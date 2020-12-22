@@ -1,7 +1,7 @@
 # Личный проект «Readme»
 
 * Студент: [Михаил Бирюков](https://up.htmlacademy.ru/php/12/user/1318859).
-* Наставник: `Неизвестно`.
+* Наставник: [Антон Попов](https://htmlacademy.ru/profile/id78239).
 
 ---
 
