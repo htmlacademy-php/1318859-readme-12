@@ -262,3 +262,31 @@ function generate_random_date($index)
 
     return $dt;
 }
+
+/**
+ * Обрезает текст до необходимого количества символов
+ *
+ * @param string $text Текст в виде строки, который нужно обрезать
+ * @param int $length Длина обрезанного текста
+ *
+ * @return string Обрезанный текст в виде строки
+ */
+function crop_text($text, $length = 300)
+{
+    $words = explode(' ', $text);
+    $sum_length = 0;
+    $words_cropped = [];
+
+    for ($i = 0; $i < count($words); $i++) {
+        if ($sum_length > $length) {
+            break;
+        }
+        $words_cropped[$i] = $words[$i];
+        $sum_length += (mb_strlen($words[$i]) + 1);
+    }
+
+    $text_cropped = implode(' ', $words_cropped);
+    if ($text !== $text_cropped) {
+        return $text_cropped;
+    }
+}
