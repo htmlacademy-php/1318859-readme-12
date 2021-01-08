@@ -40,10 +40,20 @@ $posts = [
     ],
 ];
 
+date_default_timezone_set('Europe/Moscow');
+$now = date_create('now');
+
 include_once 'helpers.php';
 
-$main_content = include_template('main.php', ['posts' => $posts]);
-$layuot = include_template('layout.php', ['main_content' => $main_content, 'user_name' => $user_name, 'title' => $title, 'is_auth' => $is_auth]);
+$main_content = include_template('main.php', ['posts' => $posts,
+    'now' => $now
+]);
+$layout = include_template('layout.php', [
+    'main_content' => $main_content,
+    'user_name' => $user_name,
+    'title' => $title,
+    'is_auth' => $is_auth
+]);
 ?>
 
-<? print_r($layuot); ?>
+<?php echo $layout; ?>

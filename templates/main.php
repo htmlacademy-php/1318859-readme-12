@@ -85,8 +85,10 @@
     </div>
     <div class="popular__posts">
 
-        <?php foreach ($posts as $post): ?>
-            <article class="popular__post post<?= (!empty($post['type'])) ? ' ' . $post['type'] : ''; ?>">
+        <?php foreach ($posts as $key => $post): ?>
+            <?php $post_date = date_create(generate_random_date($key)); ?>
+            <?php $date_diff = date_diff($now, $post_date); ?>
+            <article class="popular__post post<?= (!empty($post['type'])) ? " $post[type]" : ""; ?>">
                 <header class="post__header">
                     <h2><?= htmlspecialchars($post['title']) ?></h2>
                 </header>
@@ -128,8 +130,8 @@
                             </a>
                         </div>
                     <?php elseif ($post['type'] === 'post-text'): ?>
-                        <?php if (crop_text($post['content'], 100)): ?>
-                            <p><?= crop_text(htmlspecialchars($post['content']), 100) . '...' ?></p>
+                        <?php if (crop_text($post['content'])): ?>
+                            <p><?= htmlspecialchars(crop_text($post['content'])) . '...' ?></p>
                             <a class="post-text__more-link" href="#">Читать далее</a>
                         <?php else: ?>
                             <p><?= htmlspecialchars($post['content']) ?></p>
@@ -144,7 +146,9 @@
                             </div>
                             <div class="post__info">
                                 <b class="post__author-name"><?= htmlspecialchars($post['username']) ?></b>
-                                <time class="post__time" datetime="">дата</time>
+                                <time class="post__time" datetime="<?= generate_random_date($key) ?>" title="<?= date_format($post_date, 'd.m.Y H:i'); ?>">
+                                    <?= print_date_diff($date_diff); ?>
+                                </time>
                             </div>
                         </a>
                     </div>
