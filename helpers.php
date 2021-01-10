@@ -158,7 +158,8 @@ function check_youtube_url($url)
 {
     $id = extract_youtube_id($url);
 
-    set_error_handler(function () {}, E_WARNING);
+    set_error_handler(function () {
+    }, E_WARNING);
     $headers = get_headers('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=' . $id);
     restore_error_handler();
 
@@ -288,5 +289,41 @@ function crop_text($text, $length = 300)
     $text_cropped = implode(' ', $words_cropped);
     if ($text !== $text_cropped) {
         return $text_cropped;
+    }
+
+    return false;
+}
+
+/**
+ * Выводит время относительно текущего момента
+ *
+ * @param array $date_diff - результат функции date_diff() между настоящим моментом и датой
+ *
+ * @return string Текст в виде строки
+ */
+function print_date_diff($date_diff)
+{
+    foreach ($date_diff as $key => $value) {
+        if ($value !== 0) {
+            switch ($key) {
+                case 'y':
+                    return "$value " . get_noun_plural_form($value, 'год', 'года', 'лет') . ' назад';
+                    break;
+                case 'm':
+                    return "$value " . get_noun_plural_form($value, 'месяц', 'месяца', 'месяцев') . ' назад';
+                    break;
+                case 'd':
+                    return "$value " . get_noun_plural_form($value, 'день', 'дня', 'дней') . ' назад';
+                    break;
+                case 'h':
+                    return "$value " . get_noun_plural_form($value, 'час', 'часа', 'часов') . ' назад';
+                    break;
+                case 'i':
+                    return "$value " . get_noun_plural_form($value, 'минуту', 'минуты', 'минут') . ' назад';
+                    break;
+                default:
+                    return 'только что';
+            }
+        }
     }
 }
