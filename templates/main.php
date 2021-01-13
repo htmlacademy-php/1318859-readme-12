@@ -86,7 +86,7 @@
     <div class="popular__posts">
 
         <?php foreach ($posts as $key => $post): ?>
-            <?php $post_date = date_create(generate_random_date($key)); ?>
+            <?php $post_date = date_create($post['post_date']); ?>
             <?php $date_diff = date_diff($now, $post_date); ?>
             <article class="popular__post post<?= (!empty($post['type'])) ? " $post[type]" : ""; ?>">
                 <header class="post__header">

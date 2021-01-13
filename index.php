@@ -1,4 +1,6 @@
 <?php
+include_once 'helpers.php';
+
 $is_auth = rand(0, 1);
 $user_name = 'Миша';
 $title = 'readme: популярное';
@@ -9,6 +11,7 @@ $posts = [
         'content' => 'Мы в жизни любим только раз, а после ищем лишь похожих',
         'username' => 'Лариса',
         'avatar' => 'userpic-larisa-small.jpg',
+        'post_date' => generate_random_date(0),
     ],
     [
         'title' => 'Игра престолов',
@@ -16,6 +19,7 @@ $posts = [
         'content' => 'Не могу дождаться начала финального сезона своего любимого сериала!',
         'username' => 'Владик',
         'avatar' => 'userpic.jpg',
+        'post_date' => generate_random_date(1),
     ],
     [
         'title' => 'Наконец, обработал фотки!',
@@ -23,6 +27,7 @@ $posts = [
         'content' => 'rock-medium.jpg',
         'username' => 'Виктор',
         'avatar' => 'userpic-mark.jpg',
+        'post_date' => generate_random_date(2),
     ],
     [
         'title' => 'Моя мечта',
@@ -30,6 +35,7 @@ $posts = [
         'content' => 'coast-medium.jpg',
         'username' => 'Лариса',
         'avatar' => 'userpic-larisa-small.jpg',
+        'post_date' => generate_random_date(3),
     ],
     [
         'title' => 'Лучшие курсы',
@@ -37,13 +43,12 @@ $posts = [
         'content' => 'www.htmlacademy.ru',
         'username' => 'Владик',
         'avatar' => 'userpic.jpg',
+        'post_date' => generate_random_date(4),
     ],
 ];
 
 date_default_timezone_set('Europe/Moscow');
 $now = date_create('now');
-
-include_once 'helpers.php';
 
 $main_content = include_template('main.php', ['posts' => $posts,
     'now' => $now
@@ -56,4 +61,4 @@ $layout = include_template('layout.php', [
 ]);
 ?>
 
-<?php echo $layout; ?>
+<?= $layout; ?>
