@@ -2,33 +2,33 @@
 INSERT INTO types
 SET title
     =
-    'post-quote',
+    'Цитата',
     icon_class_name =
-    'post-quote';
+    'quote';
 INSERT INTO types
 SET title
     =
-    'post-text',
+    'Текст',
     icon_class_name =
-    'post-text';
+    'text';
 INSERT INTO types
 SET title
     =
-    'post-photo',
+    'Картинка',
     icon_class_name =
-    'post-photo';
+    'photo';
 INSERT INTO types
 SET title
     =
-    'post-link',
+    'Ссылка',
     icon_class_name =
-    'post-link';
+    'link';
 INSERT INTO types
 SET title
     =
-    'post-video',
+    'Видео',
     icon_class_name =
-    'post-video';
+    'video';
 
 -- создание пользователей;
 INSERT INTO users
