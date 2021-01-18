@@ -1,4 +1,5 @@
 <?php
+include_once 'config.php';
 include_once 'helpers.php';
 
 $is_auth = rand(0, 1);
@@ -47,7 +48,6 @@ $posts = [
     ],
 ];
 
-date_default_timezone_set('Europe/Moscow');
 $now = date_create('now');
 
 $main_content = include_template('main.php', ['posts' => $posts,
