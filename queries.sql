@@ -2,9 +2,15 @@
 INSERT INTO types
 SET title
     =
-    'Цитата',
+    'Картинка',
     icon_class_name =
-    'quote';
+    'photo';
+INSERT INTO types
+SET title
+    =
+    'Видео',
+    icon_class_name =
+    'video';
 INSERT INTO types
 SET title
     =
@@ -14,21 +20,15 @@ SET title
 INSERT INTO types
 SET title
     =
-    'Картинка',
+    'Цитата',
     icon_class_name =
-    'photo';
+    'quote';
 INSERT INTO types
 SET title
     =
     'Ссылка',
     icon_class_name =
     'link';
-INSERT INTO types
-SET title
-    =
-    'Видео',
-    icon_class_name =
-    'video';
 
 -- создание пользователей;
 INSERT INTO users
@@ -88,7 +88,7 @@ SET title
     text_content =
     'Мы в жизни любим только раз, а после ищем лишь похожих',
     quote_author =
-    'Лариса',
+    'Джейсон Стэтхем',
     views_count =
     5,
     user_id =
