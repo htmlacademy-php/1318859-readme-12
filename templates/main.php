@@ -41,40 +41,38 @@
                     </a>
                 </li>
 
-                <? foreach ($rows_types as $type): ?>
+                <?php foreach ($types as $type): ?>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--<?= $type['icon_class_name']; ?> button" href="#">
+                        <a class="filters__button filters__button--<?= $type['class_name']; ?> button" href="#">
                             <span class="visually-hidden">
-                                <? if ($type['title'] === 'Картинка'): ?>
+                                <?php if ($type['title'] === 'Картинка'): ?>
                                     Фото
-                                <? else: ?>
+                                <?php else: ?>
                                     <?= $type['title']; ?>
-                                <? endif; ?>
+                                <?php endif; ?>
                             </span>
                             <svg class="filters__icon" width="22" height="18">
-                                <use xlink:href="#icon-filter-<?= $type['icon_class_name']; ?>"></use>
+                                <use xlink:href="#icon-filter-<?= $type['class_name']; ?>"></use>
                             </svg>
                         </a>
                     </li>
-                <? endforeach; ?>
+                <?php endforeach; ?>
             </ul>
         </div>
     </div>
     <div class="popular__posts">
-        <?php foreach ($rows_posts as $key => $post): ?>
-            <?php $post_date = date_create($post['dt_add']); ?>
-            <?php $date_diff = date_diff($now, $post_date); ?>
-            <article class="popular__post post<?= $post['icon_class_name']; ?>">
+        <?php foreach ($posts as $key => $post): ?>
+            <article class="popular__post post-<?= $post['class_name']; ?>">
                 <header class="post__header">
                     <h2><?= htmlspecialchars($post['title']) ?></h2>
                 </header>
                 <div class="post__main">
-                    <?php if ($post['icon_class_name'] === 'quote'): ?>
+                    <?php if ($post['class_name'] === 'quote'): ?>
                         <blockquote>
                             <p><?= htmlspecialchars($post['text_content']) ?></p>
                             <cite><?= htmlspecialchars($post['quote_author']) ?></cite>
                         </blockquote>
-                    <?php elseif ($post['icon_class_name'] === 'link'): ?>
+                    <?php elseif ($post['class_name'] === 'link'): ?>
                         <div class="post-link__wrapper">
                             <a class="post-link__external" href="http://" title="Перейти по ссылке">
                                 <div class="post-link__info-wrapper">
@@ -88,11 +86,11 @@
                                 <span><?= htmlspecialchars($post['link']) ?></span>
                             </a>
                         </div>
-                    <?php elseif ($post['icon_class_name'] === 'photo'): ?>
+                    <?php elseif ($post['class_name'] === 'photo'): ?>
                         <div class="post-photo__image-wrapper">
                             <img src="img/<?= htmlspecialchars($post['image']) ?>" alt="Фото от пользователя" width="360" height="240">
                         </div>
-                    <?php elseif ($post['icon_class_name'] === 'video'): ?>
+                    <?php elseif ($post['class_name'] === 'video'): ?>
                         <div class="post-video__block">
                             <div class="post-video__preview">
                                 <?= embed_youtube_cover(htmlspecialchars($post['video'])); ?>
@@ -105,7 +103,7 @@
                                 <span class="visually-hidden">Запустить проигрыватель</span>
                             </a>
                         </div>
-                    <?php elseif ($post['icon_class_name'] === 'text'): ?>
+                    <?php elseif ($post['class_name'] === 'text'): ?>
                         <?php if (crop_text($post['text_content'])): ?>
                             <p><?= htmlspecialchars(crop_text($post['text_content'])) . '...' ?></p>
                             <a class="post-text__more-link" href="#">Читать далее</a>
@@ -123,7 +121,7 @@
                             <div class="post__info">
                                 <b class="post__author-name"><?= htmlspecialchars($post['login']) ?></b>
                                 <time class="post__time" datetime="<?= generate_random_date($key) ?>" title="<?= date_format($post_date, 'd.m.Y H:i'); ?>">
-                                    <?= print_date_diff($date_diff); ?>
+                                    <?= print_date_diff($post['dt_add']); ?>
                                 </time>
                             </div>
                         </a>

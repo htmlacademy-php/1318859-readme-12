@@ -297,12 +297,16 @@ function crop_text($text, $length = 300)
 /**
  * Выводит время относительно текущего момента
  *
- * @param array $date_diff - результат функции date_diff() между настоящим моментом и датой
+ * @param string $date - дата в формате 'Y-m-d H:i:s'
  *
  * @return string Текст в виде строки
  */
-function print_date_diff($date_diff)
+function print_date_diff($date)
 {
+    $post_date = date_create($date);
+    $now = date_create('now');
+    $date_diff = date_diff($now, $post_date);
+
     foreach ($date_diff as $key => $value) {
         if ($value !== 0) {
             switch ($key) {

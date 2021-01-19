@@ -1,36 +1,36 @@
 <?php
+define("NUMBER_OF_POSTS", 6);
+
 include_once 'config.php';
 include_once 'helpers.php';
+include_once 'models.php';
+
 
 $is_auth = rand(0, 1);
 $user_name = 'Миша';
 $title = 'readme: популярное';
 
-$now = date_create('now');
-
-$con = mysqli_connect("localhost", "root", "","readme");
-if ($con == false) {
+/*if ($con === false) {
     print("Ошибка подключения: " . mysqli_connect_error());
 }
 else {
-    mysqli_set_charset($con, "utf8");
     $sql_types = "SELECT * FROM types";
     $result_types = mysqli_query($con, $sql_types);
-    $rows_types = mysqli_fetch_all($result_types, MYSQLI_ASSOC);
+    $types = mysqli_fetch_all($result_types, MYSQLI_ASSOC);
 
-    $number_of_posts = 6;
-    $sql_posts = "SELECT p.*, u.login, u.avatar, t.icon_class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id  ORDER BY views_count DESC LIMIT $number_of_posts;";
+    $limit = NUMBER_OF_POSTS;
+    $sql_posts = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id  ORDER BY views_count DESC LIMIT $limit;";
     $result_posts = mysqli_query($con, $sql_posts);
-    $rows_posts = mysqli_fetch_all($result_posts, MYSQLI_ASSOC);
+    $posts = mysqli_fetch_all($result_posts, MYSQLI_ASSOC);
 
     mysqli_close($con);
-}
-
+}*/
+$types = get_post_types($con);
+$posts = get_posts($con);
 
 $main_content = include_template('main.php', [
-    'now' => $now,
-    'rows_types' => $rows_types,
-    'rows_posts' => $rows_posts
+    'types' => $types,
+    'posts' => $posts
 ]);
 $layout = include_template('layout.php', [
     'main_content' => $main_content,
