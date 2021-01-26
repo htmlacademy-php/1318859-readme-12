@@ -36,14 +36,13 @@
             <b class="popular__filters-caption filters__caption">Тип контента:</b>
             <ul class="popular__filters-list filters__list">
                 <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                    <a class="filters__button filters__button--ellipse filters__button--all filters__button--active" href="#">
+                    <a class="filters__button filters__button--ellipse filters__button--all  <?php if ($id === ''):?>filters__button--active<?php endif; ?>" href="/">
                         <span>Все</span>
                     </a>
                 </li>
-
                 <?php foreach ($types as $type): ?>
                     <li class="popular__filters-item filters__item">
-                        <a class="filters__button filters__button--<?= $type['class_name']; ?> button" href="#">
+                        <a class="filters__button filters__button--<?= $type['class_name']; ?> <?php if ($id === $type['id']):?>filters__button--active<?php endif; ?> button" href="/?id=<?= $type['id']; ?>">
                             <span class="visually-hidden">
                                 <?php if ($type['title'] === 'Картинка'): ?>
                                     Фото
@@ -64,7 +63,9 @@
         <?php foreach ($posts as $key => $post): ?>
             <article class="popular__post post-<?= $post['class_name']; ?>">
                 <header class="post__header">
-                    <h2><?= htmlspecialchars($post['title']) ?></h2>
+                    <h2>
+                        <a href="/post.php?id=<?= $post['id']; ?>"><?= htmlspecialchars($post['title']) ?></a>
+                    </h2>
                 </header>
                 <div class="post__main">
                     <?php if ($post['class_name'] === 'quote'): ?>

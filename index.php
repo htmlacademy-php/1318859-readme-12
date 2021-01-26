@@ -26,11 +26,19 @@ else {
     mysqli_close($con);
 }*/
 $types = get_post_types($con);
-$posts = get_posts($con);
+
+if (isset($_GET["id"])) {
+    $id = $_GET["id"];
+    $posts = get_posts($con, 'id', $id);
+} else {
+    $id = '';
+    $posts = get_posts($con, '', null);
+}
 
 $main_content = include_template('main.php', [
     'types' => $types,
-    'posts' => $posts
+    'posts' => $posts,
+    'id' => $id
 ]);
 $layout = include_template('layout.php', [
     'main_content' => $main_content,
