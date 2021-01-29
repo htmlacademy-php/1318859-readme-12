@@ -297,33 +297,59 @@ function crop_text($text, $length = 300)
 /**
  * Выводит время относительно текущего момента
  *
- * @param array $date_diff - результат функции date_diff() между настоящим моментом и датой
+ * @param string $date - дата в формате 'Y-m-d H:i:s'
  *
  * @return string Текст в виде строки
  */
-function print_date_diff($date_diff)
+function print_date_diff($date)
 {
+    $first_date = date_create($date);
+    $now = date_create('now');
+    $date_diff = date_diff($now, $first_date);
+
     foreach ($date_diff as $key => $value) {
         if ($value !== 0) {
             switch ($key) {
                 case 'y':
-                    return "$value " . get_noun_plural_form($value, 'год', 'года', 'лет') . ' назад';
+                    return "$value " . get_noun_plural_form($value, 'год', 'года', 'лет');
                     break;
                 case 'm':
-                    return "$value " . get_noun_plural_form($value, 'месяц', 'месяца', 'месяцев') . ' назад';
+                    return "$value " . get_noun_plural_form($value, 'месяц', 'месяца', 'месяцев');
                     break;
                 case 'd':
-                    return "$value " . get_noun_plural_form($value, 'день', 'дня', 'дней') . ' назад';
+                    return "$value " . get_noun_plural_form($value, 'день', 'дня', 'дней');
                     break;
                 case 'h':
-                    return "$value " . get_noun_plural_form($value, 'час', 'часа', 'часов') . ' назад';
+                    return "$value " . get_noun_plural_form($value, 'час', 'часа', 'часов');
                     break;
                 case 'i':
-                    return "$value " . get_noun_plural_form($value, 'минуту', 'минуты', 'минут') . ' назад';
+                    return "$value " . get_noun_plural_form($value, 'минуту', 'минуты', 'минут');
                     break;
                 default:
-                    return 'только что';
+                    return 'несколько секунд';
             }
         }
     }
+}
+
+/**
+ * Получает данные из базы данных
+ *
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param string $sql - запрос к базе данных в виде строки.
+ * @param bool $is_row - флаг, означающий получение одной строки из таблицы БД.
+ *
+ * @return array  В зависимости от $is_row одномерный или двумерный массив.
+ */
+function get_data($con, $sql, $is_row) {
+    if ($con === false) {
+        return print("Ошибка подключения: " . mysqli_connect_error());
+    }
+    $result = mysqli_query($con, $sql);
+    if ($is_row) {
+        $data = mysqli_fetch_assoc($result);
+    } else {
+        $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    return $data;
 }

@@ -1,18 +1,9 @@
 DROP DATABASE IF EXISTS readme;
 
-CREATE
-DATABASE
-readme
-DEFAULT
-CHARACTER
-SET
-utf8
-DEFAULT
-COLLATE
-utf8_general_ci;
+CREATE DATABASE readme DEFAULT CHARACTER SET utf8
+DEFAULT COLLATE utf8_general_ci;
 
-USE
-readme;
+USE readme;
 
 CREATE TABLE users
 (
@@ -82,30 +73,9 @@ CREATE TABLE types
 (
   id              INT AUTO_INCREMENT PRIMARY KEY,
   title           VARCHAR(32) NOT NULL,
-  icon_class_name VARCHAR(32) NOT NULL
+  class_name VARCHAR(32) NOT NULL
 );
 
-CREATE
-INDEX
-p_title
-ON
-posts
-(
-title
-);
-CREATE
-INDEX
-p_text_content
-ON
-posts
-(
-text_content (40)
-);
-CREATE
-INDEX
-t_name
-ON
-tags
-(
-name
-);
+CREATE INDEX p_title ON posts (title);
+CREATE INDEX p_text_content ON posts (text_content (40));
+CREATE INDEX t_name ON tags (name);
