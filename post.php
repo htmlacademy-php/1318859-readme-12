@@ -8,7 +8,6 @@ $amount_of_posts = count(get_all_posts($con));
 
 if (isset($_GET["id"]) && $_GET["id"] <= $amount_of_posts) {
     $id = $_GET["id"];
-//    $post = get_post($con, 'p.id', $id);
     $post = get_post($con, 'p.id', $id);
     $author_post_id = $post['user_id'];
     $author = get_user($con, $author_post_id);
