@@ -4,19 +4,20 @@ include_once 'helpers.php';
 include_once 'models.php';
 
 $title = 'readme: публикация';
-$number_of_posts = count(get_all_posts($con));
+$amount_of_posts = count(get_all_posts($con));
 
-if (isset($_GET["id"]) && $_GET["id"] <= $number_of_posts) {
+if (isset($_GET["id"]) && $_GET["id"] <= $amount_of_posts) {
     $id = $_GET["id"];
+//    $post = get_post($con, 'p.id', $id);
     $post = get_post($con, 'p.id', $id);
     $author_post_id = $post['user_id'];
     $author = get_user($con, $author_post_id);
-    $number_of_author_posts = count(get_filtered_posts($con, 'u.id', $author_post_id));
+    $amount_of_author_posts = count(get_filtered_posts($con, 'u.id', $author_post_id));
     $number_of_author_followers = count(get_followers($con, $author_post_id));
     $main_content = include_template('post-detail.php', [
         'post' => $post,
         'id' => $id,
-        'number_of_author_posts' => $number_of_author_posts,
+        'amount_of_author_posts' => $amount_of_author_posts,
         'author' => $author,
         'number_of_author_followers' => $number_of_author_followers
     ]);

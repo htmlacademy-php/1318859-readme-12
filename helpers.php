@@ -307,23 +307,23 @@ function print_date_diff($date)
     $now = date_create('now');
     $date_diff = date_diff($now, $first_date);
 
-    foreach ($date_diff as $key => $value) {
-        if ($value !== 0) {
-            switch ($key) {
+    foreach ($date_diff as $period => $amount) {
+        if ($amount !== 0) {
+            switch ($period) {
                 case 'y':
-                    return "$value " . get_noun_plural_form($value, 'год', 'года', 'лет');
+                    return "$amount " . get_noun_plural_form($amount, 'год', 'года', 'лет');
                     break;
                 case 'm':
-                    return "$value " . get_noun_plural_form($value, 'месяц', 'месяца', 'месяцев');
+                    return "$amount " . get_noun_plural_form($amount, 'месяц', 'месяца', 'месяцев');
                     break;
                 case 'd':
-                    return "$value " . get_noun_plural_form($value, 'день', 'дня', 'дней');
+                    return "$amount " . get_noun_plural_form($amount, 'день', 'дня', 'дней');
                     break;
                 case 'h':
-                    return "$value " . get_noun_plural_form($value, 'час', 'часа', 'часов');
+                    return "$amount " . get_noun_plural_form($amount, 'час', 'часа', 'часов');
                     break;
                 case 'i':
-                    return "$value " . get_noun_plural_form($value, 'минуту', 'минуты', 'минут');
+                    return "$amount " . get_noun_plural_form($amount, 'минуту', 'минуты', 'минут');
                     break;
                 default:
                     return 'несколько секунд';
@@ -341,11 +341,26 @@ function print_date_diff($date)
  *
  * @return array  В зависимости от $is_row одномерный или двумерный массив.
  */
-function get_data($con, $sql, $is_row) {
+//function get_data($con, $sql, $is_row) {
+//    if ($con === false) {
+//        return print("Ошибка подключения: " . mysqli_connect_error());
+//    }
+//    $result = mysqli_query($con, $sql);
+//    if ($is_row) {
+//        $data = mysqli_fetch_assoc($result);
+//    } else {
+//        $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+//    }
+//    return $data;
+//}
+
+function get_data($con, $stmt, $is_row) {
     if ($con === false) {
         return print("Ошибка подключения: " . mysqli_connect_error());
     }
-    $result = mysqli_query($con, $sql);
+
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
     if ($is_row) {
         $data = mysqli_fetch_assoc($result);
     } else {

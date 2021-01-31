@@ -43,8 +43,8 @@
                     </li>
                     <?php foreach ($types as $type): ?>
                         <li class="popular__filters-item filters__item">
-                            <a class="filters__button filters__button--<?= $type['class_name']; ?> <?php if ($id === $type['id']): ?>filters__button--active<?php endif; ?> button" href="/?id=<?= $type['id']; ?>">
-                            <span class="visually-hidden">
+                            <a class="filters__button filters__button--<?= $type['class_name']; ?> <?php if ($id === strval($type['id'])): ?>filters__button--active<?php endif; ?> button" href="/?id=<?= $type['id']; ?>">
+                                <span class="visually-hidden">
                                 <?php if ($type['title'] === 'Картинка'): ?>
                                     Фото
                                 <?php else: ?>

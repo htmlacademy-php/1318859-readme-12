@@ -200,8 +200,8 @@
                             <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($number_of_author_followers, 'подписчик', 'подписчика', 'подписчиков') ?></span>
                         </p>
                         <p class="post-details__rating-item user__rating-item user__rating-item--publications">
-                            <span class="post-details__rating-amount user__rating-amount"><?= $number_of_author_posts ?></span>
-                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($number_of_author_posts, 'публикация', 'публикации', 'публикаций') ?></span>
+                            <span class="post-details__rating-amount user__rating-amount"><?= $amount_of_author_posts ?></span>
+                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($amount_of_author_posts, 'публикация', 'публикации', 'публикаций') ?></span>
                         </p>
                     </div>
                     <div class="post-details__user-buttons user__buttons">
