@@ -13,8 +13,7 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date): bool
-{
+function is_date_valid(string $date): bool {
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
@@ -30,8 +29,7 @@ function is_date_valid(string $date): bool
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = [])
-{
+function db_get_prepare_stmt($link, $sql, $data = []) {
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -100,8 +98,7 @@ function db_get_prepare_stmt($link, $sql, $data = [])
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form(int $number, string $one, string $two, string $many): string
-{
+function get_noun_plural_form(int $number, string $one, string $two, string $many): string {
     $number = (int)$number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
@@ -130,8 +127,7 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = [])
-{
+function include_template($name, array $data = []) {
     $name = 'templates/' . $name;
     $result = '';
 
@@ -154,8 +150,7 @@ function include_template($name, array $data = [])
  *
  * @return string Ошибку если валидация не прошла
  */
-function check_youtube_url($url)
-{
+function check_youtube_url($url) {
     $id = extract_youtube_id($url);
 
     set_error_handler(function () {
@@ -181,8 +176,7 @@ function check_youtube_url($url)
  * @param string $youtube_url Ссылка на youtube видео
  * @return string
  */
-function embed_youtube_video($youtube_url)
-{
+function embed_youtube_video($youtube_url) {
     $res = "";
     $id = extract_youtube_id($youtube_url);
 
@@ -199,8 +193,7 @@ function embed_youtube_video($youtube_url)
  * @param string $youtube_url Ссылка на youtube видео
  * @return string
  */
-function embed_youtube_cover($youtube_url)
-{
+function embed_youtube_cover($youtube_url) {
     $res = "";
     $id = extract_youtube_id($youtube_url);
 
@@ -217,8 +210,7 @@ function embed_youtube_cover($youtube_url)
  * @param string $youtube_url Ссылка на youtube видео
  * @return array
  */
-function extract_youtube_id($youtube_url)
-{
+function extract_youtube_id($youtube_url) {
     $id = false;
 
     $parts = parse_url($youtube_url);
@@ -241,8 +233,7 @@ function extract_youtube_id($youtube_url)
  * @param $index
  * @return false|string
  */
-function generate_random_date($index)
-{
+function generate_random_date($index) {
     $deltas = [['minutes' => 59], ['hours' => 23], ['days' => 6], ['weeks' => 4], ['months' => 11]];
     $dcnt = count($deltas);
 
@@ -272,8 +263,7 @@ function generate_random_date($index)
  *
  * @return string Обрезанный текст в виде строки
  */
-function crop_text($text, $length = 300)
-{
+function crop_text($text, $length = 300) {
     $words = explode(' ', $text);
     $sum_length = 0;
     $words_cropped = [];
@@ -301,8 +291,7 @@ function crop_text($text, $length = 300)
  *
  * @return string Текст в виде строки
  */
-function print_date_diff($date)
-{
+function print_date_diff($date) {
     $first_date = date_create($date);
     $now = date_create('now');
     $date_diff = date_diff($now, $first_date);
@@ -368,3 +357,88 @@ function get_data($con, $stmt, $is_row) {
     }
     return $data;
 }
+
+/**
+ * Возвращает сохранённое в массив $_POST значение поля формы либо пустую строку.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @return string
+ */
+function getPostVal($name) {
+    return $_POST[$name] ?? "";
+}
+
+/**
+ * Проверяет заполненность поля формы и выдаёт текст ошибки, если поле не заполнено.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @return string
+ */
+function validateFilled($name) {
+    if (empty($_POST[$name])) {
+        return "Это поле должно быть заполнено";
+    }
+}
+
+/**
+ * Проверяет, находится ли длина строки в пределах указанных значений и возвращает текст ошибки, если длина выходит за эти пределы.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @param int $min Минимальная длиня строки
+ * @param int $max Максимальная длиня строки
+ * @return string
+ */
+function isCorrectLength($name, $min, $max) {
+    $len = strlen($_POST[$name]);
+
+    if ($len < $min or $len > $max) {
+        return "Значение должно быть от $min до $max символов";
+    }
+}
+
+/**
+ * Проверяет значение поля формы на соответствие корректному URL-адресу, если не соответствует, выдаёт текст ошибки.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @return string
+ */
+function validateUrl($name) {
+    if (!filter_var($_POST[$name], FILTER_VALIDATE_URL)) {
+        return "Значение поля должно быть корректным URL-адресом";
+    }
+}
+
+function moveUploadedImage($name) {
+    $uploaddir = '/uploads/';
+    $uploadfile = $uploaddir . basename($_FILES[$name]['name']);
+
+    if (!move_uploaded_file($_FILES[$name]['tmp_name'], $uploadfile)) {
+        return "Не удалось загрузить файл";
+    }
+    move_uploaded_file($_FILES[$name]['tmp_name'], $uploadfile);
+}
+
+function validateImageTypeFromUrl($name) {
+    $fileType = strrchr($_POST[$name], '.');
+    $validTypes = ['.png', '.jpg', '.jpeg', '.gif'];
+
+    foreach ($validTypes as $type) {
+        if ($fileType === $type) {
+            return true;
+        }
+    }
+    return "Файл должен быть картинкой";
+}
+
+function validateImageUrlContent($name) {
+    $content = file_get_contents($_POST[$name]);
+    if (!$content) {
+        return "Не удалось загрузить файл";
+    }
+    return false;
+}
+
+//function moveImageFromUrl($name) {
+//    $fileName = strrchr($_POST[$name], '/');
+//    $local = __DIR__ . '/uploads' . $fileName;
+//    if (!file_get_contents($_POST[$name])) {
+//        return "Не удалось загрузить файл";
+//    }
+//    file_put_contents($local, file_get_contents($_POST[$name]));
+//}
