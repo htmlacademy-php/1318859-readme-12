@@ -168,7 +168,7 @@ function check_youtube_url($url) {
         return "Видео по такой ссылке не найдено. Проверьте ссылку на видео";
     }
 
-    return true;
+    return false;
 }
 
 /**
@@ -402,6 +402,7 @@ function validateUrl($name) {
     if (!filter_var($_POST[$name], FILTER_VALIDATE_URL)) {
         return "Значение поля должно быть корректным URL-адресом";
     }
+    return false;
 }
 
 function moveUploadedImage($name) {
@@ -414,16 +415,11 @@ function moveUploadedImage($name) {
     move_uploaded_file($_FILES[$name]['tmp_name'], $uploadfile);
 }
 
-function validateImageTypeFromUrl($name) {
-    $fileType = strrchr($_POST[$name], '.');
-    $validTypes = ['.png', '.jpg', '.jpeg', '.gif'];
 
-    foreach ($validTypes as $type) {
-        if ($fileType === $type) {
-            return true;
-        }
-    }
-    return "Файл должен быть картинкой";
+function moveImageFromUrl($name) {
+    $fileName = strrchr($_POST[$name], '/');
+    $local = __DIR__ . '/uploads' . $fileName;
+    file_put_contents($local, file_get_contents($_POST[$name]));
 }
 
 function validateImageUrlContent($name) {
@@ -431,14 +427,25 @@ function validateImageUrlContent($name) {
     if (!$content) {
         return "Не удалось загрузить файл";
     }
+    moveImageFromUrl($name);
     return false;
 }
 
-//function moveImageFromUrl($name) {
-//    $fileName = strrchr($_POST[$name], '/');
-//    $local = __DIR__ . '/uploads' . $fileName;
-//    if (!file_get_contents($_POST[$name])) {
-//        return "Не удалось загрузить файл";
-//    }
-//    file_put_contents($local, file_get_contents($_POST[$name]));
-//}
+function validateImageTypeFromUrl($name) {
+    $fileType = strrchr($_POST[$name], '.');
+    $validTypes = ['.png', '.jpg', '.jpeg', '.gif'];
+
+    $i = 0;
+    while ($i < count($validTypes)) {
+        if ($fileType === $validTypes[$i]) {
+           return validateImageUrlContent($name);
+        }
+        $i++;
+    }
+    return "Файл должен быть картинкой";
+}
+
+function getTags($name) {
+    preg_match_all ('/([A-Za-zА-Яа-я0-9])+/', $_POST[$name], $postTags);
+    return $postTags[0];
+}

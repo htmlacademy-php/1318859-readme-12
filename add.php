@@ -1,4 +1,5 @@
 <?php
+
 include_once 'config.php';
 include_once 'helpers.php';
 include_once 'models.php';
@@ -26,20 +27,19 @@ if (isset($_POST["send"])) {
 
 $required_fields = ['email', 'password', 'login'];
 $errors = [];
-$_FILES["userpic-file-photo"] = null;
-//moveImageFromUrl('photo-url');
+$_FILES = null;
 $rules = ['photo-url' => function () {
     if (empty($_FILES["userpic-file-photo"])) {
         if (!validateUrl('photo-url')) {
-            if (!validateImageTypeFromUrl('photo-url')) {
-                validateImageUrlContent('photo-url');
-            }
             return validateImageTypeFromUrl('photo-url');
         }
         return validateUrl('photo-url');
     }
-    $_POST["photo-url"] = null;
+    return false;
 }, 'video-url' => function () {
+    if (!validateUrl('video-url')) {
+        return check_youtube_url($_POST['video-url']);
+    }
     return validateUrl('video-url');
 }, 'post-text' => function () {
     return validateFilled('post-text');
@@ -51,20 +51,21 @@ $rules = ['photo-url' => function () {
     return validateUrl('post-link');
 },];
 
+foreach ($types as $type) {
+    $class_name = $type['class_name'];
+    $rules += [$class_name . '-heading' => function () {
+        return validateFilled($class_name . '-heading');
+    }];
+
+    if (getPostVal($class_name . '-tags')) {
+        getTags($class_name . '-tags');
+    }
+}
+
+
 echo '<pre>';
 print_r($rules);
 echo '</pre>';
-
-foreach ($types as $type) {
-    $class_name = $type['class_name'];
-    $rules += [$type['class_name'] . '-heading' => function () {
-        return validateFilled($type['class_name'] . '-heading');
-    }];
-}
-
-//echo '<pre>';
-//print_r($rules);
-//echo '</pre>';
 
 foreach ($_POST as $key => $value) {
     if (isset($rules[$key])) {
