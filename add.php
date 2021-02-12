@@ -1,5 +1,4 @@
 <?php
-
 include_once 'config.php';
 include_once 'helpers.php';
 include_once 'models.php';
@@ -27,7 +26,6 @@ if (isset($_POST["send"])) {
 
 $required_fields = ['email', 'password', 'login'];
 $errors = [];
-$_FILES = null;
 $rules = ['photo-url' => function () {
     if (empty($_FILES["userpic-file-photo"])) {
         if (!validateUrl('photo-url')) {
@@ -36,6 +34,11 @@ $rules = ['photo-url' => function () {
         return validateUrl('photo-url');
     }
     return false;
+//}, 'userpic-file-photo' => function () {
+//    if (empty($_POST["photo-url"])) {
+//
+//    }
+//    return false;
 }, 'video-url' => function () {
     if (!validateUrl('video-url')) {
         return check_youtube_url($_POST['video-url']);
@@ -61,11 +64,6 @@ foreach ($types as $type) {
         getTags($class_name . '-tags');
     }
 }
-
-
-echo '<pre>';
-print_r($rules);
-echo '</pre>';
 
 foreach ($_POST as $key => $value) {
     if (isset($rules[$key])) {
