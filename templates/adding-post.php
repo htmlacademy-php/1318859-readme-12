@@ -52,17 +52,17 @@
                                         <div class="form__text-inputs">
                                             <input type="hidden" name="type" value="<?= $type['class_name']; ?>">
                                             <div class="adding-post__input-wrapper form__input-wrapper">
-                                                <label class="adding-post__label form__label" for="<?= $type['class_name']; ?>-heading">Заголовок
-                                                    <span class="form__input-required">*</span></label>
-                                                <div class="form__input-section">
+                                                <label class="adding-post__label form__label" for="<?= $type['class_name']; ?>-heading">
+                                                    Заголовок <span class="form__input-required">*</span>
+                                                </label>
+                                                <div class="form__input-section <?php if (isset($errors[$type['class_name'] . '-heading'])): ?>form__input-section--error<?php endif; ?>">
                                                     <input class="adding-post__input form__input" id="<?= $type['class_name']; ?>-heading" type="text" name="<?= $type['class_name']; ?>-heading" value="<?= getPostVal($type['class_name'] . '-heading'); ?>" placeholder="Введите заголовок">
                                                     <button class="form__error-button button" type="button">
                                                         !<span class="visually-hidden">Информация об ошибке</span>
                                                     </button>
                                                     <div class="form__error-text">
-                                                        <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                        <p class="form__error-desc">Текст сообщения об ошибке, подробно
-                                                            объясняющий, что не так.</p>
+                                                        <h3 class="form__error-title">Заголовок</h3>
+                                                        <p class="form__error-desc"><?= $errors[$type['class_name'] . '-heading']; ?></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -70,114 +70,106 @@
 
                                             <?php if ($type['class_name'] === 'photo'): ?>
                                                 <div class="adding-post__input-wrapper form__input-wrapper">
-                                                    <label class="adding-post__label form__label" for="photo-url">Ссылка
-                                                        из
-                                                        интернета</label>
-                                                    <div class="form__input-section">
+                                                    <label class="adding-post__label form__label" for="photo-url">
+                                                        Ссылка из интернета
+                                                    </label>
+                                                    <div class="form__input-section <?php if (isset($errors['photo-url'])): ?>form__input-section--error<?php endif; ?>">
                                                         <input class="adding-post__input form__input" id="photo-url" type="text" name="photo-url" value="<?= getPostVal("photo-url"); ?>" placeholder="Введите ссылку">
                                                         <button class="form__error-button button" type="button">
                                                             !<span class="visually-hidden">Информация об ошибке</span>
                                                         </button>
                                                         <div class="form__error-text">
-                                                            <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                            <p class="form__error-desc">Текст сообщения об ошибке,
-                                                                подробно
-                                                                объясняющий, что не так.</p>
+                                                            <h3 class="form__error-title">Ссылка из интернета</h3>
+                                                            <p class="form__error-desc"><?= $errors['photo-url']; ?></p>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                             <?php elseif ($type['class_name'] === 'video'): ?>
                                                 <div class="adding-post__input-wrapper form__input-wrapper">
-                                                    <label class="adding-post__label form__label" for="video-url">Ссылка
-                                                        youtube
-                                                        <span class="form__input-required">*</span></label>
-                                                    <div class="form__input-section">
+                                                    <label class="adding-post__label form__label" for="video-url">
+                                                        Ссылка youtube <span class="form__input-required">*</span>
+                                                    </label>
+                                                    <div class="form__input-section <?php if (isset($errors['video-url'])): ?>form__input-section--error<?php endif; ?>">
                                                         <input class="adding-post__input form__input" id="video-url" type="text" name="video-url" value="<?= getPostVal("video-url"); ?>" placeholder="Введите ссылку">
                                                         <button class="form__error-button button" type="button">
                                                             !<span class="visually-hidden">Информация об ошибке</span>
                                                         </button>
                                                         <div class="form__error-text">
-                                                            <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                            <p class="form__error-desc">Текст сообщения об ошибке,
-                                                                подробно
-                                                                объясняющий, что не так.</p>
+                                                            <h3 class="form__error-title">Ссылка youtube</h3>
+                                                            <p class="form__error-desc"><?= $errors['video-url']; ?></p>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                             <?php elseif ($type['class_name'] === 'text'): ?>
                                                 <div class="adding-post__textarea-wrapper form__textarea-wrapper">
-                                                    <label class="adding-post__label form__label" for="post-text">Текст
-                                                        поста
-                                                        <span class="form__input-required">*</span></label>
-                                                    <div class="form__input-section">
-                                                    <textarea class="adding-post__textarea form__textarea form__input" id="post-text" name="post-text" placeholder="Введите текст публикации">
-                                                        <?= getPostVal("post-text"); ?>
-                                                    </textarea>
+                                                    <label class="adding-post__label form__label" for="post-text">
+                                                        Текст поста <span class="form__input-required">*</span>
+                                                    </label>
+                                                    <div class="form__input-section <?php if (isset($errors['post-text'])): ?>form__input-section--error<?php endif; ?>">
+                                                    <textarea class="adding-post__textarea form__textarea form__input"
+                                                              id="post-text"
+                                                              name="post-text"
+                                                              placeholder="Введите текст публикации"><?= getPostVal("post-text"); ?></textarea>
                                                         <button class="form__error-button button" type="button">
                                                             !<span class="visually-hidden">Информация об ошибке</span>
                                                         </button>
                                                         <div class="form__error-text">
-                                                            <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                            <p class="form__error-desc">Текст сообщения об ошибке,
-                                                                подробно
-                                                                объясняющий, что не так.</p>
+                                                            <h3 class="form__error-title">Текст поста</h3>
+                                                            <p class="form__error-desc"><?= $errors['post-text']; ?></p>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                             <?php elseif ($type['class_name'] === 'quote'): ?>
                                                 <div class="adding-post__input-wrapper form__textarea-wrapper">
-                                                    <label class="adding-post__label form__label" for="cite-text">Текст
-                                                        цитаты
-                                                        <span class="form__input-required">*</span></label>
-                                                    <div class="form__input-section">
-                                                    <textarea class="adding-post__textarea adding-post__textarea--quote form__textarea form__input" id="cite-text" name="quote-text" placeholder="Текст цитаты">
-                                                        <?= getPostVal("cite-text"); ?>
-                                                    </textarea>
+                                                    <label class="adding-post__label form__label" for="quote-text">
+                                                        Текст цитаты <span class="form__input-required">*</span>
+                                                    </label>
+                                                    <div class="form__input-section <?php if (isset($errors['quote-text'])): ?>form__input-section--error<?php endif; ?>">
+                                                    <textarea class="adding-post__textarea adding-post__textarea--quote form__textarea form__input"
+                                                              id="quote-text"
+                                                              name="quote-text"
+                                                              placeholder="Текст цитаты"><?= getPostVal("quote-text"); ?></textarea>
                                                         <button class="form__error-button button" type="button">
                                                             !<span class="visually-hidden">Информация об ошибке</span>
                                                         </button>
                                                         <div class="form__error-text">
-                                                            <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                            <p class="form__error-desc">Текст сообщения об ошибке,
-                                                                подробно
-                                                                объясняющий, что не так.</p>
+                                                            <h3 class="form__error-title">Текст цитаты</h3>
+                                                            <p class="form__error-desc"><?= $errors['quote-text']; ?></p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="adding-post__textarea-wrapper form__input-wrapper">
-                                                    <label class="adding-post__label form__label" for="quote-author">Автор
-                                                        <span class="form__input-required">*</span></label>
-                                                    <div class="form__input-section">
+                                                    <label class="adding-post__label form__label" for="quote-author">
+                                                        Автор <span class="form__input-required">*</span>
+                                                    </label>
+                                                    <div class="form__input-section <?php if (isset($errors['quote-author'])): ?>form__input-section--error<?php endif; ?>">
                                                         <input class="adding-post__input form__input" id="quote-author" type="text" name="quote-author" value="<?= getPostVal("quote-author"); ?>">
                                                         <button class="form__error-button button" type="button">
                                                             !<span class="visually-hidden">Информация об ошибке</span>
                                                         </button>
                                                         <div class="form__error-text">
-                                                            <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                            <p class="form__error-desc">Текст сообщения об ошибке,
-                                                                подробно
-                                                                объясняющий, что не так.</p>
+                                                            <h3 class="form__error-title">Автор</h3>
+                                                            <p class="form__error-desc"><?= $errors['quote-author']; ?></p>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                             <?php elseif ($type['class_name'] === 'link'): ?>
                                                 <div class="adding-post__textarea-wrapper form__input-wrapper">
-                                                    <label class="adding-post__label form__label" for="post-link">Ссылка
-                                                        <span class="form__input-required">*</span></label>
-                                                    <div class="form__input-section">
+                                                    <label class="adding-post__label form__label" for="post-link">
+                                                        Ссылка <span class="form__input-required">*</span>
+                                                    </label>
+                                                    <div class="form__input-section <?php if (isset($errors['post-link'])): ?>form__input-section--error<?php endif; ?>">
                                                         <input class="adding-post__input form__input" id="post-link" type="text" name="post-link" value="<?= getPostVal("post-link"); ?>">
                                                         <button class="form__error-button button" type="button">
                                                             !<span class="visually-hidden">Информация об ошибке</span>
                                                         </button>
                                                         <div class="form__error-text">
-                                                            <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                            <p class="form__error-desc">Текст сообщения об ошибке,
-                                                                подробно
-                                                                объясняющий, что не так.</p>
+                                                            <h3 class="form__error-title">Ссылка</h3>
+                                                            <p class="form__error-desc"><?= $errors['post-link']; ?></p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -185,16 +177,17 @@
 
 
                                             <div class="adding-post__input-wrapper form__input-wrapper">
-                                                <label class="adding-post__label form__label" for="<?= $type['class_name']; ?>-tags">Теги</label>
-                                                <div class="form__input-section">
+                                                <label class="adding-post__label form__label" for="<?= $type['class_name']; ?>-tags">
+                                                    Теги
+                                                </label>
+                                                <div class="form__input-section <?php if (isset($errors[$type['class_name'] . '-tags'])): ?>form__input-section--error<?php endif; ?>">
                                                     <input class="adding-post__input form__input" id="<?= $type['class_name']; ?>-tags" type="text" name="<?= $type['class_name']; ?>-tags" value="<?= getPostVal($type['class_name'] . '-tags'); ?>" placeholder="Введите теги">
                                                     <button class="form__error-button button" type="button">
                                                         !<span class="visually-hidden">Информация об ошибке</span>
                                                     </button>
                                                     <div class="form__error-text">
-                                                        <h3 class="form__error-title">Заголовок сообщения</h3>
-                                                        <p class="form__error-desc">Текст сообщения об ошибке, подробно
-                                                            объясняющий, что не так.</p>
+                                                        <h3 class="form__error-title">Теги</h3>
+                                                        <p class="form__error-desc"><?= $errors[$type['class_name'] . '-tags']; ?></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -230,65 +223,79 @@
                                             </div>
                                         </div>
 
-                                        <div class="form__invalid-block">
-                                            <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
-                                            <ul class="form__invalid-list">
-                                                <li class="form__invalid-item">Заголовок. Это поле должно быть
-                                                    заполнено.
-                                                </li>
+                                        <?php if (!empty($errors)): ?>
+                                            <div class="form__invalid-block">
+                                                <b class="form__invalid-slogan">Пожалуйста, исправьте следующие
+                                                    ошибки:</b>
+                                                <ul class="form__invalid-list">
+                                                    <?php if (isset($errors[$type['class_name'] . '-heading'])): ?>
+                                                        <li class="form__invalid-item">
+                                                            Заголовок. <?= $errors[$type['class_name'] . '-heading'] ?>
+                                                        </li>
+                                                    <?php endif; ?>
 
-                                                <?php if ($type['class_name'] === 'photo'): ?>
-                                                    <li class="form__invalid-item">Укажите ссылку на картинку или
-                                                        загрузите
-                                                        файл с компьютера.
-                                                    </li>
-                                                    <li class="form__invalid-item">Некорректный URL-адрес.</li>
-                                                    <li class="form__invalid-item">Не удалось загрузить файл по
-                                                        ссылке.
-                                                    </li>
-                                                    <li class="form__invalid-item">Формат загруженного файла должен быть
-                                                        изображением одного из следующих типов: png, jpeg, gif.
-                                                    </li>
+                                                    <?php if ($type['class_name'] === 'photo'): ?>
+                                                        <?php if (isset($errors['photo-url'])): ?>
+                                                            <li class="form__invalid-item">
+                                                                <?= $errors['photo-url'] ?>
+                                                            </li>
+                                                        <?php endif; ?>
 
-                                                <?php elseif ($type['class_name'] === 'video'): ?>
-                                                    <li class="form__invalid-item">Ссылка youtube. Это поле должно быть
-                                                        заполнено.
-                                                    </li>
-                                                    <li class="form__invalid-item">Некорректный URL-адрес.</li>
-                                                    <li class="form__invalid-item">Не удалось воспроизвести видео по
-                                                        ссылке.
-                                                    </li>
+                                                        <!--<li class="form__invalid-item">Укажите ссылку на картинку или
+                                                            загрузите
+                                                            файл с компьютера.
+                                                        </li>
+                                                        <li class="form__invalid-item">Некорректный URL-адрес.</li>
+                                                        <li class="form__invalid-item">Не удалось загрузить файл по
+                                                            ссылке.
+                                                        </li>-->
 
-                                                <?php elseif ($type['class_name'] === 'text'): ?>
-                                                    <li class="form__invalid-item">Текст поста. Это поле должно быть
-                                                        заполнено.
-                                                    </li>
+                                                        <?php if (isset($errors['userpic-file-photo'])): ?>
+                                                            <li class="form__invalid-item">
+                                                                <?= $errors['userpic-file-photo'] ?>
+                                                            </li>
+                                                        <?php endif; ?>
+                                                    <?php elseif ($type['class_name'] === 'video'): ?>
+                                                        <?php if (isset($errors['video-url'])): ?>
+                                                            <li class="form__invalid-item">
+                                                                Ссылка youtube. <?= $errors['video-url'] ?>
+                                                            </li>
+                                                        <?php endif; ?>
 
-                                                <?php elseif ($type['class_name'] === 'quote'): ?>
-                                                    <li class="form__invalid-item">Цитата. Это поле должно быть
-                                                        заполнено.
-                                                    </li>
-                                                    <li class="form__invalid-item">Цитата. Она не должна превышать 70
-                                                        знаков.
-                                                    </li>
-                                                    <li class="form__invalid-item">Автор. Это поле должно быть
-                                                        заполнено.
-                                                    </li>
+                                                    <?php elseif ($type['class_name'] === 'text'): ?>
+                                                        <?php if (isset($errors['post-text'])): ?>
+                                                            <li class="form__invalid-item">
+                                                                Текст поста. <?= $errors['post-text'] ?>
+                                                            </li>
+                                                        <?php endif; ?>
 
-                                                <?php elseif ($type['class_name'] === 'link'): ?>
-                                                    <li class="form__invalid-item">Ссылка. Это поле должно быть
-                                                        заполнено.
-                                                    </li>
-                                                    <li class="form__invalid-item">Некорректный URL-адрес.</li>
-                                                <?php endif; ?>
+                                                    <?php elseif ($type['class_name'] === 'quote'): ?>
+                                                        <?php if (isset($errors['quote-text'])): ?>
+                                                            <li class="form__invalid-item">
+                                                                Цитата. <?= $errors['quote-text'] ?>
+                                                            </li>
+                                                        <?php endif; ?>
+                                                        <?php if (isset($errors['quote-author'])): ?>
+                                                            <li class="form__invalid-item">
+                                                                Автор. <?= $errors['quote-author'] ?>
+                                                            </li>
+                                                        <?php endif; ?>
+                                                    <?php elseif ($type['class_name'] === 'link'): ?>
+                                                        <?php if (isset($errors['post-link'])): ?>
+                                                            <li class="form__invalid-item">
+                                                                Ссылка. <?= $errors['post-link'] ?>
+                                                            </li>
+                                                        <?php endif; ?>
+                                                    <?php endif; ?>
 
-                                                <? /*
+                                                    <? /*
                                                 <li class="form__invalid-item">Теги. Нужно указать минимум один тег.
                                                     Каждый тег должен состоять из одного слова и отделяться пробелом
                                                 </li>
  */ ?>
-                                            </ul>
-                                        </div>
+                                                </ul>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
 
                                 </form>

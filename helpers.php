@@ -325,24 +325,11 @@ function print_date_diff($date) {
  * Получает данные из базы данных
  *
  * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
- * @param string $sql - запрос к базе данных в виде строки.
+ * @param string $stmt - подготовленное выражение в виде строки.
  * @param bool $is_row - флаг, означающий получение одной строки из таблицы БД.
  *
  * @return array  В зависимости от $is_row одномерный или двумерный массив.
  */
-//function get_data($con, $sql, $is_row) {
-//    if ($con === false) {
-//        return print("Ошибка подключения: " . mysqli_connect_error());
-//    }
-//    $result = mysqli_query($con, $sql);
-//    if ($is_row) {
-//        $data = mysqli_fetch_assoc($result);
-//    } else {
-//        $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
-//    }
-//    return $data;
-//}
-
 function get_data($con, $stmt, $is_row) {
     if ($con === false) {
         return print("Ошибка подключения: " . mysqli_connect_error());
@@ -405,32 +392,11 @@ function validateUrl($name) {
     return false;
 }
 
-function moveUploadedImage($name) {
-    $uploaddir = '/uploads/';
-    $uploadfile = $uploaddir . basename($_FILES[$name]['name']);
-
-    if (!move_uploaded_file($_FILES[$name]['tmp_name'], $uploadfile)) {
-        return "Не удалось загрузить файл";
-    }
-    move_uploaded_file($_FILES[$name]['tmp_name'], $uploadfile);
-}
-
-
-function moveImageFromUrl($name) {
-    $fileName = strrchr($_POST[$name], '/');
-    $local = __DIR__ . '/uploads' . $fileName;
-    file_put_contents($local, file_get_contents($_POST[$name]));
-}
-
-function validateImageUrlContent($name) {
-    $content = file_get_contents($_POST[$name]);
-    if (!$content) {
-        return "Не удалось загрузить файл";
-    }
-    moveImageFromUrl($name);
-    return false;
-}
-
+/**
+ * Проверяет тип файла, загружаемого по ссылке. Если это не изображение, возвращает текст ошибки, иначе проверяет содежримое файла.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @return string
+ */
 function validateImageTypeFromUrl($name) {
     $fileType = strrchr($_POST[$name], '.');
     $validTypes = ['.png', '.jpg', '.jpeg', '.gif'];
@@ -438,14 +404,78 @@ function validateImageTypeFromUrl($name) {
     $i = 0;
     while ($i < count($validTypes)) {
         if ($fileType === $validTypes[$i]) {
-           return validateImageUrlContent($name);
+            return validateImageUrlContent($name);
         }
         $i++;
     }
-    return "Файл должен быть картинкой";
+    return "Файл должен быть картинкой.";
 }
 
+/**
+ * Проверяет содержимое файла, загружаемого по ссылке. Если не находит изображение, возвращает текст ошибки, иначе загружает изображение в папку /uploads.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @return string
+ */
+function validateImageUrlContent($name) {
+    $content = file_get_contents($_POST[$name]);
+    if (!$content) {
+        return "Не удалось загрузить файл. Пожалуйста, проверьте ещё раз указанный адрес.";
+    }
+    moveImageFromUrl($name);
+    return false;
+}
+
+/**
+ * Загружает изображение в папку /uploads.
+ * @param string $name Значение атрибута 'name' поля формы
+ */
+function moveImageFromUrl($name) {
+    $fileName = strrchr($_POST[$name], '/');
+    $local = __DIR__ . '/uploads' . $fileName;
+    file_put_contents($local, file_get_contents($_POST[$name]));
+}
+
+/**
+ * Проверяет тип файла, загружаемого с компьютера. Если это не изображение, возвращает текст ошибки, иначе загружает изображение в папку /uploads.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @return string
+ */
+function validateImageType($name) {
+    $fileType = $_FILES[$name]["type"];
+    $validTypes = ['image/png', 'image/jpeg', 'image/gif'];
+
+    $i = 0;
+    while ($i < count($validTypes)) {
+        if ($fileType === $validTypes[$i]) {
+            return moveUploadedImage($name);
+        }
+        $i++;
+    }
+    return "Формат загруженного файла должен быть изображением одного из следующих типов: png, jpeg, gif.";
+}
+
+/**
+ * Перемещает загруженное с компьютера изображение из временной папки в папку /uploads и возвращает false. Если перемещение не удалось, возвращает текст ошибки.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @return false
+ */
+function moveUploadedImage($name) {
+    $uploaddir = __DIR__ . '/uploads/';
+    $uploadfile = $uploaddir . basename($_FILES[$name]['name']);
+
+    if (is_uploaded_file($_FILES[$name]['tmp_name'])) {
+        move_uploaded_file($_FILES[$name]['tmp_name'], $uploadfile);
+        return false;
+    }
+    return "Не удалось загрузить файл.";
+}
+
+/**
+ * Возвращает массив тегов поста.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @return array
+ */
 function getTags($name) {
-    preg_match_all ('/([A-Za-zА-Яа-я0-9])+/', $_POST[$name], $postTags);
+    preg_match_all('/([A-Za-zА-Яа-я0-9])+/', $_POST[$name], $postTags);
     return $postTags[0];
 }
