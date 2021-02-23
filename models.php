@@ -14,13 +14,6 @@ function get_all_posts($con) {
     return $posts;
 }
 
-function get_posts_id($con) {
-    $sql = "SELECT id FROM posts;";
-    $stmt = mysqli_prepare($con, $sql);
-    $posts_id = get_data($con, $stmt, false);
-    return $posts_id;
-}
-
 function get_filtered_posts($con, $filtered_property, $value) {
     $limit = NUMBER_OF_PAGE_POSTS;
     if ($filtered_property) {

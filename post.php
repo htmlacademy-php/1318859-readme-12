@@ -4,12 +4,11 @@ include_once 'helpers.php';
 include_once 'models.php';
 
 $title = 'readme: публикация';
-$posts_id = get_posts_id($con);
-
+$posts = get_all_posts($con);
 $existed_ids = [];
 
-    for ($i = 0; $i < count($posts_id); $i++) {
-        $existed_ids[$i] = $posts_id[$i]['id'];
+    for ($i = 0; $i < count($posts); $i++) {
+        $existed_ids[$i] = $posts[$i]['id'];
     }
 
 if (isset($_GET["id"]) && in_array($_GET["id"], $existed_ids)) {
