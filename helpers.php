@@ -351,7 +351,7 @@ function get_data($con, $stmt, $is_row) {
  * @return string
  */
 function getPostVal($name) {
-    return $_POST[$name] ?? "";
+    return $name ?? "";
 }
 
 /**
