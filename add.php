@@ -15,7 +15,7 @@ $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rules = ['photo-url' => function () {
-        if (empty($_FILES["userpic-file-photo"]) || $_FILES["userpic-file-photo"]["error"]) {
+        if (empty($_FILES["photo-userpic-file"]) || $_FILES["photo-userpic-file"]["error"]) {
             if (!validateFilled('photo-url')) {
                 if (!validateUrl('photo-url')) {
                     return validateImageTypeFromUrl('photo-url');
@@ -25,9 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             return "Укажите ссылку на картинку или загрузите файл с компьютера.";
         }
         return false;
-    }, 'userpic-file-photo' => function () {
-        if (!empty($_FILES["userpic-file-photo"]) && !$_FILES["userpic-file-photo"]["error"]) {
-            return validateImageType('userpic-file-photo');
+    }, 'photo-userpic-file' => function () {
+        if (!empty($_FILES["photo-userpic-file"]) && !$_FILES["photo-userpic-file"]["error"]) {
+            return validateImageType('photo-userpic-file');
         }
         return false;
     }, 'video-url' => function () {
@@ -94,8 +94,8 @@ foreach ($types as $type) {
             $bd_post_user_id = 1;
             $db_data = ['title' => $db_post_title, 'user_id' => $bd_post_user_id];
             if ($_POST['type'] === 'photo') {
-                if (getPostVal('userpic-file-photo')) {
-                    $db_post_image = '/uploads/' . basename($_FILES['userpic-file-photo']['name']);
+                if (getPostVal('photo-userpic-file')) {
+                    $db_post_image = '/uploads/' . basename($_FILES['photo-userpic-file']['name']);
                 } else {
                     $db_post_image = '/uploads' . strrchr($_POST['photo-url'], '/');
                 }
