@@ -13,100 +13,238 @@ if (isset($_GET["type"])) {
 $_GET["type"] = $current_tab;
 $errors = [];
 
+$tabs = [
+    'photo' => 'фото',
+    'video' => 'видео',
+    'text' => 'текст',
+    'quote' => 'цитата',
+    'link' => 'ссылка',
+];
+
+$forms = [
+    'photo' => [
+        'title' => 'Форма добавления фото',
+        'inputs' => [
+            [
+                'title' => 'Заголовок',
+                'required' => true,
+                'type' => 'text',
+                'name' => 'heading',
+                'placeholder' => 'Введите заголовок',
+                'field_type' => 'input',
+            ], [
+                'title' => 'Ссылка из интернета',
+                'required' => false,
+                'type' => 'url',
+                'name' => 'url',
+                'placeholder' => 'Введите ссылку',
+                'field_type' => 'input',
+            ], [
+                'title' => 'Теги',
+                'required' => false,
+                'type' => 'text',
+                'name' => 'tags',
+                'placeholder' => 'Введите теги',
+                'field_type' => 'input',
+            ], [
+                'required' => false,
+                'type' => 'file',
+                'name' => 'userpic-file',
+                'field_type' => 'input-file',
+            ]
+        ],
+    ],
+    'video' => [
+        'title' => 'Форма добавления видео',
+        'inputs' => [
+            [
+                'title' => 'Заголовок',
+                'required' => true,
+                'type' => 'text',
+                'name' => 'heading',
+                'placeholder' => 'Введите заголовок',
+                'field_type' => 'input',
+            ], [
+                'title' => 'Ссылка youtube',
+                'required' => true,
+                'type' => 'url',
+                'name' => 'url',
+                'placeholder' => 'Введите ссылку',
+                'field_type' => 'input',
+            ], [
+                'title' => 'Теги',
+                'required' => false,
+                'type' => 'text',
+                'name' => 'tags',
+                'placeholder' => 'Введите теги',
+                'field_type' => 'input',
+            ],
+        ],
+    ],
+    'text' => [
+        'title' => 'Форма добавления текста',
+        'inputs' => [
+            [
+                'title' => 'Заголовок',
+                'required' => true,
+                'type' => 'text',
+                'name' => 'heading',
+                'placeholder' => 'Введите заголовок',
+                'field_type' => 'input',
+            ], [
+                'title' => 'Текст поста',
+                'required' => true,
+                'type' => 'textarea',
+                'name' => 'post',
+                'placeholder' => 'Введите текст публикации',
+                'field_type' => 'textarea',
+            ], [
+                'title' => 'Теги',
+                'required' => false,
+                'type' => 'text',
+                'name' => 'tags',
+                'placeholder' => 'Введите теги',
+                'field_type' => 'input',
+            ],
+        ],
+    ],
+    'quote' => [
+        'title' => 'Форма добавления цитаты',
+        'inputs' => [
+            [
+                'title' => 'Заголовок',
+                'required' => true,
+                'type' => 'text',
+                'name' => 'heading',
+                'placeholder' => 'Введите заголовок',
+                'field_type' => 'input',
+            ], [
+                'title' => 'Текст цитаты',
+                'required' => true,
+                'type' => 'textarea',
+                'name' => 'text',
+                'placeholder' => 'Текст цитаты',
+                'field_type' => 'textarea',
+            ], [
+                'title' => 'Автор',
+                'required' => true,
+                'type' => 'text',
+                'name' => 'author',
+                'field_type' => 'input',
+            ], [
+                'title' => 'Теги',
+                'required' => false,
+                'type' => 'text',
+                'name' => 'tags',
+                'placeholder' => 'Введите теги',
+                'field_type' => 'input',
+            ],
+        ],
+    ],
+    'link' => [
+        'title' => 'Форма добавления ссылки',
+        'inputs' => [
+            [
+                'title' => 'Заголовок',
+                'required' => true,
+                'type' => 'text',
+                'name' => 'heading',
+                'placeholder' => 'Введите заголовок',
+                'field_type' => 'input',
+            ], [
+                'title' => 'Ссылка',
+                'required' => true,
+                'type' => 'url',
+                'name' => 'url',
+                'field_type' => 'input',
+            ], [
+                'title' => 'Теги',
+                'required' => false,
+                'type' => 'text',
+                'name' => 'tags',
+                'placeholder' => 'Введите теги',
+                'field_type' => 'input',
+            ],
+        ],
+    ],
+];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $rules = ['photo-url' => function () {
-        if (empty($_FILES["photo-userpic-file"]) || $_FILES["photo-userpic-file"]["error"]) {
-            if (!validateFilled('photo-url')) {
-                if (!validateUrl('photo-url')) {
-                    return validateImageTypeFromUrl('photo-url');
+
+    foreach ($forms[$current_tab]['inputs'] as $input) {
+        if (($input['type'] === 'text' || $input['type'] === 'textarea') && $input['required']) {
+            $input['error'] = function($current_tab, $input) {
+                return validateFilled($current_tab . '-' . $input['name']);
+            };
+            $errors += [$current_tab . '-' . $input['name'] => $input['error']($current_tab, $input)];
+        } elseif ($input['type'] === 'url') {
+            if ($current_tab === 'photo') {
+                $input['error'] = function($current_tab, $input) {
+                    if (empty($_FILES["photo-userpic-file"]) || $_FILES["photo-userpic-file"]["error"]) {
+                        if (!validateFilled($current_tab . '-' . $input['name'])) {
+                            if (!validateUrl($current_tab . '-' . $input['name'])) {
+                                return validateImageTypeFromUrl($current_tab . '-' . $input['name']);
+                            }
+                            return validateUrl($current_tab . '-' . $input['name']);
+                        }
+                        return "Укажите ссылку на картинку или загрузите файл с компьютера.";
+                    }
+                    return false;
+                };
+            } elseif ($current_tab === 'video') {
+                $input['error'] = function ($current_tab, $input) {
+                    if (!validateFilled($current_tab . '-' . $input['name'])) {
+                        if (!validateUrl($current_tab . '-' . $input['name'])) {
+                            return check_youtube_url($_POST[$current_tab . '-' . $input['name']]);
+                        }
+                        return validateUrl($current_tab . '-' . $input['name']);
+                    }
+                    return validateFilled($current_tab . '-' . $input['name']);
+                };
+            } else {
+                $input['error'] = function ($current_tab, $input) {
+                    if (!validateFilled($current_tab . '-' . $input['name'])) {
+                        return validateUrl($current_tab . '-' . $input['name']);
+                    }
+                    return validateFilled($current_tab . '-' . $input['name']);
+                };
+            }
+            $errors += [$current_tab . '-' . $input['name'] => $input['error']($current_tab, $input)];
+        } elseif ($input['type'] === 'file') {
+            $input['error'] = function($current_tab, $input) {
+                if (!empty($_FILES[$current_tab . '-' . $input['name']]) && !$_FILES[$current_tab . '-' . $input['name']]["error"]) {
+                    return validateImageType($current_tab . '-' . $input['name']);
                 }
-                return validateUrl('photo-url');
-            }
-            return "Укажите ссылку на картинку или загрузите файл с компьютера.";
-        }
-        return false;
-    }, 'photo-userpic-file' => function () {
-        if (!empty($_FILES["photo-userpic-file"]) && !$_FILES["photo-userpic-file"]["error"]) {
-            return validateImageType('photo-userpic-file');
-        }
-        return false;
-    }, 'video-url' => function () {
-        if (!validateFilled('video-url')) {
-            if (!validateUrl('video-url')) {
-                return check_youtube_url($_POST['video-url']);
-            }
-            return validateUrl('video-url');
-        }
-        return validateFilled('video-url');
-    }, 'text-post' => function () {
-        return validateFilled('text-post');
-    }, 'quote-text' => function () {
-        return validateFilled('quote-text');
-    }, 'quote-author' => function () {
-        return validateFilled('quote-author');
-    }, 'link-url' => function () {
-        if (!validateFilled('link-url')) {
-            return validateUrl('link-url');
-        }
-        return validateFilled('link-url');
-    }, 'photo-heading' => function () {
-        return validateFilled('photo-heading');
-    }, 'video-heading' => function () {
-        return validateFilled('video-heading');
-    }, 'text-heading' => function () {
-        return validateFilled('text-heading');
-    }, 'quote-heading' => function () {
-        return validateFilled('quote-heading');
-    }, 'link-heading' => function () {
-        return validateFilled('link-heading');
-    },];
-
-    foreach ($_POST as $key => $value) {
-        if (isset($rules[$key])) {
-            $rule = $rules[$key];
-            $errors[$key] = $rule();
+                return false;
+            };
+            $errors += [$current_tab . '-' . $input['name'] => $input['error']($current_tab, $input)];
         }
     }
-    foreach ($_FILES as $key => $value) {
-        if (isset($rules[$key])) {
-            $rule = $rules[$key];
-            $errors[$key] = $rule();
-        }
-    }
-
-    $errors = array_filter($errors);
+    print_r($errors);
 
     if (isset($_POST["send"])) {
-        $current_tab = $_POST["type"];
+        $_GET["type"] = $_POST["type"];
     }
 
-foreach ($types as $type) {
-    $class_name = $type['class_name'];
-    $rules += [$type['class_name'] . '-heading' => function ($class_name) {
-        return validateHeading($class_name);
-    }];
-}
-
-    if (!$errors) {
-        foreach ($types as $type) {
-            $class_name = $type['class_name'];
-            $db_post_title = getPostVal($_POST['type'] . '-heading');
+    if (empty($errors)) {
+        foreach ($forms[$current_tab]['inputs'] as $input) {
+            $db_post_title = $_POST[$current_tab . '-' . $input['name']];
             $bd_post_user_id = 1;
             $db_data = ['title' => $db_post_title, 'user_id' => $bd_post_user_id];
-            if ($_POST['type'] === 'photo') {
+            if ($current_tab === 'photo') {
                 if (getPostVal('photo-userpic-file')) {
                     $db_post_image = '/uploads/' . basename($_FILES['photo-userpic-file']['name']);
                 } else {
                     $db_post_image = '/uploads' . strrchr($_POST['photo-url'], '/');
                 }
                 $db_data += ['image' => $db_post_image, 'type_id' => 1];
-            } elseif ($_POST['type'] === 'video') {
+            } elseif ($current_tab === 'video') {
                 $db_post_video = getPostVal('video-url');
                 $db_data += ['video' => $db_post_video, 'type_id' => 2];
-            } elseif ($_POST['type'] === 'text') {
+            } elseif ($current_tab === 'text') {
                 $db_post_text_content = getPostVal('text-post');
                 $db_data += ['text_content' => $db_post_text_content, 'type_id' => 3];
-            } elseif ($_POST['type'] === 'quote') {
+            } elseif ($current_tab === 'quote') {
                 $db_post_text_content = getPostVal('quote-text');
                 $db_post_quote_author = getPostVal('quote-author');
                 $db_data += ['text_content' => $db_post_text_content, 'quote_author' => $db_post_quote_author, 'type_id' => 4];
@@ -115,8 +253,8 @@ foreach ($types as $type) {
                 $db_data += ['link' => $db_post_link, 'type_id' => 5];
             }
 
-            if (getPostVal($class_name . '-tags')) {
-                $post_tags = getTags($class_name . '-tags');
+            if (getPostVal($current_tab . '-tags')) {
+                $post_tags = getTags($current_tab . '-tags');
                 add_tags($con, $post_tags);
             }
         }
@@ -126,7 +264,7 @@ foreach ($types as $type) {
     }
 }
 
-$main_content = include_template('adding-post.php', ['types' => $types, 'current_tab' => $current_tab, 'errors' => $errors,]);
+$main_content = include_template('adding-post.php', ['tabs' => $tabs, 'forms' => $forms, 'types' => $types, 'current_tab' => $current_tab, 'errors' => $errors,]);
 $layout = include_template('layout.php', ['main_content' => $main_content, 'user_name' => $user_name, 'title' => $title, 'is_auth' => $is_auth]);
 ?>
 <?= $layout; ?>

@@ -7,37 +7,28 @@
             <div class="adding-post__tabs-wrapper tabs">
                 <div class="adding-post__tabs filters">
                     <ul class="adding-post__tabs-list filters__list tabs__list">
-                        <?php foreach ($types as $type): ?>
+                        <?php foreach ($tabs as $post_type => $tab_name): ?>
                             <li class="adding-post__tabs-item filters__item">
-
-                                <a class="adding-post__tabs-link filters__button filters__button--<?= $type['class_name']; ?> <?php if ($current_tab === $type['class_name']): ?>filters__button--active tabs__item--active<?php endif; ?> tabs__item button" href="add.php?type=<?= $type['class_name']; ?>">
+                                <a class="adding-post__tabs-link filters__button filters__button--<?= $post_type; ?> <?php if ($current_tab === $post_type): ?>filters__button--active tabs__item--active<?php endif; ?> tabs__item button" href="add.php?type=<?= $post_type; ?>">
                                     <svg class="filters__icon" width="22" height="18">
-                                        <use xlink:href="#icon-filter-<?= $type['class_name']; ?>"></use>
+                                        <use xlink:href="#icon-filter-<?= $post_type; ?>"></use>
                                     </svg>
-                                    <span>
-                                        <?php if ($type['title'] === 'Картинка'): ?>
-                                            Фото
-                                        <?php else: ?>
-                                            <?= $type['title']; ?>
-                                        <?php endif; ?>
-                                    </span>
+                                    <span><?= $tab_name; ?></span>
                                 </a>
-
                             </li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
-                <div class="adding-post__tab-content">
 
+                <div class="adding-post__tab-content">
                     <section class="adding-post__<?= $current_tab; ?> tabs__content tabs__content--active">
                         <h2 class="visually-hidden">
                             <?= $forms[$current_tab]['title']; ?>
                         </h2>
-                        <form class="adding-post__form form" action="add.php" method="post" <?php if ($current_tab === 'photo'): ?>enctype="multipart/form-data"<?php endif; ?>>
+                        <form class="adding-post__form form" action="add.php?type=<?= $current_tab; ?>" method="post" <?php if ($current_tab === 'photo'): ?>enctype="multipart/form-data"<?php endif; ?>>
                             <div class="form__text-inputs-wrapper">
                                 <div class="form__text-inputs">
                                     <input type="hidden" name="type" value="<?= $current_tab; ?>">
-
 
                                     <?php foreach ($forms[$current_tab]['inputs'] as $input): ?>
 
@@ -69,7 +60,7 @@
                                                 <label class="adding-post__label form__label" for="<?= $current_tab; ?>-<?= $input['name']; ?>">
                                                     <?= $input['title']; ?> <?= ($input['required']) ? '<span class="form__input-required">*</span>' : ''; ?>
                                                 </label>
-                                                <div class="form__input-section <?php if (isset($errors[$type['class_name'] . '-heading'])): ?>form__input-section--error<?php endif; ?>">
+                                                <div class="form__input-section <?php if (isset($input['error'])): ?>form__input-section--error<?php endif; ?>">
 
                                                     <?php if ($input['field_type'] === 'input'): ?>
                                                         <input class="adding-post__input form__input"
@@ -82,8 +73,7 @@
                                                         <textarea class="adding-post__textarea form__textarea form__input"
                                                                   id="<?= $current_tab; ?>-<?= $input['name']; ?>"
                                                                   name="<?= $current_tab; ?>-<?= $input['name']; ?>"
-                                                                  placeholder="<?= $input['placeholder'] ?? ''; ?>"><?= $_POST[$current_tab . '-' . $input['name']] ?? ''; ?>
-                                                    </textarea>
+                                                                  placeholder="<?= $input['placeholder'] ?? ''; ?>"><?= $_POST[$current_tab . '-' . $input['name']] ?? ''; ?></textarea>
                                                     <?php endif; ?>
 
                                                     <button class="form__error-button button" type="button">
@@ -91,7 +81,7 @@
                                                     </button>
                                                     <div class="form__error-text">
                                                         <h3 class="form__error-title"><?= $input['title']; ?></h3>
-                                                        <p class="form__error-desc"><?= $errors[$type['class_name'] . '-heading']; ?></p>
+                                                        <p class="form__error-desc"><?= $input['error']; ?></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -111,66 +101,13 @@
                                             следующие
                                             ошибки:</b>
                                         <ul class="form__invalid-list">
-                                            <?php if (isset($errors[$type['class_name'] . '-heading'])): ?>
-                                                <li class="form__invalid-item">
-                                                    Заголовок. <?= $errors[$type['class_name'] . '-heading'] ?>
-                                                </li>
-                                            <?php endif; ?>
-
-                                            <?php if ($type['class_name'] === 'photo'): ?>
-                                                <?php if (isset($errors['photo-url'])): ?>
+                                            <?php foreach ($forms[$current_tab]['inputs'] as $input): ?>
+                                                <?php if (!empty($errors[$current_tab . '-' . $input['name']])): ?>
                                                     <li class="form__invalid-item">
-                                                        <?= $errors['photo-url'] ?>
+                                                        <?= (isset($input['title'])) ? $input['title'] . '. ' : ''?><?= $errors[$current_tab . '-' . $input['name']]; ?>
                                                     </li>
                                                 <?php endif; ?>
-
-                                                <!--<li class="form__invalid-item">Укажите ссылку на картинку или
-                                                    загрузите
-                                                    файл с компьютера.
-                                                </li>
-                                                <li class="form__invalid-item">Некорректный URL-адрес.</li>
-                                                <li class="form__invalid-item">Не удалось загрузить файл по
-                                                    ссылке.
-                                                </li>-->
-
-                                                <?php if (isset($errors['photo-userpic-file'])): ?>
-                                                    <li class="form__invalid-item">
-                                                        <?= $errors['photo-userpic-file'] ?>
-                                                    </li>
-                                                <?php endif; ?>
-                                            <?php elseif ($type['class_name'] === 'video'): ?>
-                                                <?php if (isset($errors['video-url'])): ?>
-                                                    <li class="form__invalid-item">
-                                                        Ссылка
-                                                        youtube. <?= $errors['video-url'] ?>
-                                                    </li>
-                                                <?php endif; ?>
-
-                                            <?php elseif ($type['class_name'] === 'text'): ?>
-                                                <?php if (isset($errors['text-post'])): ?>
-                                                    <li class="form__invalid-item">
-                                                        Текст поста. <?= $errors['text-post'] ?>
-                                                    </li>
-                                                <?php endif; ?>
-
-                                            <?php elseif ($type['class_name'] === 'quote'): ?>
-                                                <?php if (isset($errors['quote-text'])): ?>
-                                                    <li class="form__invalid-item">
-                                                        Цитата. <?= $errors['quote-text'] ?>
-                                                    </li>
-                                                <?php endif; ?>
-                                                <?php if (isset($errors['quote-author'])): ?>
-                                                    <li class="form__invalid-item">
-                                                        Автор. <?= $errors['quote-author'] ?>
-                                                    </li>
-                                                <?php endif; ?>
-                                            <?php elseif ($type['class_name'] === 'link'): ?>
-                                                <?php if (isset($errors['link-url'])): ?>
-                                                    <li class="form__invalid-item">
-                                                        Ссылка. <?= $errors['link-url'] ?>
-                                                    </li>
-                                                <?php endif; ?>
-                                            <?php endif; ?>
+                                            <?php endforeach; ?>
 
                                             <? /*
                                                 <li class="form__invalid-item">Теги. Нужно указать минимум один тег.
@@ -183,7 +120,7 @@
                             </div>
                         </form>
                     </section>
-                        <? /*
+                    <? /*
                         <?php foreach ($types as $type): ?>
                             <?php if ($type_name === $type['class_name']): ?>
                                 <section class="adding-post__<?= $type['class_name']; ?> tabs__content tabs__content--active">
