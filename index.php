@@ -10,7 +10,7 @@ $types = get_post_types($con);
 
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
-    $posts = get_filtered_posts($con, 't.id', $id);
+    $posts = get_filtered_posts($con, 't.id', intval($id));
 } else {
     $id = '';
     $posts = get_filtered_posts($con, '', null);
@@ -27,6 +27,7 @@ $layout = include_template('layout.php', [
     'title' => $title,
     'is_auth' => $is_auth
 ]);
-?>
 
+?>
+<!--<pre>--><?// print_r($posts); ?><!--</pre>-->
 <?= $layout; ?>
