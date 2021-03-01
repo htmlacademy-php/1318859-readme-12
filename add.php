@@ -176,7 +176,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $input['error'] = function($current_tab, $input) {
                 return validateFilled($current_tab . '-' . $input['name']);
             };
-            $errors += [$current_tab . '-' . $input['name'] => $input['error']($current_tab, $input)];
+            if ($input['error']($current_tab, $input)) {
+                $errors += [$current_tab . '-' . $input['name'] => $input['error']($current_tab, $input)];
+            }
         } elseif ($input['type'] === 'url') {
             if ($current_tab === 'photo') {
                 $input['error'] = function($current_tab, $input) {
@@ -209,7 +211,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     return validateFilled($current_tab . '-' . $input['name']);
                 };
             }
-            $errors += [$current_tab . '-' . $input['name'] => $input['error']($current_tab, $input)];
+            if ($input['error']($current_tab, $input)) {
+                $errors += [$current_tab . '-' . $input['name'] => $input['error']($current_tab, $input)];
+            }
         } elseif ($input['type'] === 'file') {
             $input['error'] = function($current_tab, $input) {
                 if (!empty($_FILES[$current_tab . '-' . $input['name']]) && !$_FILES[$current_tab . '-' . $input['name']]["error"]) {
@@ -217,50 +221,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 return false;
             };
-            $errors += [$current_tab . '-' . $input['name'] => $input['error']($current_tab, $input)];
+            if ($input['error']($current_tab, $input)) {
+                $errors += [$current_tab . '-' . $input['name'] => $input['error']($current_tab, $input)];
+            }
         }
     }
-    print_r($errors);
 
     if (isset($_POST["send"])) {
         $_GET["type"] = $_POST["type"];
     }
 
     if (empty($errors)) {
-        foreach ($forms[$current_tab]['inputs'] as $input) {
-            $db_post_title = $_POST[$current_tab . '-' . $input['name']];
-            $bd_post_user_id = 1;
-            $db_data = ['title' => $db_post_title, 'user_id' => $bd_post_user_id];
-            if ($current_tab === 'photo') {
-                if (getPostVal('photo-userpic-file')) {
-                    $db_post_image = '/uploads/' . basename($_FILES['photo-userpic-file']['name']);
-                } else {
-                    $db_post_image = '/uploads' . strrchr($_POST['photo-url'], '/');
-                }
-                $db_data += ['image' => $db_post_image, 'type_id' => 1];
-            } elseif ($current_tab === 'video') {
-                $db_post_video = getPostVal('video-url');
-                $db_data += ['video' => $db_post_video, 'type_id' => 2];
-            } elseif ($current_tab === 'text') {
-                $db_post_text_content = getPostVal('text-post');
-                $db_data += ['text_content' => $db_post_text_content, 'type_id' => 3];
-            } elseif ($current_tab === 'quote') {
-                $db_post_text_content = getPostVal('quote-text');
-                $db_post_quote_author = getPostVal('quote-author');
-                $db_data += ['text_content' => $db_post_text_content, 'quote_author' => $db_post_quote_author, 'type_id' => 4];
+        $db_post_title = $_POST[$current_tab . '-heading'];
+        $bd_post_user_id = 1;
+        $db_data = ['title' => $db_post_title, 'user_id' => $bd_post_user_id];
+        if ($current_tab === 'photo') {
+            if (isset($_POST['photo-userpic-file'])) {
+                $db_post_image = '/uploads/' . basename($_FILES['photo-userpic-file']['name']);
             } else {
-                $db_post_link = getPostVal('link-url');
-                $db_data += ['link' => $db_post_link, 'type_id' => 5];
+                $db_post_image = '/uploads' . strrchr($_POST['photo-url'], '/');
             }
+            $db_data += ['image' => $db_post_image, 'type_id' => 1];
+        } elseif ($current_tab === 'video') {
+            $db_post_video = $_POST['video-url'];
+            $db_data += ['video' => $db_post_video, 'type_id' => 2];
+        } elseif ($current_tab === 'text') {
+            $db_post_text_content = $_POST['text-post'];
+            $db_data += ['text_content' => $db_post_text_content, 'type_id' => 3];
+        } elseif ($current_tab === 'quote') {
+            $db_post_text_content = $_POST['quote-text'];
+            $db_post_quote_author = $_POST['quote-author'];
+            $db_data += ['text_content' => $db_post_text_content, 'quote_author' => $db_post_quote_author, 'type_id' => 4];
+        } else {
+            $db_post_link = $_POST['link-url'];
+            $db_data += ['link' => $db_post_link, 'type_id' => 5];
+        }
 
-            if (getPostVal($current_tab . '-tags')) {
-                $post_tags = getTags($current_tab . '-tags');
-                add_tags($con, $post_tags);
-            }
+        if (isset($_POST[$current_tab . '-tags'])) {
+            $post_tags = getTags($current_tab . '-tags');
+            add_tags($con, $post_tags);
         }
         $new_post_id = add_post($con, $db_data);
 
-        header("Location: /post.php?id=$new_post_id");
+        header("Location: post.php?id=$new_post_id");
     }
 }
 

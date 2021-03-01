@@ -346,15 +346,6 @@ function get_data($con, $stmt, $is_row) {
 }
 
 /**
- * Возвращает сохранённое в массив $_POST значение поля формы либо пустую строку.
- * @param string $name Значение атрибута 'name' поля формы
- * @return string
- */
-function getPostVal($name) {
-    return $name ?? "";
-}
-
-/**
  * Проверяет заполненность поля формы и выдаёт текст ошибки, если поле не заполнено.
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
