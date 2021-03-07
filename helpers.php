@@ -466,7 +466,7 @@ function moveUploadedImage($name) {
  * @param string $name Значение атрибута 'name' поля формы
  * @return array
  */
-function getTags($name) {
+function getTagsFromPost($name) {
     preg_match_all('/([A-Za-zА-Яа-я0-9])+/', $_POST[$name], $postTags);
     return $postTags[0];
 }

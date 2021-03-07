@@ -14,6 +14,13 @@ function get_all_posts($con) {
     return $posts;
 }
 
+function get_all_tags($con) {
+    $sql = "SELECT * FROM tags;";
+    $stmt = mysqli_prepare($con, $sql);
+    $tags = get_data($con, $stmt, false);
+    return $tags;
+}
+
 function get_filtered_posts($con, $filtered_property, $value) {
     $limit = NUMBER_OF_PAGE_POSTS;
     if ($filtered_property) {
@@ -67,7 +74,7 @@ function add_post($con, $data) {
     foreach ($data as $db_col_name => $value) {
         $sql_data .= " $db_col_name = '$value',";
     }
-    $sql = "INSERT INTO posts SET" . substr($sql_data, 0, -1). ";" ;
+    $sql = "INSERT INTO posts SET" . substr($sql_data, 0, -1) . ";";
     $result = mysqli_query($con, $sql);
     if (!$result) {
         $error = mysqli_error($con);
@@ -78,13 +85,21 @@ function add_post($con, $data) {
     return $last_id;
 }
 
-function add_tags($con, $tags) {
-    foreach ($tags as $tag) {
-        $sql = "INSERT INTO tags SET name = '$tag';" ;
-        $result = mysqli_query($con, $sql);
-        if (!$result) {
-            $error = mysqli_error($con);
-            print("Ошибка MySQL: " . $error);
+function add_tags($con, $postTags, $db_tags) {
+    $tag_names = [];
+    $key = 0;
+    foreach ($db_tags as $db_tag) {
+        $tag_names += [$key => $db_tag['name']];
+        $key+=1;
+    }
+    foreach ($postTags as $tag) {
+        if (!in_array($tag, $tag_names)) {
+            $sql = "INSERT INTO tags SET name = '$tag';";
+            $result = mysqli_query($con, $sql);
+            if (!$result) {
+                $error = mysqli_error($con);
+                print("Ошибка MySQL: " . $error);
+            }
         }
     }
 }

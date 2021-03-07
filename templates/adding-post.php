@@ -60,7 +60,7 @@
                                                 <label class="adding-post__label form__label" for="<?= $current_tab; ?>-<?= $input['name']; ?>">
                                                     <?= $input['title']; ?> <?= ($input['required']) ? '<span class="form__input-required">*</span>' : ''; ?>
                                                 </label>
-                                                <div class="form__input-section <?php if (isset($input['error'])): ?>form__input-section--error<?php endif; ?>">
+                                                <div class="form__input-section <?php if (isset($errors[$current_tab . '-' . $input['name']])): ?>form__input-section--error<?php endif; ?>">
 
                                                     <?php if ($input['field_type'] === 'input'): ?>
                                                         <input class="adding-post__input form__input"
@@ -81,7 +81,7 @@
                                                     </button>
                                                     <div class="form__error-text">
                                                         <h3 class="form__error-title"><?= $input['title']; ?></h3>
-                                                        <p class="form__error-desc"><?= $input['error']; ?></p>
+                                                        <p class="form__error-desc"><?= $errors[$current_tab . '-' . $input['name']]; ?></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -104,7 +104,7 @@
                                             <?php foreach ($forms[$current_tab]['inputs'] as $input): ?>
                                                 <?php if (!empty($errors[$current_tab . '-' . $input['name']])): ?>
                                                     <li class="form__invalid-item">
-                                                        <?= (isset($input['title'])) ? $input['title'] . '. ' : ''?><?= $errors[$current_tab . '-' . $input['name']]; ?>
+                                                        <?= (isset($input['title'])) ? $input['title'] . '. ' : '' ?><?= $errors[$current_tab . '-' . $input['name']]; ?>
                                                     </li>
                                                 <?php endif; ?>
                                             <?php endforeach; ?>
