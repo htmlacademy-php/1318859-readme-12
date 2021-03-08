@@ -62,7 +62,10 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
             }
         }
 
-        $values = array_merge([$stmt, $types], $stmt_data);
+        $values = array_merge([
+            $stmt,
+            $types
+        ], $stmt_data);
 
         $func = 'mysqli_stmt_bind_param';
         $func(...$values);
@@ -234,7 +237,13 @@ function extract_youtube_id($youtube_url) {
  * @return false|string
  */
 function generate_random_date($index) {
-    $deltas = [['minutes' => 59], ['hours' => 23], ['days' => 6], ['weeks' => 4], ['months' => 11]];
+    $deltas = [
+        ['minutes' => 59],
+        ['hours' => 23],
+        ['days' => 6],
+        ['weeks' => 4],
+        ['months' => 11]
+    ];
     $dcnt = count($deltas);
 
     if ($index < 0) {
@@ -384,13 +393,49 @@ function validateUrl($name) {
 }
 
 /**
+ * Проверяет значение поля формы на соответствие корректному email-адресу, если не соответствует, выдаёт текст ошибки.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @return string
+ */
+function validateEmail($name) {
+    if (!filter_var($_POST[$name], FILTER_VALIDATE_EMAIL)) {
+        return "Значение поля должно быть корректным email-адресом";
+    }
+    return false;
+}
+
+
+function validateUniqueEmail($con, $name) {
+    $email = mysqli_real_escape_string($con, $_POST[$name]);
+    $sql = "SELECT id FROM users WHERE email = '$email'";
+    $res = mysqli_query($con, $sql);
+
+    if (mysqli_num_rows($res) > 0) {
+        return "Пользователь с таким email уже зарегистрирован";
+    }
+    return false;
+}
+
+function validatePassword($password_repeat, $password) {
+    if ($_POST[$password_repeat] !== $_POST[$password]) {
+        return "Пароли не совпадают.";
+    }
+    return false;
+}
+
+/**
  * Проверяет тип файла, загружаемого по ссылке. Если это не изображение, возвращает текст ошибки, иначе проверяет содежримое файла.
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
 function validateImageTypeFromUrl($name) {
     $fileType = strrchr($_POST[$name], '.');
-    $validTypes = ['.png', '.jpg', '.jpeg', '.gif'];
+    $validTypes = [
+        '.png',
+        '.jpg',
+        '.jpeg',
+        '.gif'
+    ];
 
     $i = 0;
     while ($i < count($validTypes)) {
@@ -433,8 +478,11 @@ function moveImageFromUrl($name) {
  */
 function validateImageType($name) {
     $fileType = $_FILES[$name]["type"];
-    $validTypes = ['image/png', 'image/jpeg', 'image/gif'];
-
+    $validTypes = [
+        'image/png',
+        'image/jpeg',
+        'image/gif'
+    ];
     $i = 0;
     while ($i < count($validTypes)) {
         if ($fileType === $validTypes[$i]) {
@@ -451,7 +499,11 @@ function validateImageType($name) {
  * @return false
  */
 function moveUploadedImage($name) {
-    $uploaddir = __DIR__ . '/uploads/';
+    if ($name === 'userpic-file') {
+        $uploaddir = __DIR__ . '/uploads/users/';
+    } else {
+        $uploaddir = __DIR__ . '/uploads/';
+    }
     $uploadfile = $uploaddir . basename($_FILES[$name]['name']);
 
     if (is_uploaded_file($_FILES[$name]['tmp_name'])) {

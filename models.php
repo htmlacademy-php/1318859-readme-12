@@ -85,6 +85,22 @@ function add_post($con, $data) {
     return $last_id;
 }
 
+function add_user($con, $data) {
+    $sql_data = '';
+    foreach ($data as $db_col_name => $value) {
+        $sql_data .= " $db_col_name = '$value',";
+    }
+    $sql = "INSERT INTO users SET" . substr($sql_data, 0, -1) . ";";
+    $result = mysqli_query($con, $sql);
+    if (!$result) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+    } else {
+        $user_id = mysqli_insert_id($con);
+    }
+    return $user_id;
+}
+
 function add_tags($con, $postTags, $db_tags) {
     $tag_names = [];
     $key = 0;
