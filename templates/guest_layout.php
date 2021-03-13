@@ -7,7 +7,8 @@
     <title><?= $title ?></title>
     <link rel="stylesheet" href="css/main.css">
 </head>
-<body class="page">
+
+<body class="page page--main">
 <div style="display: none">
     <svg xmlns="http://www.w3.org/2000/svg">
         <symbol id="icon-arrow-right-ad" viewbox="0 0 6 9">
@@ -78,110 +79,71 @@
     </svg>
 </div>
 
-<header class="header">
-    <div class="header__wrapper container">
-        <div class="header__logo-wrapper">
-            <a class="header__logo-link" href="main.html">
-                <img class="header__logo" src="img/logo.svg" alt="Логотип readme" width="128" height="24">
+<header class="header page__header">
+    <div class="header__wrapper page__header-wrapper container">
+        <div class="header__logo-wrapper page__logo-wrapper">
+            <a class="header__logo-link header__logo-link--active">
+                <img class="header__logo" src="../img/logo.svg" alt="Логотип readme" width="172" height="32">
             </a>
-            <p class="header__topic">
+            <p class="header__topic page__header-topic">
                 micro blogging
             </p>
         </div>
-        <form class="header__search-form form" action="#" method="get">
-            <div class="header__search">
-                <label class="visually-hidden">Поиск</label>
-                <input class="header__search-input form__input" type="search">
-                <button class="header__search-button button" type="submit">
-                    <svg class="header__search-icon" width="18" height="18">
-                        <use xlink:href="#icon-search"></use>
-                    </svg>
-                    <span class="visually-hidden">Начать поиск</span>
-                </button>
-            </div>
-        </form>
         <div class="header__nav-wrapper">
             <nav class="header__nav">
-                <ul class="header__my-nav">
-                    <li class="header__my-page header__my-page--popular">
-                        <a class="header__page-link header__page-link--active" title="Популярный контент">
-                            <span class="visually-hidden">Популярный контент</span>
-                        </a>
-                    </li>
-                    <li class="header__my-page header__my-page--feed">
-                        <a class="header__page-link" href="feed.html" title="Моя лента">
-                            <span class="visually-hidden">Моя лента</span>
-                        </a>
-                    </li>
-                    <li class="header__my-page header__my-page--messages">
-                        <a class="header__page-link" href="messages.html" title="Личные сообщения">
-                            <span class="visually-hidden">Личные сообщения</span>
-                        </a>
-                    </li>
-                </ul>
-                <!-- здесь должен быть PHP код, который показывает следующий тег по условию -->
+                <p class="header__register-slogan">
+                    Еще нет аккаунта?
+                </p>
                 <ul class="header__user-nav">
-                    <?php if ($user_name): ?>
-                        <li class="header__profile">
-                            <a class="header__profile-link" href="#">
-                                <div class="header__avatar-wrapper">
-                                    <img class="header__profile-avatar" src="<?= $user_avatar ?>" alt="Аватар профиля">
-                                </div>
-                                <div class="header__profile-name">
-                                <span>
-                                    <?= $user_name ?>
-                                </span>
-                                    <svg class="header__link-arrow" width="10" height="6">
-                                        <use xlink:href="#icon-arrow-right-ad"></use>
-                                    </svg>
-                                </div>
-                            </a>
-                            <div class="header__tooltip-wrapper">
-                                <div class="header__profile-tooltip">
-                                    <ul class="header__profile-nav">
-                                        <li class="header__profile-nav-item">
-                                            <a class="header__profile-nav-link" href="#">
-                                                <span class="header__profile-nav-text">Мой профиль</span>
-                                            </a>
-                                        </li>
-                                        <li class="header__profile-nav-item">
-                                            <a class="header__profile-nav-link" href="#">
-                                                <span class="header__profile-nav-text">
-                                                    Сообщения
-                                                    <i class="header__profile-indicator">2</i>
-                                                </span>
-                                            </a>
-                                        </li>
-
-                                        <li class="header__profile-nav-item">
-                                            <a class="header__profile-nav-link" href="logout.php">
-                                                <span class="header__profile-nav-text">Выход</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="header__post-button button button--transparent" href="add.php">Пост</a>
-                        </li>
-                    <?php else: ?>
-                        <li class="header__authorization">
-                            <a class="header__user-button header__authorization-button button" href="login.html">Вход</a>
-                        </li>
-                        <li>
-                            <a class="header__user-button header__user-button--active header__register-button button">Регистрация</a>
-                        </li>
-                    <?php endif; ?>
+                    <li>
+                        <a class="header__user-button header__register-button button button--transparent" href="reg.php">Регистрация</a>
+                    </li>
                 </ul>
             </nav>
         </div>
     </div>
 </header>
 
-<?= $main_content ?>
+<main>
+    <h1 class="visually-hidden">Главная страница сайта по созданию микроблога readme</h1>
+    <div class="page__main-wrapper page__main-wrapper--intro container">
+        <section class="intro">
+            <h2 class="visually-hidden">Наши преимущества</h2>
+            <b class="intro__slogan">Блог, каким<br> он должен быть</b>
+            <ul class="intro__advantages-list">
+                <li class="intro__advantage intro__advantage--ease">
+                    <p class="intro__advantage-text">
+                        Есть все необходимое для&nbsp;простоты публикации
+                    </p>
+                </li>
+                <li class="intro__advantage intro__advantage--no-excess">
+                    <p class="intro__advantage-text">
+                        Нет ничего лишнего, отвлекающего от сути
+                    </p>
+                </li>
+            </ul>
+        </section>
+        <section class="authorization">
+            <h2 class="visually-hidden">Авторизация</h2>
+            <form class="authorization__form form" action="index.php" method="post">
+                <?php foreach ($form['inputs'] as $input): ?>
+                    <div class="authorization__input-wrapper form__input-wrapper <?php if (isset($errors[$input['name']])): ?>form__input-section--error<?php endif; ?>">
+                        <input class="authorization__input authorization__input--<?= $input['name']; ?> form__input" type="<?= $input['type']; ?>" name="<?= $input['name']; ?>" value="<?= $_POST[$input['name']] ?? ''; ?>" placeholder="<?= $input['placeholder']; ?>">
+                        <svg class="form__input-icon" width="<?= $input['icon']['width']; ?>" height="<?= $input['icon']['height']; ?>">
+                            <use xlink:href="#icon-input-<?= $input['icon']['name']; ?>"></use>
+                        </svg>
+                        <label class="visually-hidden"><?= $input['title']; ?></label>
+                    </div>
+                    <span class="form__error-label form__error-label--login"><?= $errors[$input['name']]; ?></span>
+                <?php endforeach; ?>
+                <a class="authorization__recovery" href="#">Восстановить пароль</a>
+                <button class="authorization__submit button button--main" type="submit">Войти</button>
+            </form>
+        </section>
+    </div>
+</main>
 
-<footer class="footer">
+<footer class="footer footer--main">
     <div class="footer__wrapper">
         <div class="footer__container container">
             <div class="footer__site-info">
@@ -209,8 +171,10 @@
                 </div>
                 <p class="footer__license">
                     При использовании любых материалов с сайта обязательно указание Readme в качестве источника. Все
-                    авторские и исключительные права в рамках проекта защищены в соответствии с положениями 4 части
-                    Гражданского Кодекса Российской Федерации.
+                    авторские и
+                    исключительные права в рамках проекта защищены в соответствии с положениями 4 части Гражданского
+                    Кодекса
+                    Российской Федерации.
                 </p>
             </div>
             <div class="footer__my-info">
@@ -237,8 +201,5 @@
         </div>
     </div>
 </footer>
-<!--<script src="libs/dropzone.js"></script>-->
-<!--<script src="js/dropzone-settings.js"></script>-->
-<!--<script src="js/main.js"></script>-->
 </body>
 </html>
