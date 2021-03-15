@@ -1,4 +1,10 @@
 <?php
+
+if (isset($_SESSION['user'])) {
+    header("Location: /");
+    exit();
+}
+
 include_once 'config.php';
 include_once 'helpers.php';
 include_once 'models.php';
@@ -32,21 +38,24 @@ $forms = [
                 'name' => 'heading',
                 'placeholder' => 'Введите заголовок',
                 'field_type' => 'input',
-            ], [
+            ],
+            [
                 'title' => 'Ссылка из интернета',
                 'required' => false,
                 'type' => 'url',
                 'name' => 'url',
                 'placeholder' => 'Введите ссылку',
                 'field_type' => 'input',
-            ], [
+            ],
+            [
                 'title' => 'Теги',
                 'required' => false,
                 'type' => 'text',
                 'name' => 'tags',
                 'placeholder' => 'Введите теги',
                 'field_type' => 'input',
-            ], [
+            ],
+            [
                 'required' => false,
                 'type' => 'file',
                 'name' => 'userpic-file',
@@ -64,14 +73,16 @@ $forms = [
                 'name' => 'heading',
                 'placeholder' => 'Введите заголовок',
                 'field_type' => 'input',
-            ], [
+            ],
+            [
                 'title' => 'Ссылка youtube',
                 'required' => true,
                 'type' => 'url',
                 'name' => 'url',
                 'placeholder' => 'Введите ссылку',
                 'field_type' => 'input',
-            ], [
+            ],
+            [
                 'title' => 'Теги',
                 'required' => false,
                 'type' => 'text',
@@ -91,14 +102,16 @@ $forms = [
                 'name' => 'heading',
                 'placeholder' => 'Введите заголовок',
                 'field_type' => 'input',
-            ], [
+            ],
+            [
                 'title' => 'Текст поста',
                 'required' => true,
                 'type' => 'textarea',
                 'name' => 'post',
                 'placeholder' => 'Введите текст публикации',
                 'field_type' => 'textarea',
-            ], [
+            ],
+            [
                 'title' => 'Теги',
                 'required' => false,
                 'type' => 'text',
@@ -118,20 +131,23 @@ $forms = [
                 'name' => 'heading',
                 'placeholder' => 'Введите заголовок',
                 'field_type' => 'input',
-            ], [
+            ],
+            [
                 'title' => 'Текст цитаты',
                 'required' => true,
                 'type' => 'textarea',
                 'name' => 'text',
                 'placeholder' => 'Текст цитаты',
                 'field_type' => 'textarea',
-            ], [
+            ],
+            [
                 'title' => 'Автор',
                 'required' => true,
                 'type' => 'text',
                 'name' => 'author',
                 'field_type' => 'input',
-            ], [
+            ],
+            [
                 'title' => 'Теги',
                 'required' => false,
                 'type' => 'text',
@@ -151,13 +167,15 @@ $forms = [
                 'name' => 'heading',
                 'placeholder' => 'Введите заголовок',
                 'field_type' => 'input',
-            ], [
+            ],
+            [
                 'title' => 'Ссылка',
                 'required' => true,
                 'type' => 'url',
                 'name' => 'url',
                 'field_type' => 'input',
-            ], [
+            ],
+            [
                 'title' => 'Теги',
                 'required' => false,
                 'type' => 'text',
@@ -173,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     foreach ($forms[$current_tab]['inputs'] as $input) {
         if (($input['type'] === 'text' || $input['type'] === 'textarea') && $input['required']) {
-            $input['error'] = function($current_tab, $input) {
+            $input['error'] = function ($current_tab, $input) {
                 return validateFilled($current_tab . '-' . $input['name']);
             };
             if ($input['error']($current_tab, $input)) {
@@ -181,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } elseif ($input['type'] === 'url') {
             if ($current_tab === 'photo') {
-                $input['error'] = function($current_tab, $input) {
+                $input['error'] = function ($current_tab, $input) {
                     if (empty($_FILES["photo-userpic-file"]) || $_FILES["photo-userpic-file"]["error"]) {
                         if (!validateFilled($current_tab . '-' . $input['name'])) {
                             if (!validateUrl($current_tab . '-' . $input['name'])) {
@@ -215,7 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $errors += [$current_tab . '-' . $input['name'] => $input['error']($current_tab, $input)];
             }
         } elseif ($input['type'] === 'file') {
-            $input['error'] = function($current_tab, $input) {
+            $input['error'] = function ($current_tab, $input) {
                 if (!empty($_FILES[$current_tab . '-' . $input['name']]) && !$_FILES[$current_tab . '-' . $input['name']]["error"]) {
                     return validateImageType($current_tab . '-' . $input['name']);
                 }
@@ -234,27 +252,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         $db_post_title = $_POST[$current_tab . '-heading'];
         $bd_post_user_id = 1;
-        $db_data = ['title' => $db_post_title, 'user_id' => $bd_post_user_id];
+        $db_data = [
+            'title' => $db_post_title,
+            'user_id' => $bd_post_user_id
+        ];
         if ($current_tab === 'photo') {
             if (isset($_POST['photo-userpic-file'])) {
                 $db_post_image = '/uploads/' . basename($_FILES['photo-userpic-file']['name']);
             } else {
                 $db_post_image = '/uploads' . strrchr($_POST['photo-url'], '/');
             }
-            $db_data += ['image' => $db_post_image, 'type_id' => 1];
+            $db_data += [
+                'image' => $db_post_image,
+                'type_id' => 1
+            ];
         } elseif ($current_tab === 'video') {
             $db_post_video = $_POST['video-url'];
-            $db_data += ['video' => $db_post_video, 'type_id' => 2];
+            $db_data += [
+                'video' => $db_post_video,
+                'type_id' => 2
+            ];
         } elseif ($current_tab === 'text') {
             $db_post_text_content = $_POST['text-post'];
-            $db_data += ['text_content' => $db_post_text_content, 'type_id' => 3];
+            $db_data += [
+                'text_content' => $db_post_text_content,
+                'type_id' => 3
+            ];
         } elseif ($current_tab === 'quote') {
             $db_post_text_content = $_POST['quote-text'];
             $db_post_quote_author = $_POST['quote-author'];
-            $db_data += ['text_content' => $db_post_text_content, 'quote_author' => $db_post_quote_author, 'type_id' => 4];
+            $db_data += [
+                'text_content' => $db_post_text_content,
+                'quote_author' => $db_post_quote_author,
+                'type_id' => 4
+            ];
         } else {
             $db_post_link = $_POST['link-url'];
-            $db_data += ['link' => $db_post_link, 'type_id' => 5];
+            $db_data += [
+                'link' => $db_post_link,
+                'type_id' => 5
+            ];
         }
 
         if (isset($_POST[$current_tab . '-tags'])) {
@@ -268,8 +305,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$main_content = include_template('adding-post.php', ['tabs' => $tabs, 'forms' => $forms, 'types' => $types, 'current_tab' => $current_tab, 'errors' => $errors,]);
-$layout = include_template('layout.php', ['main_content' => $main_content, 'user_name' => $user_name, 'title' => $title, 'is_auth' => $is_auth]);
+$main_content = include_template('adding-post.php', [
+    'tabs' => $tabs,
+    'forms' => $forms,
+    'types' => $types,
+    'current_tab' => $current_tab,
+    'errors' => $errors,
+]);
+$layout = include_template('layout.php', [
+    'main_content' => $main_content,
+    'user_name' => $_SESSION['user']['login'],
+    'user_avatar' => $_SESSION['user']['avatar'],
+    'title' => $title,
+]);
 ?>
 <?= $layout; ?>
 

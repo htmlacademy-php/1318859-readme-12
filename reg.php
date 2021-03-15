@@ -4,7 +4,6 @@ include_once 'helpers.php';
 include_once 'models.php';
 
 $title = 'readme: регистрация';
-$is_auth = 0;
 $errors = [];
 
 $form = [
@@ -53,7 +52,6 @@ $form = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     foreach ($form['inputs'] as $input) {
         if (($input['type'] === 'text') && $input['required']) {
             $input['error'] = function ($input) {
@@ -126,9 +124,7 @@ $main_content = include_template('registration.php', [
 ]);
 $layout = include_template('layout.php', [
     'main_content' => $main_content,
-    'user_name' => $user_name,
     'title' => $title,
-    'is_auth' => $is_auth
 ]);
 ?>
 <?= $layout; ?>
