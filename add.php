@@ -263,45 +263,30 @@ $forms = [
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     foreach ($forms[$current_tab]['inputs'] as $input) {
-        if (($input['type'] === 'text' || $input['type'] === 'textarea') && $input['required']) {
-            if ($input['checks'][0]($current_tab, $input)) {
-                $errors += [$current_tab . '-' . $input['name'] => $input['checks'][0]($current_tab, $input)];
-            }
-        } elseif ($input['type'] === 'url') {
-            if ($current_tab === 'photo') {
-                if (empty($_FILES["photo-userpic-file"]) || $_FILES["photo-userpic-file"]["error"] === 4) {
-                    if ($input['checks'][0]($current_tab, $input)) {
-                        $errors += [$current_tab . '-' . $input['name'] => $input['checks'][0]($current_tab, $input)];
-                    } elseif ($input['checks'][1]($current_tab, $input)) {
-                        $errors += [$current_tab . '-' . $input['name'] => $input['checks'][1]($current_tab, $input)];
-                    } elseif ($input['checks'][2]($current_tab, $input)) {
-                        $errors += [$current_tab . '-' . $input['name'] => $input['checks'][2]($current_tab, $input)];
-                    }
-                };
-            } elseif ($current_tab === 'video') {
-                if ($input['checks'][0]($current_tab, $input)) {
-                    $errors += [$current_tab . '-' . $input['name'] => $input['checks'][0]($current_tab, $input)];
-                } elseif ($input['checks'][1]($current_tab, $input)) {
-                    $errors += [$current_tab . '-' . $input['name'] => $input['checks'][1]($current_tab, $input)];
-                } elseif ($input['checks'][2]($current_tab, $input)) {
-                    $errors += [$current_tab . '-' . $input['name'] => $input['checks'][2]($current_tab, $input)];
+        if ($input['required']) {
+            foreach ($input['checks'] as $check) {
+                if ($check($current_tab, $input)) {
+                    $errors += [$current_tab . '-' . $input['name'] => $check($current_tab, $input)];
                 }
-            } else {
-                if ($input['checks'][0]($current_tab, $input)) {
-                    $errors += [$current_tab . '-' . $input['name'] => $input['checks'][0]($current_tab, $input)];
-                } elseif ($input['checks'][1]) {
-                    $errors += [$current_tab . '-' . $input['name'] => $input['checks'][1]($current_tab, $input)];
+            }
+        } elseif ($current_tab === 'photo' && $input['type'] === 'url') {
+            if (empty($_FILES["photo-userpic-file"]) || $_FILES["photo-userpic-file"]["error"] === 4) {
+                foreach ($input['checks'] as $check) {
+                    if ($check($current_tab, $input)) {
+                        $errors += [$current_tab . '-' . $input['name'] => $check($current_tab, $input)];
+                    }
                 }
             }
         } elseif ($input['type'] === 'file') {
             if (!empty($_FILES[$current_tab . '-' . $input['name']]) && $_FILES[$current_tab . '-' . $input['name']]["error"] !== 4) {
-                if ($input['checks'][0]($current_tab, $input)) {
-                    $errors += [$current_tab . '-' . $input['name'] => $input['checks'][0]($current_tab, $input)];
+                foreach ($input['checks'] as $check) {
+                    if ($check($current_tab, $input)) {
+                        $errors += [$current_tab . '-' . $input['name'] => $check($current_tab, $input)];
+                    }
                 }
             }
         }
     }
-    print_r($_FILES);
 
     if (isset($_POST["send"])) {
         $_GET["type"] = $_POST["type"];

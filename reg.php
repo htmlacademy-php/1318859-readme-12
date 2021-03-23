@@ -24,7 +24,7 @@ $form = [
                 1 => function ($input) {
                     return validateEmail($input['name']);
                 },
-                2 => function ($con, $input) {
+                2 => function ($input, $con) {
                     return validateUniqueEmail($con, $input['name']);
                 }
             ]
@@ -96,6 +96,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif ($input['checks'][2]($con, $input)) {
                 $errors += [$input['name'] => $input['checks'][2]($con, $input)];
             }
+//            хочу тоже применить foreach, но не знаю, как быть с параметром $con
+
         } elseif ($input['type'] === 'password' && $input['name'] === 'password') {
             if ($input['checks'][0]($input)) {
                 $errors += [$input['name'] => $input['checks'][0]($input)];
