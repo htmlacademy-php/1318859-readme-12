@@ -88,7 +88,7 @@
                 micro blogging
             </p>
         </div>
-        <form class="header__search-form form" action="#" method="get">
+        <form class="header__search-form form" action="search.php" method="get">
             <div class="header__search">
                 <label class="visually-hidden">Поиск</label>
                 <input class="header__search-input form__input" type="search">
@@ -121,7 +121,7 @@
                 </ul>
                 <!-- здесь должен быть PHP код, который показывает следующий тег по условию -->
                 <ul class="header__user-nav">
-                    <?php if ($user_name): ?>
+                    <?php if (isset($user_name)): ?>
                         <li class="header__profile">
                             <a class="header__profile-link" href="#">
                                 <div class="header__avatar-wrapper">

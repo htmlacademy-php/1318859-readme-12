@@ -1,13 +1,13 @@
 <?php
 
-if (isset($_SESSION['user'])) {
-    header("Location: /");
-    exit();
-}
-
 include_once 'config.php';
 include_once 'helpers.php';
 include_once 'models.php';
+
+if (!isset($_SESSION['user'])) {
+    header("Location: /");
+    exit();
+}
 
 $title = 'readme: публикация';
 $posts = get_all_posts($con);

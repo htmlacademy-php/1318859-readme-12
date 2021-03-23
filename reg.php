@@ -17,6 +17,17 @@ $form = [
             'name' => 'email',
             'placeholder' => 'Укажите эл.почту',
             'field_type' => 'input',
+            'checks' => [
+                0 => function ($input) {
+                    return validateFilled($input['name']);
+                },
+                1 => function ($input) {
+                    return validateEmail($input['name']);
+                },
+                2 => function ($con, $input) {
+                    return validateUniqueEmail($con, $input['name']);
+                }
+            ]
         ],
         [
             'title' => 'Логин',
@@ -25,6 +36,11 @@ $form = [
             'name' => 'login',
             'placeholder' => 'Укажите логин',
             'field_type' => 'input',
+            'checks' => [
+                0 => function ($input) {
+                    return validateFilled($input['name']);
+                }
+            ]
         ],
         [
             'title' => 'Пароль',
@@ -33,6 +49,11 @@ $form = [
             'name' => 'password',
             'placeholder' => 'Придумайте пароль',
             'field_type' => 'input',
+            'checks' => [
+                0 => function ($input) {
+                    return validateFilled($input['name']);
+                }
+            ]
         ],
         [
             'title' => 'Повтор пароля',
@@ -41,12 +62,22 @@ $form = [
             'name' => 'password-repeat',
             'placeholder' => 'Повторите пароль',
             'field_type' => 'input',
+            'checks' => [
+                0 => function ($input) {
+                    return validatePassword($input['name'], 'password');
+                }
+            ]
         ],
         [
             'required' => false,
             'type' => 'file',
             'name' => 'userpic-file',
             'field_type' => 'input-file',
+            'checks' => [
+                0 => function ($input) {
+                    return validateImageType($input['name']);
+                }
+            ]
         ]
     ],
 ];
@@ -54,48 +85,30 @@ $form = [
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     foreach ($form['inputs'] as $input) {
         if (($input['type'] === 'text') && $input['required']) {
-            $input['error'] = function ($input) {
-                return validateFilled($input['name']);
-            };
-            if ($input['error']($input)) {
-                $errors += [$input['name'] => $input['error']($input)];
+            if ($input['checks'][0]($input)) {
+                $errors += [$input['name'] => $input['checks'][0]($input)];
             }
         } elseif ($input['type'] === 'email') {
-            $input['error'] = function ($con, $input) {
-                if (!validateFilled($input['name'])) {
-                    if (!validateEmail($input['name'])) {
-                        return validateUniqueEmail($con, $input['name']);
-                    }
-                    return validateEmail($input['name']);
-                }
-                return validateFilled($input['name']);
-            };
-            if ($input['error']($con, $input)) {
-                $errors += [$input['name'] => $input['error']($con, $input)];
+            if ($input['checks'][0]($input)) {
+                $errors += [$input['name'] => $input['checks'][0]($input)];
+            } elseif ($input['checks'][1]($input)) {
+                $errors += [$input['name'] => $input['checks'][1]($input)];
+            } elseif ($input['checks'][2]($con, $input)) {
+                $errors += [$input['name'] => $input['checks'][2]($con, $input)];
             }
         } elseif ($input['type'] === 'password' && $input['name'] === 'password') {
-            $input['error'] = function ($input) {
-                return validateFilled($input['name']);
-            };
-            if ($input['error']($input)) {
-                $errors += [$input['name'] => $input['error']($input)];
+            if ($input['checks'][0]($input)) {
+                $errors += [$input['name'] => $input['checks'][0]($input)];
             }
         } elseif ($input['type'] === 'password' && $input['name'] === 'password-repeat') {
-            $input['error'] = function ($input) {
-                return validatePassword($input['name'], 'password');
-            };
-            if ($input['error']($input)) {
-                $errors += [$input['name'] => $input['error']($input)];
+            if ($input['checks'][0]($input)) {
+                $errors += [$input['name'] => $input['checks'][0]($input)];
             }
         } elseif ($input['type'] === 'file') {
-            $input['error'] = function ($input) {
-                if (!empty($_FILES[$input['name']]) && !$_FILES[$input['name']]["error"]) {
-                    return validateImageType($input['name']);
+            if (!empty($_FILES[$input['name']]) && $_FILES[$input['name']]["error"] !== 4) {
+                if ($input['checks'][0]($input)) {
+                    $errors += [$input['name'] => $input['checks'][0]($input)];
                 }
-                return false;
-            };
-            if ($input['error']($input)) {
-                $errors += [$input['name'] => $input['error']($input)];
             }
         }
     }
@@ -112,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'avatar' => $db_avatar,
         ];
 
-//        $new_user_id = add_user($con, $db_data);
+        $new_user_id = add_user($con, $db_data);
 
         header("Location: index.php");
     }

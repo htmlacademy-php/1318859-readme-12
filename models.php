@@ -119,3 +119,11 @@ function add_tags($con, $postTags, $db_tags) {
         }
     }
 }
+
+function get_search_posts($con, $search) {
+    $sql = "SELECT * FROM posts WHERE MATCH(title, description) AGAINST(?)";
+
+    $stmt = db_get_prepare_stmt($con, $sql, [$search]);
+    $posts = get_data($con, $stmt, false);
+    return $posts;
+}
