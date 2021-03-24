@@ -4,7 +4,7 @@ include_once 'config.php';
 include_once 'helpers.php';
 include_once 'models.php';
 
-$title = 'readme: регистрация';
+$title = 'readme: вход на сайт';
 $errors = [];
 $form = [
     'title' => 'Авторизация',
@@ -18,6 +18,11 @@ $form = [
                 'name' => 'user',
                 'width' => '19',
                 'height' => '18',
+            ],
+            'checks' => [
+                0 => function ($input) {
+                    return validateFilled($input['name']);
+                }
             ]
         ],
         [
@@ -29,6 +34,11 @@ $form = [
                 'name' => 'password',
                 'width' => '16',
                 'height' => '20',
+            ],
+            'checks' => [
+                0 => function ($input) {
+                    return validateFilled($input['name']);
+                }
             ]
         ],
     ],
@@ -37,11 +47,8 @@ $form = [
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     foreach ($form['inputs'] as $input) {
-        $input['error'] = function ($input) {
-            return validateFilled($input['name']);
-        };
-        if ($input['error']($input)) {
-            $errors += [$input['name'] => $input['error']($input)];
+        if ($input['checks'][0]($input)) {
+            $errors += [$input['name'] => $input['checks'][0]($input)];
         }
     }
 

@@ -1,21 +1,19 @@
 <?php
 
-if (isset($_SESSION['user'])) {
-    header("Location: /");
-    exit();
-}
-
 include_once 'config.php';
 include_once 'helpers.php';
 include_once 'models.php';
 
+if (!isset($_SESSION['user'])) {
+    header("Location: /");
+    exit();
+}
+
 $title = 'readme: добавление публикации';
 $types = get_post_types($con);
-if (isset($_GET["type"])) {
-    $current_tab = $_GET["type"];
-} else {
-    $current_tab = 'text';
-}
+
+$current_tab = (isset($_GET["type"])) ? $_GET["type"] : 'text';
+
 $_GET["type"] = $current_tab;
 $errors = [];
 
@@ -38,6 +36,11 @@ $forms = [
                 'name' => 'heading',
                 'placeholder' => 'Введите заголовок',
                 'field_type' => 'input',
+                'checks' => [
+                    0 => function ($current_tab, $input) {
+                        return validateFilled($current_tab . '-' . $input['name']);
+                    }
+                ]
             ],
             [
                 'title' => 'Ссылка из интернета',
@@ -46,6 +49,17 @@ $forms = [
                 'name' => 'url',
                 'placeholder' => 'Введите ссылку',
                 'field_type' => 'input',
+                'checks' => [
+                    0 => function ($current_tab, $input) {
+                        return validateFilled($current_tab . '-' . $input['name']);
+                    },
+                    1 => function ($current_tab, $input) {
+                        return validateUrl($current_tab . '-' . $input['name']);
+                    },
+                    2 => function ($current_tab, $input) {
+                        return validateImageTypeFromUrl($current_tab . '-' . $input['name']);
+                    }
+                ]
             ],
             [
                 'title' => 'Теги',
@@ -60,6 +74,11 @@ $forms = [
                 'type' => 'file',
                 'name' => 'userpic-file',
                 'field_type' => 'input-file',
+                'checks' => [
+                    0 => function ($current_tab, $input) {
+                        return validateImageType($current_tab . '-' . $input['name']);
+                    }
+                ]
             ]
         ],
     ],
@@ -73,6 +92,11 @@ $forms = [
                 'name' => 'heading',
                 'placeholder' => 'Введите заголовок',
                 'field_type' => 'input',
+                'checks' => [
+                    0 => function ($current_tab, $input) {
+                        return validateFilled($current_tab . '-' . $input['name']);
+                    }
+                ]
             ],
             [
                 'title' => 'Ссылка youtube',
@@ -81,6 +105,17 @@ $forms = [
                 'name' => 'url',
                 'placeholder' => 'Введите ссылку',
                 'field_type' => 'input',
+                'checks' => [
+                    0 => function ($current_tab, $input) {
+                        return validateFilled($current_tab . '-' . $input['name']);
+                    },
+                    1 => function ($current_tab, $input) {
+                        return validateUrl($current_tab . '-' . $input['name']);
+                    },
+                    2 => function ($current_tab, $input) {
+                        return check_youtube_url($_POST[$current_tab . '-' . $input['name']]);
+                    }
+                ]
             ],
             [
                 'title' => 'Теги',
@@ -102,6 +137,11 @@ $forms = [
                 'name' => 'heading',
                 'placeholder' => 'Введите заголовок',
                 'field_type' => 'input',
+                'checks' => [
+                    0 => function ($current_tab, $input) {
+                        return validateFilled($current_tab . '-' . $input['name']);
+                    }
+                ]
             ],
             [
                 'title' => 'Текст поста',
@@ -110,6 +150,11 @@ $forms = [
                 'name' => 'post',
                 'placeholder' => 'Введите текст публикации',
                 'field_type' => 'textarea',
+                'checks' => [
+                    0 => function ($current_tab, $input) {
+                        return validateFilled($current_tab . '-' . $input['name']);
+                    }
+                ]
             ],
             [
                 'title' => 'Теги',
@@ -131,6 +176,11 @@ $forms = [
                 'name' => 'heading',
                 'placeholder' => 'Введите заголовок',
                 'field_type' => 'input',
+                'checks' => [
+                    0 => function ($current_tab, $input) {
+                        return validateFilled($current_tab . '-' . $input['name']);
+                    }
+                ]
             ],
             [
                 'title' => 'Текст цитаты',
@@ -139,6 +189,11 @@ $forms = [
                 'name' => 'text',
                 'placeholder' => 'Текст цитаты',
                 'field_type' => 'textarea',
+                'checks' => [
+                    0 => function ($current_tab, $input) {
+                        return validateFilled($current_tab . '-' . $input['name']);
+                    }
+                ]
             ],
             [
                 'title' => 'Автор',
@@ -146,6 +201,11 @@ $forms = [
                 'type' => 'text',
                 'name' => 'author',
                 'field_type' => 'input',
+                'checks' => [
+                    0 => function ($current_tab, $input) {
+                        return validateFilled($current_tab . '-' . $input['name']);
+                    }
+                ]
             ],
             [
                 'title' => 'Теги',
@@ -167,6 +227,11 @@ $forms = [
                 'name' => 'heading',
                 'placeholder' => 'Введите заголовок',
                 'field_type' => 'input',
+                'checks' => [
+                    0 => function ($current_tab, $input) {
+                        return validateFilled($current_tab . '-' . $input['name']);
+                    }
+                ]
             ],
             [
                 'title' => 'Ссылка',
@@ -174,6 +239,14 @@ $forms = [
                 'type' => 'url',
                 'name' => 'url',
                 'field_type' => 'input',
+                'checks' => [
+                    0 => function ($current_tab, $input) {
+                        return validateFilled($current_tab . '-' . $input['name']);
+                    },
+                    1 => function ($current_tab, $input) {
+                        return validateUrl($current_tab . '-' . $input['name']);
+                    }
+                ]
             ],
             [
                 'title' => 'Теги',
@@ -190,57 +263,27 @@ $forms = [
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     foreach ($forms[$current_tab]['inputs'] as $input) {
-        if (($input['type'] === 'text' || $input['type'] === 'textarea') && $input['required']) {
-            $input['error'] = function ($current_tab, $input) {
-                return validateFilled($current_tab . '-' . $input['name']);
-            };
-            if ($input['error']($current_tab, $input)) {
-                $errors += [$current_tab . '-' . $input['name'] => $input['error']($current_tab, $input)];
+        if ($input['required']) {
+            foreach ($input['checks'] as $check) {
+                if ($check($current_tab, $input)) {
+                    $errors += [$current_tab . '-' . $input['name'] => $check($current_tab, $input)];
+                }
             }
-        } elseif ($input['type'] === 'url') {
-            if ($current_tab === 'photo') {
-                $input['error'] = function ($current_tab, $input) {
-                    if (empty($_FILES["photo-userpic-file"]) || $_FILES["photo-userpic-file"]["error"]) {
-                        if (!validateFilled($current_tab . '-' . $input['name'])) {
-                            if (!validateUrl($current_tab . '-' . $input['name'])) {
-                                return validateImageTypeFromUrl($current_tab . '-' . $input['name']);
-                            }
-                            return validateUrl($current_tab . '-' . $input['name']);
-                        }
-                        return "Укажите ссылку на картинку или загрузите файл с компьютера.";
+        } elseif ($current_tab === 'photo' && $input['type'] === 'url') {
+            if (empty($_FILES["photo-userpic-file"]) || $_FILES["photo-userpic-file"]["error"] === 4) {
+                foreach ($input['checks'] as $check) {
+                    if ($check($current_tab, $input)) {
+                        $errors += [$current_tab . '-' . $input['name'] => $check($current_tab, $input)];
                     }
-                    return false;
-                };
-            } elseif ($current_tab === 'video') {
-                $input['error'] = function ($current_tab, $input) {
-                    if (!validateFilled($current_tab . '-' . $input['name'])) {
-                        if (!validateUrl($current_tab . '-' . $input['name'])) {
-                            return check_youtube_url($_POST[$current_tab . '-' . $input['name']]);
-                        }
-                        return validateUrl($current_tab . '-' . $input['name']);
-                    }
-                    return validateFilled($current_tab . '-' . $input['name']);
-                };
-            } else {
-                $input['error'] = function ($current_tab, $input) {
-                    if (!validateFilled($current_tab . '-' . $input['name'])) {
-                        return validateUrl($current_tab . '-' . $input['name']);
-                    }
-                    return validateFilled($current_tab . '-' . $input['name']);
-                };
-            }
-            if ($input['error']($current_tab, $input)) {
-                $errors += [$current_tab . '-' . $input['name'] => $input['error']($current_tab, $input)];
+                }
             }
         } elseif ($input['type'] === 'file') {
-            $input['error'] = function ($current_tab, $input) {
-                if (!empty($_FILES[$current_tab . '-' . $input['name']]) && !$_FILES[$current_tab . '-' . $input['name']]["error"]) {
-                    return validateImageType($current_tab . '-' . $input['name']);
+            if (!empty($_FILES[$current_tab . '-' . $input['name']]) && $_FILES[$current_tab . '-' . $input['name']]["error"] !== 4) {
+                foreach ($input['checks'] as $check) {
+                    if ($check($current_tab, $input)) {
+                        $errors += [$current_tab . '-' . $input['name'] => $check($current_tab, $input)];
+                    }
                 }
-                return false;
-            };
-            if ($input['error']($current_tab, $input)) {
-                $errors += [$current_tab . '-' . $input['name'] => $input['error']($current_tab, $input)];
             }
         }
     }
