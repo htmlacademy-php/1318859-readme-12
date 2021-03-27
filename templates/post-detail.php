@@ -17,7 +17,7 @@
                     <?php elseif ($post['class_name'] === 'link'): ?>
                         <div class="post__main">
                             <div class="post-link__wrapper">
-                                <a class="post-link__external" href="http://<?= htmlspecialchars($post['link']) ?>" title="Перейти по ссылке">
+                                <a class="post-link__external" href="<?= htmlspecialchars($post['link']) ?>" title="Перейти по ссылке">
                                     <div class="post-link__icon-wrapper">
                                         <img src="https://www.google.com/s2/favicons?domain=<?= htmlspecialchars(str_replace('www.', '', $post['link'])) ?>" alt="Иконка">
                                     </div>
@@ -43,8 +43,8 @@
                         <div class="post__main">
                             <div class="post-video__block">
                                 <div class="post-video__preview">
-                                    <?= embed_youtube_cover(htmlspecialchars($post['video'])); ?>
-                                    <img src="img/coast-medium.jpg" alt="Превью к видео" width="760" height="507">
+                                    <?= embed_youtube_cover(htmlspecialchars($post['video']), 760, 507); ?>
+                                    <!--<img src="img/coast-medium.jpg" alt="Превью к видео" width="760" height="507">-->
                                 </div>
                                 <div class="post-video__control">
                                     <button class="post-video__play post-video__play--paused button button--video" type="button">
@@ -184,7 +184,7 @@
                     <div class="post-details__user-info user__info">
                         <div class="post-details__avatar user__avatar">
                             <a class="post-details__avatar-link user__avatar-link" href="#">
-                                <img class="post-details__picture user__picture" src="../img/<?= $post['avatar'] ?>" alt="Аватар пользователя">
+                                <img class="post-details__picture user__picture" src="../<?= $post['avatar'] ?>" alt="Аватар пользователя">
                             </a>
                         </div>
                         <div class="post-details__name-wrapper user__name-wrapper">

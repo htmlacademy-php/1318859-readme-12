@@ -121,7 +121,7 @@ function add_tags($con, $postTags, $db_tags) {
 }
 
 function get_search_posts($con, $search) {
-    $sql = "SELECT * FROM posts WHERE MATCH(title, description) AGAINST(?)";
+    $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id WHERE MATCH(p.title, p.text_content) AGAINST(?) ORDER BY views_count DESC";
 
     $stmt = db_get_prepare_stmt($con, $sql, [$search]);
     $posts = get_data($con, $stmt, false);

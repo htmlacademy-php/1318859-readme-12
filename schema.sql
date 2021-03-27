@@ -76,6 +76,7 @@ CREATE TABLE types
   class_name VARCHAR(32) NOT NULL
 );
 
-CREATE FULLTEXT INDEX p_title ON posts (title);
-CREATE FULLTEXT INDEX p_text_content ON posts (text_content (40));
+-- CREATE FULLTEXT INDEX p_title ON posts (title);
+-- CREATE FULLTEXT INDEX p_text_content ON posts (text_content (40));
+CREATE FULLTEXT INDEX ON posts (title, text_content (40));
 CREATE FULLTEXT INDEX t_name ON tags (name);

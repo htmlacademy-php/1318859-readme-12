@@ -294,7 +294,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $db_post_title = $_POST[$current_tab . '-heading'];
-        $bd_post_user_id = 1;
+        $bd_post_user_id = $_SESSION['user']['id'];
         $db_data = [
             'title' => $db_post_title,
             'user_id' => $bd_post_user_id
