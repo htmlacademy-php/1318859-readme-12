@@ -17,18 +17,34 @@ if (empty($search)) {
     exit();
 }
 
-$posts = get_search_posts($con, $search);
-echo '<pre>';
-print_r($posts);
-echo '</pre>';
+if ($_GET['type'] === 'tag') {
+    $post_ids = get_posts_with_tag($con, $search);
+    $posts = [];
+    foreach ($post_ids as $post_id) {
+        $post = find_posts_with_tag($con, $post_id['post_id']);
+        $posts += $post;
+    }
+
+//    echo '<pre>';
+//    print_r($posts);
+//    echo '</pre>';
+
+    $result_text = '#' . $search;
+    $search_line_text = '';
+} else {
+    $posts = get_search_posts($con, $search);
+    $result_text = $search;
+    $search_line_text = $search;
+}
+
 if (!count($posts)) {
     $main_content = include_template('no-search-results.php', [
-        'search' => $search,
+        'result_text' => $result_text,
     ]);
 } else {
     $main_content = include_template('search-results.php', [
         'posts' => $posts,
-        'search' => $search,
+        'result_text' => $result_text,
     ]);
 }
 
@@ -38,6 +54,7 @@ $layout = include_template('layout.php', [
     'user_avatar' => $_SESSION['user']['avatar'],
     'title' => $title,
     'search' => $search,
+    'search_line_text' => $search_line_text,
 ]);
 ?>
 <?= $layout; ?>

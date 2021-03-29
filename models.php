@@ -101,16 +101,22 @@ function add_user($con, $data) {
     return $user_id;
 }
 
-function add_tags($con, $postTags, $db_tags) {
+function add_tags($con, $postTags, $db_tags, $post_id) {
     $tag_names = [];
     $key = 0;
     foreach ($db_tags as $db_tag) {
         $tag_names += [$key => $db_tag['name']];
-        $key+=1;
+        $key += 1;
     }
     foreach ($postTags as $tag) {
         if (!in_array($tag, $tag_names)) {
             $sql = "INSERT INTO tags SET name = '$tag';";
+            $result = mysqli_query($con, $sql);
+            if (!$result) {
+                $error = mysqli_error($con);
+                print("Ошибка MySQL: " . $error);
+            }
+            $sql = "INSERT INTO posts_tags SET post_id = '$post_id', tag_name = '$tag';";
             $result = mysqli_query($con, $sql);
             if (!$result) {
                 $error = mysqli_error($con);
@@ -126,4 +132,36 @@ function get_search_posts($con, $search) {
     $stmt = db_get_prepare_stmt($con, $sql, [$search]);
     $posts = get_data($con, $stmt, false);
     return $posts;
+}
+
+function get_post_tags($con, $post_id) {
+    $sql = "SELECT tag_name FROM posts_tags WHERE post_id = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $post_id);
+    $post_tags = get_data($con, $stmt, false);
+    return $post_tags;
+}
+
+function get_posts_with_tag($con, $tag_name) {
+    $sql = "SELECT post_id FROM posts_tags WHERE tag_name = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 's', $tag_name);
+    $post_tags = get_data($con, $stmt, false);
+    return $post_tags;
+}
+
+function find_posts_with_tag($con, $post_id) {
+    $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id WHERE p.id = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $post_id);
+    $filtered_posts = get_data($con, $stmt, false);
+    return $filtered_posts;
+}
+
+function get_posts_of_user($con, $user_id) {
+    $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id WHERE u.id = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $user_id);
+    $filtered_posts = get_data($con, $stmt, false);
+    return $filtered_posts;
 }

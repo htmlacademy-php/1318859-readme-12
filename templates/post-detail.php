@@ -103,14 +103,15 @@
                         </div>
                         <span class="post__view">500 просмотров</span>
                     </div>
-                    <ul class="post__tags">
-                        <li><a href="#">#nature</a></li>
-                        <li><a href="#">#globe</a></li>
-                        <li><a href="#">#photooftheday</a></li>
-                        <li><a href="#">#canon</a></li>
-                        <li><a href="#">#landscape</a></li>
-                        <li><a href="#">#щикарныйвид</a></li>
-                    </ul>
+                    <?php if (count($post_tags)): ?>
+                        <ul class="post__tags">
+                            <?php foreach ($post_tags as $tag): ?>
+                                <li>
+                                    <a href="search.php?q=<?= $tag['tag_name'] ?>&type=tag">#<?= $tag['tag_name'] ?></a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
                     <div class="comments">
                         <form class="comments__form form" action="#" method="post">
                             <div class="comments__my-avatar">
@@ -191,7 +192,9 @@
                             <a class="post-details__name user__name" href="#">
                                 <span><?= $post['login'] ?></span>
                             </a>
-                            <time class="post-details__time user__time" datetime="<?= date_format(date_create($author['dt_add']), 'Y-m-d'); ?>"><?= print_date_diff($author['dt_add']); ?> на сайте</time>
+                            <time class="post-details__time user__time" datetime="<?= date_format(date_create($author['dt_add']), 'Y-m-d'); ?>"><?= print_date_diff($author['dt_add']); ?>
+                                на сайте
+                            </time>
                         </div>
                     </div>
                     <div class="post-details__rating user__rating">
