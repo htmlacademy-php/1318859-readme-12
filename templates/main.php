@@ -68,6 +68,8 @@
                             <a href="/post.php?id=<?= $post['id']; ?>"><?= htmlspecialchars($post['title']) ?></a>
                         </h2>
                     </header>
+
+
                     <div class="post__main">
                         <?php if ($post['class_name'] === 'quote'): ?>
                             <blockquote>
@@ -95,7 +97,7 @@
                         <?php elseif ($post['class_name'] === 'video'): ?>
                             <div class="post-video__block">
                                 <div class="post-video__preview">
-                                    <?= embed_youtube_cover(htmlspecialchars($post['video'])); ?>
+                                    <?= embed_youtube_cover(htmlspecialchars($post['video']), 360, 188); ?>
                                     <img src="img/coast-medium.jpg" alt="Превью к видео" width="360" height="188">
                                 </div>
                                 <a href="post-details.html" class="post-video__play-big button">
@@ -114,6 +116,8 @@
                             <?php endif; ?>
                         <?php endif; ?>
                     </div>
+
+
                     <footer class="post__footer">
                         <div class="post__author">
                             <a class="post__author-link" href="#" title="Автор">

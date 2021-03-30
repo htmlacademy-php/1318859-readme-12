@@ -10,27 +10,51 @@ include_once 'helpers.php';
 include_once 'models.php';
 
 $title = 'readme: страница результатов поиска';
-$search = $_GET['q'] ?? '';
+$search = trim($_GET['q']) ?? '';
 
 if (empty($search)) {
-    header('Location: http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+    header("Location: ".$_SERVER['HTTP_REFERER']);
+    exit();
 }
 
-$posts = get_search_posts($con, $search);
-print_r($posts);
+if ($_GET['type'] === 'tag') {
+    $post_ids = get_posts_with_tag($con, $search);
+    $posts = [];
+    foreach ($post_ids as $post_id) {
+        $post = find_posts_with_tag($con, $post_id['post_id']);
+        $posts += $post;
+    }
+
+//    echo '<pre>';
+//    print_r($posts);
+//    echo '</pre>';
+
+    $result_text = '#' . $search;
+    $search_line_text = '';
+} else {
+    $posts = get_search_posts($con, $search);
+    $result_text = $search;
+    $search_line_text = $search;
+}
+
 if (!count($posts)) {
-    $main_content = include_template('no-search-result.php');
+    $main_content = include_template('no-search-results.php', [
+        'result_text' => $result_text,
+    ]);
+} else {
+    $main_content = include_template('search-results.php', [
+        'posts' => $posts,
+        'result_text' => $result_text,
+    ]);
 }
-
-$main_content = include_template('search-result.php', [
-    'posts' => $posts,
-]);
 
 $layout = include_template('layout.php', [
     'main_content' => $main_content,
     'user_name' => $_SESSION['user']['login'],
     'user_avatar' => $_SESSION['user']['avatar'],
     'title' => $title,
+    'search' => $search,
+    'search_line_text' => $search_line_text,
 ]);
 ?>
 <?= $layout; ?>
