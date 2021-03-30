@@ -25,20 +25,20 @@ $user_posts = get_posts_of_user($con, $user_id);
 
 if (empty($current_tab)) {
     $user_current_tab_posts = $user_posts;
-    echo '<pre>';
-    print_r($user_current_tab_posts);
-    echo '</pre>';
+//    echo '<pre>';
+//    print_r($user_current_tab_posts);
+//    echo '</pre>';
 } else {
     $user_current_tab_posts = [];
     foreach ($user_posts as $post) {
-        echo '<pre>';
-        print_r($post['class_name']);
-        echo '</pre>';
+//        echo '<pre>';
+//        print_r($post['class_name']);
+//        echo '</pre>';
         if ($current_tab === $post['class_name']) {
             $user_current_tab_posts += [$post];
-            echo '<pre>';
-            print_r($user_current_tab_posts);
-            echo '</pre>';
+//            echo '<pre>';
+//            print_r($user_current_tab_posts);
+//            echo '</pre>';
         }
     }
 }
