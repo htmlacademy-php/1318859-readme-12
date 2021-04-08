@@ -165,3 +165,38 @@ function get_posts_of_user($con, $user_id) {
     $filtered_posts = get_data($con, $stmt, false);
     return $filtered_posts;
 }
+
+// определяем id постов пользователя
+function get_ids_of_user_posts($con, $user_id) {
+    $sql = "SELECT id FROM posts WHERE user_id = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $user_id);
+    $ids = get_data($con, $stmt, false);
+    for ($i = 0; $i < count($ids); $i++) {
+        $ids[$i] = $ids[$i]['id'];
+    }
+    return $ids;
+}
+
+function get_liked_posts_of_user($con, $user_id) {
+    $ids = implode(",", get_ids_of_user_posts($con, $user_id));
+    // выбираем из таблицы лайков лайки постов пользователя, считаем количество лайков(строк в таблице) каждого поста
+    // группируем по id поста, сортируем по дате последнего лайка.
+    $sql = "SELECT p.*, u.login, u.avatar, t.class_name, MAX(l.id) AS last_like_id, COUNT(l.post_id) AS post_likes FROM likes l 
+            JOIN posts p ON p.id = l.post_id
+            JOIN users u ON p.user_id = u.id
+            JOIN types t ON p.type_id = t.id
+            WHERE l.post_id IN (" . $ids . ") GROUP BY l.post_id ORDER BY last_like_id DESC;";
+    $stmt = mysqli_prepare($con, $sql);
+    $liked_user_posts = get_data($con, $stmt, false);
+    return $liked_user_posts;
+}
+
+function get_following_users_of_user($con, $user_id) {
+    // выбираем из таблицы подписок ысе строки с follower_id == user_id.
+    $sql = "SELECT u.* FROM users u JOIN follows f ON u.id = f.following_user_id WHERE f.follower_id = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $user_id);
+    $following_users_of_user = get_data($con, $stmt, false);
+    return $following_users_of_user;
+}
