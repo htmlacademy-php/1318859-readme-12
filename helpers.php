@@ -219,11 +219,11 @@ function extract_youtube_id($youtube_url) {
     $parts = parse_url($youtube_url);
 
     if ($parts) {
-        if ($parts['path'] == '/watch') {
+        if ($parts['path'] === '/watch') {
             parse_str($parts['query'], $vars);
             $id = $vars['v'] ?? null;
         } else {
-            if ($parts['host'] == 'youtu.be') {
+            if ($parts['host'] === 'youtu.be') {
                 $id = substr($parts['path'], 1);
             }
         }
@@ -404,7 +404,12 @@ function validateEmail($name) {
     return false;
 }
 
-
+/**
+ * Проверяет введённый e-mail на уникальность, если не уникален, выдаёт текст ошибки.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @return string
+ */
 function validateUniqueEmail($con, $name) {
     $email = mysqli_real_escape_string($con, $_POST[$name]);
     $sql = "SELECT id FROM users WHERE email = '$email'";
@@ -416,6 +421,12 @@ function validateUniqueEmail($con, $name) {
     return false;
 }
 
+/**
+ * Проверяет совпадене значений в полях формы "Пароль" и "Повторить пароль", если не совпадают, выдаёт текст ошибки.
+ * @param string $password_repeat Значение из поля "Повторите пароль"
+ * @param string $password Значение из поля "Пароль"
+ * @return string
+ */
 function validatePassword($password_repeat, $password) {
     if ($_POST[$password_repeat] !== $_POST[$password]) {
         return "Пароли не совпадают.";

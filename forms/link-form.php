@@ -1,0 +1,42 @@
+<?php
+$form = [
+    'title' => 'Форма добавления ссылки',
+    'inputs' => [
+        [
+            'title' => 'Заголовок',
+            'required' => true,
+            'type' => 'text',
+            'name' => 'heading',
+            'placeholder' => 'Введите заголовок',
+            'field_type' => 'input',
+            'checks' => [
+                0 => function ($current_tab, $input) {
+                    return validateFilled($current_tab . '-' . $input['name']);
+                }
+            ]
+        ],
+        [
+            'title' => 'Ссылка',
+            'required' => true,
+            'type' => 'url',
+            'name' => 'url',
+            'field_type' => 'input',
+            'checks' => [
+                0 => function ($current_tab, $input) {
+                    return validateFilled($current_tab . '-' . $input['name']);
+                },
+                1 => function ($current_tab, $input) {
+                    return validateUrl($current_tab . '-' . $input['name']);
+                }
+            ]
+        ],
+        [
+            'title' => 'Теги',
+            'required' => false,
+            'type' => 'text',
+            'name' => 'tags',
+            'placeholder' => 'Введите теги',
+            'field_type' => 'input',
+        ],
+    ],
+];

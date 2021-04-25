@@ -6,6 +6,7 @@
 //}
 
 include_once 'config.php';
+include_once 'init.php';
 include_once 'helpers.php';
 include_once 'models.php';
 
@@ -24,10 +25,6 @@ if ($_GET['type'] === 'tag') {
         $post = find_posts_with_tag($con, $post_id['post_id']);
         $posts += $post;
     }
-
-//    echo '<pre>';
-//    print_r($posts);
-//    echo '</pre>';
 
     $result_text = '#' . $search;
     $search_line_text = '';

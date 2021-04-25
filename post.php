@@ -1,6 +1,7 @@
 <?php
 
 include_once 'config.php';
+include_once 'init.php';
 include_once 'helpers.php';
 include_once 'models.php';
 
@@ -25,9 +26,6 @@ if (isset($_GET["id"]) && in_array($_GET["id"], $existed_ids)) {
     $amount_of_author_posts = count(get_filtered_posts($con, 'u.id', $author_post_id));
     $number_of_author_followers = count(get_followers($con, $author_post_id));
     $post_tags = get_post_tags($con, $id);
-//    echo '<pre>';
-//    print_r($post);
-//    echo '</pre>';
     $main_content = include_template('post-detail.php', [
         'post' => $post,
         'id' => $id,
