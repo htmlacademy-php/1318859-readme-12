@@ -17,7 +17,7 @@
                     <?php elseif ($post['class_name'] === 'link'): ?>
                         <div class="post__main">
                             <div class="post-link__wrapper">
-                                <a class="post-link__external" href="http://<?= htmlspecialchars($post['link']) ?>" title="Перейти по ссылке">
+                                <a class="post-link__external" href="<?= htmlspecialchars($post['link']) ?>" title="Перейти по ссылке">
                                     <div class="post-link__icon-wrapper">
                                         <img src="https://www.google.com/s2/favicons?domain=<?= htmlspecialchars(str_replace('www.', '', $post['link'])) ?>" alt="Иконка">
                                     </div>
@@ -43,8 +43,8 @@
                         <div class="post__main">
                             <div class="post-video__block">
                                 <div class="post-video__preview">
-                                    <?= embed_youtube_cover(htmlspecialchars($post['video'])); ?>
-                                    <img src="img/coast-medium.jpg" alt="Превью к видео" width="760" height="507">
+                                    <?= embed_youtube_cover(htmlspecialchars($post['video']), 760, 507); ?>
+                                    <!--<img src="img/coast-medium.jpg" alt="Превью к видео" width="760" height="507">-->
                                 </div>
                                 <div class="post-video__control">
                                     <button class="post-video__play post-video__play--paused button button--video" type="button">
@@ -103,14 +103,15 @@
                         </div>
                         <span class="post__view">500 просмотров</span>
                     </div>
-                    <ul class="post__tags">
-                        <li><a href="#">#nature</a></li>
-                        <li><a href="#">#globe</a></li>
-                        <li><a href="#">#photooftheday</a></li>
-                        <li><a href="#">#canon</a></li>
-                        <li><a href="#">#landscape</a></li>
-                        <li><a href="#">#щикарныйвид</a></li>
-                    </ul>
+                    <?php if (count($post_tags)): ?>
+                        <ul class="post__tags">
+                            <?php foreach ($post_tags as $tag): ?>
+                                <li>
+                                    <a href="search.php?q=<?= $tag['tag_name'] ?>&type=tag">#<?= $tag['tag_name'] ?></a>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
                     <div class="comments">
                         <form class="comments__form form" action="#" method="post">
                             <div class="comments__my-avatar">
@@ -184,14 +185,16 @@
                     <div class="post-details__user-info user__info">
                         <div class="post-details__avatar user__avatar">
                             <a class="post-details__avatar-link user__avatar-link" href="#">
-                                <img class="post-details__picture user__picture" src="../img/<?= $post['avatar'] ?>" alt="Аватар пользователя">
+                                <img class="post-details__picture user__picture" src="../<?= $post['avatar'] ?>" alt="Аватар пользователя">
                             </a>
                         </div>
                         <div class="post-details__name-wrapper user__name-wrapper">
                             <a class="post-details__name user__name" href="#">
                                 <span><?= $post['login'] ?></span>
                             </a>
-                            <time class="post-details__time user__time" datetime="<?= date_format(date_create($author['dt_add']), 'Y-m-d'); ?>"><?= print_date_diff($author['dt_add']); ?> на сайте</time>
+                            <time class="post-details__time user__time" datetime="<?= date_format(date_create($author['dt_add']), 'Y-m-d'); ?>"><?= print_date_diff($author['dt_add']); ?>
+                                на сайте
+                            </time>
                         </div>
                     </div>
                     <div class="post-details__rating user__rating">

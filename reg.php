@@ -24,7 +24,7 @@ $form = [
                 1 => function ($input) {
                     return validateEmail($input['name']);
                 },
-                2 => function ($input, $con) {
+                2 => function ($con, $input) {
                     return validateUniqueEmail($con, $input['name']);
                 }
             ]

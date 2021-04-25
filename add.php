@@ -294,7 +294,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $db_post_title = $_POST[$current_tab . '-heading'];
-        $bd_post_user_id = 1;
+        $bd_post_user_id = $_SESSION['user']['id'];
         $db_data = [
             'title' => $db_post_title,
             'user_id' => $bd_post_user_id
@@ -337,12 +337,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
         }
 
+        $new_post_id = add_post($con, $db_data);
+
         if (isset($_POST[$current_tab . '-tags'])) {
             $post_tags = getTagsFromPost($current_tab . '-tags');
             $db_tags = get_all_tags($con);
-            add_tags($con, $post_tags, $db_tags);
+            add_tags($con, $post_tags, $db_tags, $new_post_id);
         }
-        $new_post_id = add_post($con, $db_data);
 
         header("Location: post.php?id=$new_post_id");
     }
