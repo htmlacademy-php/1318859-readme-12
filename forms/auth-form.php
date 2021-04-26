@@ -1,6 +1,7 @@
 <?php
 $form = [
     'title' => 'Авторизация',
+    'name' => 'auth-form',
     'inputs' => [
         [
             'title' => 'Email',

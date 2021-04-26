@@ -1,6 +1,7 @@
 <?php
 $form = [
     'title' => 'Форма добавления видео',
+    'name' => 'video-form',
     'inputs' => [
         [
             'title' => 'Заголовок',

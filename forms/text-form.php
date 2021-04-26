@@ -1,6 +1,7 @@
 <?php
 $form = [
     'title' => 'Форма добавления текста',
+    'name' => 'text-form',
     'inputs' => [
         [
             'title' => 'Заголовок',

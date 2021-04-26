@@ -9,7 +9,7 @@ $errors = [];
 
 $form = [
     'title' => 'Форма регистрации',
-    'name' => 'registration',
+    'name' => 'reg-form',
     'inputs' => [
         [
             'title' => 'Электронная почта',

@@ -1,6 +1,7 @@
 <?php
 $form = [
     'title' => 'Форма добавления ссылки',
+    'name' => 'link-form',
     'inputs' => [
         [
             'title' => 'Заголовок',

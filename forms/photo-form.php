@@ -1,6 +1,7 @@
 <?php
 $form = [
     'title' => 'Форма добавления фото',
+    'name' => 'photo-form',
     'inputs' => [
         [
             'title' => 'Заголовок',

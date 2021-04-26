@@ -1,6 +1,7 @@
 <?php
 $form = [
     'title' => 'Форма добавления цитаты',
+    'name' => 'quote-form',
     'inputs' => [
         [
             'title' => 'Заголовок',
