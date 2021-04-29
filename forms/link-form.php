@@ -1,5 +1,5 @@
 <?php
-$form = [
+return [
     'title' => 'Форма добавления ссылки',
     'name' => 'link-form',
     'inputs' => [
@@ -10,11 +10,6 @@ $form = [
             'name' => 'heading',
             'placeholder' => 'Введите заголовок',
             'field_type' => 'input',
-            'checks' => [
-                0 => function ($current_tab, $input) {
-                    return validateFilled($current_tab . '-' . $input['name']);
-                }
-            ]
         ],
         [
             'title' => 'Ссылка',
@@ -22,14 +17,6 @@ $form = [
             'type' => 'url',
             'name' => 'url',
             'field_type' => 'input',
-            'checks' => [
-                0 => function ($current_tab, $input) {
-                    return validateFilled($current_tab . '-' . $input['name']);
-                },
-                1 => function ($current_tab, $input) {
-                    return validateUrl($current_tab . '-' . $input['name']);
-                }
-            ]
         ],
         [
             'title' => 'Теги',

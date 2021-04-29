@@ -2,6 +2,7 @@
 
 include_once 'config.php';
 include_once 'init.php';
+include_once 'form-config.php';
 include_once 'helpers.php';
 include_once 'models.php';
 
@@ -12,12 +13,7 @@ if (!isset($_SESSION['user'])) {
 
 $title = 'readme: добавление публикации';
 $types = get_post_types($con);
-
 $current_tab = (isset($_GET["type"])) ? $_GET["type"] : 'text';
-
-$_GET["type"] = $current_tab;
-$errors = [];
-
 $tabs = [
     'photo' => 'фото',
     'video' => 'видео',
@@ -25,275 +21,18 @@ $tabs = [
     'quote' => 'цитата',
     'link' => 'ссылка',
 ];
+$form = include_once 'forms/' . $current_tab . '-form.php';
 
-$forms = [
-    'photo' => [
-        'title' => 'Форма добавления фото',
-        'inputs' => [
-            [
-                'title' => 'Заголовок',
-                'required' => true,
-                'type' => 'text',
-                'name' => 'heading',
-                'placeholder' => 'Введите заголовок',
-                'field_type' => 'input',
-                'checks' => [
-                    0 => function ($current_tab, $input) {
-                        return validateFilled($current_tab . '-' . $input['name']);
-                    }
-                ]
-            ],
-            [
-                'title' => 'Ссылка из интернета',
-                'required' => false,
-                'type' => 'url',
-                'name' => 'url',
-                'placeholder' => 'Введите ссылку',
-                'field_type' => 'input',
-                'checks' => [
-                    0 => function ($current_tab, $input) {
-                        return validateFilled($current_tab . '-' . $input['name']);
-                    },
-                    1 => function ($current_tab, $input) {
-                        return validateUrl($current_tab . '-' . $input['name']);
-                    },
-                    2 => function ($current_tab, $input) {
-                        return validateImageTypeFromUrl($current_tab . '-' . $input['name']);
-                    }
-                ]
-            ],
-            [
-                'title' => 'Теги',
-                'required' => false,
-                'type' => 'text',
-                'name' => 'tags',
-                'placeholder' => 'Введите теги',
-                'field_type' => 'input',
-            ],
-            [
-                'required' => false,
-                'type' => 'file',
-                'name' => 'userpic-file',
-                'field_type' => 'input-file',
-                'checks' => [
-                    0 => function ($current_tab, $input) {
-                        return validateImageType($current_tab . '-' . $input['name']);
-                    }
-                ]
-            ]
-        ],
-    ],
-    'video' => [
-        'title' => 'Форма добавления видео',
-        'inputs' => [
-            [
-                'title' => 'Заголовок',
-                'required' => true,
-                'type' => 'text',
-                'name' => 'heading',
-                'placeholder' => 'Введите заголовок',
-                'field_type' => 'input',
-                'checks' => [
-                    0 => function ($current_tab, $input) {
-                        return validateFilled($current_tab . '-' . $input['name']);
-                    }
-                ]
-            ],
-            [
-                'title' => 'Ссылка youtube',
-                'required' => true,
-                'type' => 'url',
-                'name' => 'url',
-                'placeholder' => 'Введите ссылку',
-                'field_type' => 'input',
-                'checks' => [
-                    0 => function ($current_tab, $input) {
-                        return validateFilled($current_tab . '-' . $input['name']);
-                    },
-                    1 => function ($current_tab, $input) {
-                        return validateUrl($current_tab . '-' . $input['name']);
-                    },
-                    2 => function ($current_tab, $input) {
-                        return check_youtube_url($_POST[$current_tab . '-' . $input['name']]);
-                    }
-                ]
-            ],
-            [
-                'title' => 'Теги',
-                'required' => false,
-                'type' => 'text',
-                'name' => 'tags',
-                'placeholder' => 'Введите теги',
-                'field_type' => 'input',
-            ],
-        ],
-    ],
-    'text' => [
-        'title' => 'Форма добавления текста',
-        'inputs' => [
-            [
-                'title' => 'Заголовок',
-                'required' => true,
-                'type' => 'text',
-                'name' => 'heading',
-                'placeholder' => 'Введите заголовок',
-                'field_type' => 'input',
-                'checks' => [
-                    0 => function ($current_tab, $input) {
-                        return validateFilled($current_tab . '-' . $input['name']);
-                    }
-                ]
-            ],
-            [
-                'title' => 'Текст поста',
-                'required' => true,
-                'type' => 'textarea',
-                'name' => 'post',
-                'placeholder' => 'Введите текст публикации',
-                'field_type' => 'textarea',
-                'checks' => [
-                    0 => function ($current_tab, $input) {
-                        return validateFilled($current_tab . '-' . $input['name']);
-                    }
-                ]
-            ],
-            [
-                'title' => 'Теги',
-                'required' => false,
-                'type' => 'text',
-                'name' => 'tags',
-                'placeholder' => 'Введите теги',
-                'field_type' => 'input',
-            ],
-        ],
-    ],
-    'quote' => [
-        'title' => 'Форма добавления цитаты',
-        'inputs' => [
-            [
-                'title' => 'Заголовок',
-                'required' => true,
-                'type' => 'text',
-                'name' => 'heading',
-                'placeholder' => 'Введите заголовок',
-                'field_type' => 'input',
-                'checks' => [
-                    0 => function ($current_tab, $input) {
-                        return validateFilled($current_tab . '-' . $input['name']);
-                    }
-                ]
-            ],
-            [
-                'title' => 'Текст цитаты',
-                'required' => true,
-                'type' => 'textarea',
-                'name' => 'text',
-                'placeholder' => 'Текст цитаты',
-                'field_type' => 'textarea',
-                'checks' => [
-                    0 => function ($current_tab, $input) {
-                        return validateFilled($current_tab . '-' . $input['name']);
-                    }
-                ]
-            ],
-            [
-                'title' => 'Автор',
-                'required' => true,
-                'type' => 'text',
-                'name' => 'author',
-                'field_type' => 'input',
-                'checks' => [
-                    0 => function ($current_tab, $input) {
-                        return validateFilled($current_tab . '-' . $input['name']);
-                    }
-                ]
-            ],
-            [
-                'title' => 'Теги',
-                'required' => false,
-                'type' => 'text',
-                'name' => 'tags',
-                'placeholder' => 'Введите теги',
-                'field_type' => 'input',
-            ],
-        ],
-    ],
-    'link' => [
-        'title' => 'Форма добавления ссылки',
-        'inputs' => [
-            [
-                'title' => 'Заголовок',
-                'required' => true,
-                'type' => 'text',
-                'name' => 'heading',
-                'placeholder' => 'Введите заголовок',
-                'field_type' => 'input',
-                'checks' => [
-                    0 => function ($current_tab, $input) {
-                        return validateFilled($current_tab . '-' . $input['name']);
-                    }
-                ]
-            ],
-            [
-                'title' => 'Ссылка',
-                'required' => true,
-                'type' => 'url',
-                'name' => 'url',
-                'field_type' => 'input',
-                'checks' => [
-                    0 => function ($current_tab, $input) {
-                        return validateFilled($current_tab . '-' . $input['name']);
-                    },
-                    1 => function ($current_tab, $input) {
-                        return validateUrl($current_tab . '-' . $input['name']);
-                    }
-                ]
-            ],
-            [
-                'title' => 'Теги',
-                'required' => false,
-                'type' => 'text',
-                'name' => 'tags',
-                'placeholder' => 'Введите теги',
-                'field_type' => 'input',
-            ],
-        ],
-    ],
-];
+$_GET["type"] = $current_tab;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    foreach ($forms[$current_tab]['inputs'] as $input) {
-        if ($input['required']) {
-            foreach ($input['checks'] as $check) {
-                if ($check($current_tab, $input)) {
-                    $errors += [$current_tab . '-' . $input['name'] => $check($current_tab, $input)];
-                }
-            }
-        } elseif ($current_tab === 'photo' && $input['type'] === 'url') {
-            if (empty($_FILES["photo-userpic-file"]) || $_FILES["photo-userpic-file"]["error"] === 4) {
-                foreach ($input['checks'] as $check) {
-                    if ($check($current_tab, $input)) {
-                        $errors += [$current_tab . '-' . $input['name'] => $check($current_tab, $input)];
-                    }
-                }
-            }
-        } elseif ($input['type'] === 'file') {
-            if (!empty($_FILES[$current_tab . '-' . $input['name']]) && $_FILES[$current_tab . '-' . $input['name']]["error"] !== 4) {
-                foreach ($input['checks'] as $check) {
-                    if ($check($current_tab, $input)) {
-                        $errors += [$current_tab . '-' . $input['name'] => $check($current_tab, $input)];
-                    }
-                }
-            }
-        }
-    }
+    $errors = validate_form($form, $checks, $errors, $configs);
 
     if (isset($_POST["send"])) {
         $_GET["type"] = $_POST["type"];
     }
 
-    if (empty($errors)) {
+    if (empty($errors[$form['name']])) {
         $db_post_title = $_POST[$current_tab . '-heading'];
         $bd_post_user_id = $_SESSION['user']['id'];
         $db_data = [
@@ -352,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $main_content = include_template('adding-post.php', [
     'tabs' => $tabs,
-    'forms' => $forms,
+    'form' => $form,
     'types' => $types,
     'current_tab' => $current_tab,
     'errors' => $errors,
@@ -365,5 +104,3 @@ $layout = include_template('layout.php', [
 ]);
 ?>
 <?= $layout; ?>
-
-

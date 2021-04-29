@@ -15,86 +15,29 @@
                                         <span class="form__input-required">*</span>
                                     <?php endif; ?>
                                 </label>
-                                <div class="form__input-section <?php if (isset($errors[$input['name']])): ?>form__input-section--error<?php endif; ?>">
+                                <div class="form__input-section <?php if (isset($errors[$form['name']][$input['name']])): ?>form__input-section--error<?php endif; ?>">
                                     <input class="registration__input form__input" id="<?= 'registration-' . $input['name']; ?>" type="<?= $input['type']; ?>" name="<?= $input['name']; ?>" value="<?= $_POST[$input['name']] ?? ''; ?>" placeholder="<?= $input['placeholder']; ?>">
                                     <button class="form__error-button button" type="button">
                                         !<span class="visually-hidden">Информация об ошибке</span>
                                     </button>
                                     <div class="form__error-text">
                                         <h3 class="form__error-title"><?= $input['title']; ?></h3>
-                                        <p class="form__error-desc"><?= $errors[$input['name']]; ?></p>
+                                        <p class="form__error-desc"><?= $errors[$form['name']][$input['name']]; ?></p>
                                     </div>
                                 </div>
                             </div>
                         <?php endif; ?>
                     <? endforeach; ?>
-                    <? /*
-                    <div class="registration__input-wrapper form__input-wrapper">
-                        <label class="registration__label form__label" for="registration-email">Электронная почта
-                            <span class="form__input-required">*</span></label>
-                        <div class="form__input-section">
-                            <input class="registration__input form__input" id="registration-email" type="email" name="email" placeholder="Укажите эл.почту">
-                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
-                            </button>
-                            <div class="form__error-text">
-                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не
-                                    так.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="registration__input-wrapper form__input-wrapper">
-                        <label class="registration__label form__label" for="registration-login">Логин
-                            <span class="form__input-required">*</span></label>
-                        <div class="form__input-section">
-                            <input class="registration__input form__input" id="registration-login" type="text" name="login" placeholder="Укажите логин">
-                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
-                            </button>
-                            <div class="form__error-text">
-                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не
-                                    так.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="registration__input-wrapper form__input-wrapper">
-                        <label class="registration__label form__label" for="registration-password">Пароль<span class="form__input-required">*</span></label>
-                        <div class="form__input-section">
-                            <input class="registration__input form__input" id="registration-password" type="password" name="password" placeholder="Придумайте пароль">
-                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
-                            </button>
-                            <div class="form__error-text">
-                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не
-                                    так.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="registration__input-wrapper form__input-wrapper">
-                        <label class="registration__label form__label" for="registration-password-repeat">Повтор
-                            пароля<span class="form__input-required">*</span></label>
-                        <div class="form__input-section">
-                            <input class="registration__input form__input" id="registration-password-repeat" type="password" name="password-repeat" placeholder="Повторите пароль">
-                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
-                            </button>
-                            <div class="form__error-text">
-                                <h3 class="form__error-title">Заголовок сообщения</h3>
-                                <p class="form__error-desc">Текст сообщения об ошибке, подробно объясняющий, что не
-                                    так.</p>
-                            </div>
-                        </div>
-                    </div>
- */ ?>
                 </div>
 
-                <?php if (!empty($errors)): ?>
+                <?php if (!empty($errors[$form['name']])): ?>
                     <div class="form__invalid-block">
                         <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                         <ul class="form__invalid-list">
                             <?php foreach ($form['inputs'] as $input): ?>
-                                <?php if (!empty($errors[$input['name']])): ?>
+                                <?php if (!empty($errors[$form['name']][$input['name']])): ?>
                                     <li class="form__invalid-item">
-                                        <?= (isset($input['title'])) ? $input['title'] . '. ' : '' ?><?= $errors[$input['name']]; ?>
+                                        <?= (isset($input['title'])) ? $input['title'] . '. ' : '' ?><?= $errors[$form['name']][$input['name']]; ?>
                                     </li>
                                 <?php endif; ?>
                             <?php endforeach; ?>

@@ -1,5 +1,5 @@
 <?php
-$form = [
+return [
     'title' => 'Форма добавления цитаты',
     'name' => 'quote-form',
     'inputs' => [
@@ -10,11 +10,6 @@ $form = [
             'name' => 'heading',
             'placeholder' => 'Введите заголовок',
             'field_type' => 'input',
-            'checks' => [
-                0 => function ($current_tab, $input) {
-                    return validateFilled($current_tab . '-' . $input['name']);
-                }
-            ]
         ],
         [
             'title' => 'Текст цитаты',
@@ -23,11 +18,6 @@ $form = [
             'name' => 'text',
             'placeholder' => 'Текст цитаты',
             'field_type' => 'textarea',
-            'checks' => [
-                0 => function ($current_tab, $input) {
-                    return validateFilled($current_tab . '-' . $input['name']);
-                }
-            ]
         ],
         [
             'title' => 'Автор',
@@ -35,11 +25,6 @@ $form = [
             'type' => 'text',
             'name' => 'author',
             'field_type' => 'input',
-            'checks' => [
-                0 => function ($current_tab, $input) {
-                    return validateFilled($current_tab . '-' . $input['name']);
-                }
-            ]
         ],
         [
             'title' => 'Теги',

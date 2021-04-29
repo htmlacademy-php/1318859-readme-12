@@ -1,5 +1,5 @@
 <?php
-$form = [
+return [
     'title' => 'Форма регистрации',
     'name' => 'reg-form',
     'inputs' => [
@@ -10,17 +10,6 @@ $form = [
             'name' => 'email',
             'placeholder' => 'Укажите эл.почту',
             'field_type' => 'input',
-            'checks' => [
-                0 => function ($input) {
-                    return validateFilled($input['name']);
-                },
-                1 => function ($input) {
-                    return validateEmail($input['name']);
-                },
-                2 => function ($con, $input) {
-                    return validateUniqueEmail($con, $input['name']);
-                }
-            ]
         ],
         [
             'title' => 'Логин',
@@ -29,11 +18,6 @@ $form = [
             'name' => 'login',
             'placeholder' => 'Укажите логин',
             'field_type' => 'input',
-            'checks' => [
-                0 => function ($input) {
-                    return validateFilled($input['name']);
-                }
-            ]
         ],
         [
             'title' => 'Пароль',
@@ -42,11 +26,6 @@ $form = [
             'name' => 'password',
             'placeholder' => 'Придумайте пароль',
             'field_type' => 'input',
-            'checks' => [
-                0 => function ($input) {
-                    return validateFilled($input['name']);
-                }
-            ]
         ],
         [
             'title' => 'Повтор пароля',
@@ -55,22 +34,12 @@ $form = [
             'name' => 'password-repeat',
             'placeholder' => 'Повторите пароль',
             'field_type' => 'input',
-            'checks' => [
-                0 => function ($input) {
-                    return validatePassword($input['name'], 'password');
-                }
-            ]
         ],
         [
             'required' => false,
             'type' => 'file',
             'name' => 'userpic-file',
             'field_type' => 'input-file',
-            'checks' => [
-                0 => function ($input) {
-                    return validateImageType($input['name']);
-                }
-            ]
         ]
     ],
 ];

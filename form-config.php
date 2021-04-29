@@ -29,8 +29,8 @@ $checks = [
             1 => function ($input) {
                 return validateEmail($input['name']);
             },
-            2 => function ($con, $input) {
-                return validateUniqueEmail($con, $input['name']);
+            2 => function ($input, $configs) {
+                return validateUniqueEmail($configs['con'], $input['name']);
             }
         ],
         'login' => [
@@ -56,97 +56,106 @@ $checks = [
     ],
     'photo-form' => [
         'heading' => [
-            0 => function ($current_tab, $input) {
-                return validateFilled($current_tab . '-' . $input['name']);
+            0 => function ($input, $configs) {
+                return validateFilled($configs['current_tab'] . '-' . $input['name']);
             }
         ],
         'url' => [
-            0 => function ($current_tab, $input) {
-                return validateFilled($current_tab . '-' . $input['name']);
+            0 => function ($input, $configs) {
+                return validateFilled($configs['current_tab'] . '-' . $input['name']);
             },
-            1 => function ($current_tab, $input) {
-                return validateUrl($current_tab . '-' . $input['name']);
+            1 => function ($input, $configs) {
+                return validateUrl($configs['current_tab'] . '-' . $input['name']);
             },
-            2 => function ($current_tab, $input) {
-                return validateImageTypeFromUrl($current_tab . '-' . $input['name']);
+            2 => function ($input, $configs) {
+                return validateImageTypeFromUrl($configs['current_tab'] . '-' . $input['name']);
             }
         ],
         'userpic-file' => [
-            0 => function ($current_tab, $input) {
-                return validateImageType($current_tab . '-' . $input['name']);
+            0 => function ($input, $configs) {
+                return validateImageType($configs['current_tab'] . '-' . $input['name']);
             }
         ],
+        'tags' => [],
     ],
     'video-form' => [
         'heading' => [
-            0 => function ($current_tab, $input) {
-                return validateFilled($current_tab . '-' . $input['name']);
+            0 => function ($input, $configs) {
+                return validateFilled($configs['current_tab'] . '-' . $input['name']);
             }
         ],
         'url' => [
-            0 => function ($current_tab, $input) {
-                return validateFilled($current_tab . '-' . $input['name']);
+            0 => function ($input, $configs) {
+                return validateFilled($configs['current_tab'] . '-' . $input['name']);
             },
-            1 => function ($current_tab, $input) {
-                return validateUrl($current_tab . '-' . $input['name']);
+            1 => function ($input, $configs) {
+                return validateUrl($configs['current_tab'] . '-' . $input['name']);
             },
-            2 => function ($current_tab, $input) {
-                return check_youtube_url($_POST[$current_tab . '-' . $input['name']]);
+            2 => function ($input, $configs) {
+                return check_youtube_url($_POST[$configs['current_tab'] . '-' . $input['name']]);
             }
         ],
+        'tags' => [],
     ],
     'text-form' => [
         'heading' => [
-            0 => function ($current_tab, $input) {
-                return validateFilled($current_tab . '-' . $input['name']);
+            0 => function ($input, $configs) {
+                return validateFilled($configs['current_tab'] . '-' . $input['name']);
             }
         ],
         'post' => [
-            0 => function ($current_tab, $input) {
-                return validateFilled($current_tab . '-' . $input['name']);
+            0 => function ($input, $configs) {
+                return validateFilled($configs['current_tab'] . '-' . $input['name']);
             }
         ],
+        'tags' => [],
     ],
     'quote-form' => [
         'heading' => [
-            0 => function ($current_tab, $input) {
-                return validateFilled($current_tab . '-' . $input['name']);
+            0 => function ($input, $configs) {
+                return validateFilled($configs['current_tab'] . '-' . $input['name']);
             }
         ],
         'text' => [
-            0 => function ($current_tab, $input) {
-                return validateFilled($current_tab . '-' . $input['name']);
+            0 => function ($input, $configs) {
+                return validateFilled($configs['current_tab'] . '-' . $input['name']);
             }
         ],
         'author' => [
-            0 => function ($current_tab, $input) {
-                return validateFilled($current_tab . '-' . $input['name']);
+            0 => function ($input, $configs) {
+                return validateFilled($configs['current_tab'] . '-' . $input['name']);
             }
         ],
+        'tags' => [],
     ],
     'link-form' => [
         'heading' => [
-            0 => function ($current_tab, $input) {
-                return validateFilled($current_tab . '-' . $input['name']);
+            0 => function ($input, $configs) {
+                return validateFilled($configs['current_tab'] . '-' . $input['name']);
             }
         ],
         'url' => [
-            0 => function ($current_tab, $input) {
-                return validateFilled($current_tab . '-' . $input['name']);
+            0 => function ($input, $configs) {
+                return validateFilled($configs['current_tab'] . '-' . $input['name']);
             },
-            1 => function ($current_tab, $input) {
-                return validateUrl($current_tab . '-' . $input['name']);
+            1 => function ($input, $configs) {
+                return validateUrl($configs['current_tab'] . '-' . $input['name']);
             }
         ],
+        'tags' => [],
     ],
 ];
 
-function validate_form($form, $checks, $errors) {
+function validate_form($form, $checks, $errors, $configs) {
     foreach ($form['inputs'] as $input) {
+
         foreach ($checks[$form['name']][$input['name']] as $check) {
-            if ($check) {
-                $errors[$form['name']] += [$input['name'] => $check];
+            if ($check($input, $configs)) {
+                $errors[$form['name']] += [$input['name'] => $check($input, $configs)];
             }
         }
     }
+    return $errors;
 }
+
+

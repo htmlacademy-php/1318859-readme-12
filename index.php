@@ -2,56 +2,16 @@
 
 include_once 'config.php';
 include_once 'init.php';
+include_once 'form-config.php';
 include_once 'helpers.php';
 include_once 'models.php';
 
 $title = 'readme: вход на сайт';
-$errors = [];
-$form = [
-    'title' => 'Авторизация',
-    'inputs' => [
-        [
-            'title' => 'Email',
-            'type' => 'email',
-            'name' => 'email',
-            'placeholder' => 'Email',
-            'icon' => [
-                'name' => 'user',
-                'width' => '19',
-                'height' => '18',
-            ],
-            'checks' => [
-                0 => function ($input) {
-                    return validateFilled($input['name']);
-                }
-            ]
-        ],
-        [
-            'title' => 'Пароль',
-            'type' => 'password',
-            'name' => 'password',
-            'placeholder' => 'Пароль',
-            'icon' => [
-                'name' => 'password',
-                'width' => '16',
-                'height' => '20',
-            ],
-            'checks' => [
-                0 => function ($input) {
-                    return validateFilled($input['name']);
-                }
-            ]
-        ],
-    ],
-];
+$form = include_once 'forms/auth-form.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    foreach ($form['inputs'] as $input) {
-        if ($input['checks'][0]($input)) {
-            $errors += [$input['name'] => $input['checks'][0]($input)];
-        }
-    }
+    $errors = validate_form($form, $checks, $errors, $configs);
 
     $email = mysqli_real_escape_string($con, $_POST['email']);
     $sql = "SELECT * FROM users WHERE email = '$email'";
@@ -59,17 +19,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
-    if (!count($errors) and $user) {
+    if (!count($errors[$form['name']]) and $user) {
         if (password_verify($_POST['password'], $user['password'])) {
             $_SESSION['user'] = $user;
         } else {
-            $errors['password'] = 'Неверный пароль';
+            $errors[$form['name']]['password'] = 'Неверный пароль';
         }
     } elseif (!empty($_POST['email'])) {
-        $errors['email'] = 'Пользователь с таким email не найден';
+        $errors[$form['name']]['email'] = 'Пользователь с таким email не найден';
     }
 
-    if (!count($errors)) {
+    if (!count($errors[$form['name']])) {
         header("Location: /feed.php?id=" . $_SESSION['user']['id']);
         exit();
     }
