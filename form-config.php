@@ -148,14 +148,25 @@ $checks = [
 
 function validate_form($form, $checks, $errors, $configs) {
     foreach ($form['inputs'] as $input) {
-
         foreach ($checks[$form['name']][$input['name']] as $check) {
-            if ($check($input, $configs)) {
-                $errors[$form['name']] += [$input['name'] => $check($input, $configs)];
+            if ($form['name'] === 'photo-form' && [$input['name']] === 'url') {
+                if (empty($_FILES["photo-userpic-file"]) || $_FILES["photo-userpic-file"]["error"] === 4) {
+                    if ($check($input, $configs)) {
+                        $errors[$form['name']] += [$input['name'] => $check($input, $configs)];
+                    }
+                }
+            } elseif ([$input['name']] === 'userpic-file') {
+                if (!empty($_FILES[$configs['current_tab'] . '-' . $input['name']]) && $_FILES[$configs['current_tab'] . '-' . $input['name']]["error"] !== 4) {
+                    if ($check($input, $configs)) {
+                        $errors[$form['name']] += [$input['name'] => $check($input, $configs)];
+                    }
+                }
+            } else {
+                if ($check($input, $configs)) {
+                    $errors[$form['name']] += [$input['name'] => $check($input, $configs)];
+                }
             }
         }
     }
     return $errors;
 }
-
-
