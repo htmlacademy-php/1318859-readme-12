@@ -1,7 +1,6 @@
 <?php
 include_once 'config.php';
 include_once 'init.php';
-include_once 'form-config.php';
 include_once 'helpers.php';
 include_once 'models.php';
 
@@ -10,8 +9,7 @@ $title = 'readme: регистрация';
 $form = include_once 'forms/reg-form.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $errors = validate_form($form, $checks, $errors, $configs);
-
+    $errors = validate_form($form, $configs);
     if (empty($errors[$form['name']])) {
         $db_email = $_POST['email'];
         $db_login = $_POST['login'];
@@ -32,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $main_content = include_template('registration.php', [
     'form' => $form,
-    'errors' => $errors,
+    'errors' => $errors ?? '',
 ]);
 $layout = include_template('layout.php', [
     'main_content' => $main_content,

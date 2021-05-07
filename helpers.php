@@ -533,3 +533,22 @@ function getTagsFromPost($name) {
     preg_match_all('/([A-Za-zА-Яа-я0-9])+/', $_POST[$name], $postTags);
     return $postTags[0];
 }
+
+/**
+ * Возвращает массив ошибок валидации формы.
+ * @param array $form Массив со свойствами валидируемой формы
+ * @param array $configs Массив дополнительных параметров для проверок
+ * @return array
+ */
+function validate_form($form, $configs) {
+    $errors = [$form['name'] => []];
+    foreach ($form['inputs'] as $input) {
+        foreach ($input['checks'] as $check) {
+            $error = $check($input, $configs);
+            if ($error) {
+                $errors[$form['name']] += [$input['name'] => $error];
+            }
+        }
+    }
+    return $errors;
+}

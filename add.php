@@ -2,7 +2,6 @@
 
 include_once 'config.php';
 include_once 'init.php';
-include_once 'form-config.php';
 include_once 'helpers.php';
 include_once 'models.php';
 
@@ -26,7 +25,7 @@ $form = include_once 'forms/' . $current_tab . '-form.php';
 $_GET["type"] = $current_tab;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $errors = validate_form($form, $checks, $errors, $configs);
+    $errors = validate_form($form, $configs);
 
     if (isset($_POST["send"])) {
         $_GET["type"] = $_POST["type"];
@@ -94,7 +93,7 @@ $main_content = include_template('adding-post.php', [
     'form' => $form,
     'types' => $types,
     'current_tab' => $current_tab,
-    'errors' => $errors,
+    'errors' => $errors ?? '',
 ]);
 $layout = include_template('layout.php', [
     'main_content' => $main_content,

@@ -10,6 +10,11 @@ return [
             'name' => 'heading',
             'placeholder' => 'Введите заголовок',
             'field_type' => 'input',
+            'checks' => [
+                0 => function ($input, $configs) {
+                    return validateFilled($configs['current_tab'] . '-' . $input['name']);
+                }
+            ],
         ],
         [
             'title' => 'Текст цитаты',
@@ -18,6 +23,11 @@ return [
             'name' => 'text',
             'placeholder' => 'Текст цитаты',
             'field_type' => 'textarea',
+            'checks' => [
+                0 => function ($input, $configs) {
+                    return validateFilled($configs['current_tab'] . '-' . $input['name']);
+                }
+            ],
         ],
         [
             'title' => 'Автор',
@@ -25,6 +35,11 @@ return [
             'type' => 'text',
             'name' => 'author',
             'field_type' => 'input',
+            'checks' => [
+                0 => function ($input, $configs) {
+                    return validateFilled($configs['current_tab'] . '-' . $input['name']);
+                }
+            ],
         ],
         [
             'title' => 'Теги',
@@ -33,6 +48,7 @@ return [
             'name' => 'tags',
             'placeholder' => 'Введите теги',
             'field_type' => 'input',
+            'checks' => [],
         ],
     ],
 ];

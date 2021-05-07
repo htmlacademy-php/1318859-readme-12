@@ -2,7 +2,6 @@
 
 include_once 'config.php';
 include_once 'init.php';
-include_once 'form-config.php';
 include_once 'helpers.php';
 include_once 'models.php';
 
@@ -11,7 +10,7 @@ $form = include_once 'forms/auth-form.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $errors = validate_form($form, $checks, $errors, $configs);
+    $errors = validate_form($form, $configs);
 
     $email = mysqli_real_escape_string($con, $_POST['email']);
     $sql = "SELECT * FROM users WHERE email = '$email'";
@@ -43,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $layout = include_template('guest_layout.php', [
     'title' => $title,
     'form' => $form,
-    'errors' => $errors,
+    'errors' => $errors ?? '',
 ]);
 ?>
 <?= $layout; ?>

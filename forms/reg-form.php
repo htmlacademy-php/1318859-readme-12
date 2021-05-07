@@ -10,6 +10,17 @@ return [
             'name' => 'email',
             'placeholder' => 'Укажите эл.почту',
             'field_type' => 'input',
+            'checks' => [
+                0 => function ($input) {
+                    return validateFilled($input['name']);
+                },
+                1 => function ($input) {
+                    return validateEmail($input['name']);
+                },
+                2 => function ($input, $configs) {
+                    return validateUniqueEmail($configs['con'], $input['name']);
+                }
+            ],
         ],
         [
             'title' => 'Логин',
@@ -18,6 +29,11 @@ return [
             'name' => 'login',
             'placeholder' => 'Укажите логин',
             'field_type' => 'input',
+            'checks' => [
+                0 => function ($input) {
+                    return validateFilled($input['name']);
+                }
+            ],
         ],
         [
             'title' => 'Пароль',
@@ -26,6 +42,11 @@ return [
             'name' => 'password',
             'placeholder' => 'Придумайте пароль',
             'field_type' => 'input',
+            'checks' => [
+                0 => function ($input) {
+                    return validateFilled($input['name']);
+                }
+            ],
         ],
         [
             'title' => 'Повтор пароля',
@@ -34,12 +55,22 @@ return [
             'name' => 'password-repeat',
             'placeholder' => 'Повторите пароль',
             'field_type' => 'input',
+            'checks' => [
+                0 => function ($input) {
+                    return validatePassword($input['name'], 'password');
+                }
+            ],
         ],
         [
             'required' => false,
             'type' => 'file',
             'name' => 'userpic-file',
             'field_type' => 'input-file',
+            'checks' => (!empty($_FILES['userpic-file']) && $_FILES['userpic-file']["error"] !== 4) ? [
+                0 => function ($input) {
+                    return validateImageType($input['name']);
+                }
+            ] : [],
         ]
     ],
 ];

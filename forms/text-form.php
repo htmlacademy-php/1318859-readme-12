@@ -10,6 +10,11 @@ return [
             'name' => 'heading',
             'placeholder' => 'Введите заголовок',
             'field_type' => 'input',
+            'checks' => [
+                0 => function ($input, $configs) {
+                    return validateFilled($configs['current_tab'] . '-' . $input['name']);
+                }
+            ],
         ],
         [
             'title' => 'Текст поста',
@@ -18,6 +23,11 @@ return [
             'name' => 'post',
             'placeholder' => 'Введите текст публикации',
             'field_type' => 'textarea',
+            'checks' => [
+                0 => function ($input, $configs) {
+                    return validateFilled($configs['current_tab'] . '-' . $input['name']);
+                }
+            ],
         ],
         [
             'title' => 'Теги',
@@ -26,6 +36,7 @@ return [
             'name' => 'tags',
             'placeholder' => 'Введите теги',
             'field_type' => 'input',
+            'checks' => [],
         ],
     ],
 ];

@@ -10,6 +10,11 @@ return [
             'name' => 'heading',
             'placeholder' => 'Введите заголовок',
             'field_type' => 'input',
+            'checks' => [
+                0 => function ($input, $configs) {
+                    return validateFilled($configs['current_tab'] . '-' . $input['name']);
+                }
+            ],
         ],
         [
             'title' => 'Ссылка',
@@ -17,6 +22,14 @@ return [
             'type' => 'url',
             'name' => 'url',
             'field_type' => 'input',
+            'checks' => [
+                0 => function ($input, $configs) {
+                    return validateFilled($configs['current_tab'] . '-' . $input['name']);
+                },
+                1 => function ($input, $configs) {
+                    return validateUrl($configs['current_tab'] . '-' . $input['name']);
+                }
+            ],
         ],
         [
             'title' => 'Теги',
@@ -25,6 +38,7 @@ return [
             'name' => 'tags',
             'placeholder' => 'Введите теги',
             'field_type' => 'input',
+            'checks' => [],
         ],
     ],
 ];
