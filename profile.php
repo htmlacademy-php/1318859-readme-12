@@ -1,6 +1,7 @@
 <?php
 
 include_once 'config.php';
+include_once 'init.php';
 include_once 'helpers.php';
 include_once 'models.php';
 
@@ -17,7 +18,6 @@ $tabs = [
     'likes' => 'лайки',
     'follows' => 'подписки',
 ];
-print_r($current_tab);
 $user = get_user($con, $_GET['id']);
 $amount_of_user_posts = count(get_filtered_posts($con, 'u.id', $user['id']));
 $number_of_user_followers = count(get_followers($con, $user['id']));
@@ -25,11 +25,6 @@ $user_posts = get_posts_of_user($con, $user['id']);
 
 $liked_posts_of_user = get_liked_posts_of_user($con, $user['id']);
 $following_users_of_user = get_following_users_of_user($con, $user['id']);
-
-echo '<pre>';
-print_r($user);
-//print_r($following_users_of_user);
-echo '</pre>';
 
 $main_content = include_template('profile.php', [
     'user_posts' => $user_posts,

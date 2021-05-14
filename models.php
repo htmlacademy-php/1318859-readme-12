@@ -29,10 +29,6 @@ function get_filtered_posts($con, $filtered_property, $value) {
         $sql_filter = "";
     }
     $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id $sql_filter ORDER BY views_count DESC LIMIT ?;";
-//    $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id ? ORDER BY views_count DESC LIMIT ?;";
-
-
-//    $stmt = db_get_prepare_stmt($con, $sql, [$sql_filter, $limit]);
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $limit);
     $filtered_posts = get_data($con, $stmt, false);
@@ -45,10 +41,8 @@ function get_post($con, $filtered_property, $value) {
     } else {
         $sql_filter = "";
     }
-//    var_dump($sql_filter);
     $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id $sql_filter;";
     $stmt = mysqli_prepare($con, $sql);
-//    mysqli_stmt_bind_param($stmt, 's',$sql_filter);
     $post = get_data($con, $stmt, true);
     return $post;
 }

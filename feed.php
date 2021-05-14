@@ -1,6 +1,7 @@
 <?php
 
 include_once 'config.php';
+include_once 'init.php';
 include_once 'helpers.php';
 include_once 'models.php';
 
@@ -19,26 +20,16 @@ $tabs = [
     'quote' => 'цитата',
     'link' => 'ссылка',
 ];
-print_r($current_tab);
 $user_id = $_SESSION['user']['id'];
 $user_posts = get_posts_of_user($con, $user_id);
 
 if (empty($current_tab)) {
     $user_current_tab_posts = $user_posts;
-//    echo '<pre>';
-//    print_r($user_current_tab_posts);
-//    echo '</pre>';
 } else {
     $user_current_tab_posts = [];
     foreach ($user_posts as $post) {
-//        echo '<pre>';
-//        print_r($post['class_name']);
-//        echo '</pre>';
         if ($current_tab === $post['class_name']) {
             $user_current_tab_posts += [$post];
-//            echo '<pre>';
-//            print_r($user_current_tab_posts);
-//            echo '</pre>';
         }
     }
 }
@@ -58,5 +49,4 @@ $layout = include_template('layout.php', [
 ]);
 
 ?>
-<!--<pre>--><? // print_r($posts); ?><!--</pre>-->
 <?= $layout; ?>
