@@ -51,9 +51,9 @@ return [
             'field_type' => 'input-file',
             'checks' => (!empty($_FILES['photo-userpic-file']) && $_FILES['photo-userpic-file']["error"] !== 4) ? [
                 0 => function ($input, $configs) {
-                    echo '<pre>';
+                    /*echo '<pre>';
                     print_r($_FILES['photo-userpic-file']);
-                    echo '</pre>';
+                    echo '</pre>';*/
                     return validateImageType($configs['current_tab'] . '-' . $input['name']);
                 }
             ] : [],

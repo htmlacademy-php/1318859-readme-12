@@ -11,7 +11,7 @@
                     <?php foreach ($user_current_tab_posts as $post): ?>
                         <article class="search__post post post-<?= $post['class_name']; ?>">
                             <header class="post__header post__author">
-                                <a class="post__author-link" href="#" title="Автор">
+                                <a class="post__author-link" href="profile.php?id=<?= $post['user_id'] ?>" title="Автор">
                                     <div class="post__avatar-wrapper">
                                         <img class="post__author-avatar" src="<?= $post['avatar'] ?>" alt="Аватар пользователя" width="60" height="60">
                                     </div>
@@ -130,7 +130,7 @@
                 </li>
                 <?php foreach ($tabs as $type => $tab_name): ?>
                     <li class="feed__filters-item filters__item">
-                        <a class="filters__button filters__button--<?= $type ?> button" href="feed.php?id=<?= $user_id ?>&type=<?= $type ?>">
+                        <a class="filters__button filters__button--<?= $type ?> <?= ($currentTab === $type) ? 'filters__button--active' : ''?> button" href="feed.php?id=<?= $user_id ?>&type=<?= $type ?>">
                             <span class="visually-hidden"><?= $tab_name ?></span>
                             <svg class="filters__icon" width="22" height="18">
                                 <use xlink:href="#icon-filter-<?= $type ?>"></use>

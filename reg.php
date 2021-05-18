@@ -4,6 +4,11 @@ include_once 'init.php';
 include_once 'helpers.php';
 include_once 'models.php';
 
+if (isset($_SESSION['user'])) {
+    header("Location: /");
+    exit();
+}
+
 $title = 'readme: регистрация';
 
 $form = include_once 'forms/reg-form.php';

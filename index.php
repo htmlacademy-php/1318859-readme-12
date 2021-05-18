@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             $errors[$form['name']]['password'] = 'Неверный пароль';
         }
-    } elseif (!empty($_POST['email'])) {
+    } elseif (!empty($_POST['email']) and !$user) {
         $errors[$form['name']]['email'] = 'Пользователь с таким email не найден';
     }
 

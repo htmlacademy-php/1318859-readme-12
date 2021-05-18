@@ -9,7 +9,7 @@
                     <ul class="adding-post__tabs-list filters__list tabs__list">
                         <?php foreach ($tabs as $post_type => $tab_name): ?>
                             <li class="adding-post__tabs-item filters__item">
-                                <a class="adding-post__tabs-link filters__button filters__button--<?= $post_type; ?> <?php if ($current_tab === $post_type): ?>filters__button--active tabs__item--active<?php endif; ?> tabs__item button" href="add.php?type=<?= $post_type; ?>">
+                                <a class="adding-post__tabs-link filters__button filters__button--<?= $post_type; ?> <?php if ($currentTab === $post_type): ?>filters__button--active tabs__item--active<?php endif; ?> tabs__item button" href="add.php?type=<?= $post_type; ?>">
                                     <svg class="filters__icon" width="22" height="18">
                                         <use xlink:href="#icon-filter-<?= $post_type; ?>"></use>
                                     </svg>
@@ -21,14 +21,14 @@
                 </div>
 
                 <div class="adding-post__tab-content">
-                    <section class="adding-post__<?= $current_tab; ?> tabs__content tabs__content--active">
+                    <section class="adding-post__<?= $currentTab; ?> tabs__content tabs__content--active">
                         <h2 class="visually-hidden">
                             <?= $form['title']; ?>
                         </h2>
-                        <form class="adding-post__form form" action="add.php?type=<?= $current_tab; ?>" method="post" <?php if ($current_tab === 'photo'): ?>enctype="multipart/form-data"<?php endif; ?>>
+                        <form class="adding-post__form form" action="add.php?type=<?= $currentTab; ?>" method="post" <?php if ($currentTab === 'photo'): ?>enctype="multipart/form-data"<?php endif; ?>>
                             <div class="form__text-inputs-wrapper">
                                 <div class="form__text-inputs">
-                                    <input type="hidden" name="type" value="<?= $current_tab; ?>">
+                                    <input type="hidden" name="type" value="<?= $currentTab; ?>">
 
                                     <?php foreach ($form['inputs'] as $input): ?>
 
@@ -37,9 +37,9 @@
                                                 <div class="adding-post__<?= $input['field_type']; ?>-wrapper form__<?= $input['field_type']; ?>-wrapper">
                                                     <div class="adding-post__file-zone adding-post__file-zone--photo form__file-zone dropzone">
                                                         <input class="adding-post__input-file form__input-file"
-                                                               id="<?= $current_tab; ?>-<?= $input['name']; ?>"
+                                                               id="<?= $currentTab; ?>-<?= $input['name']; ?>"
                                                                type="<?= $input['type']; ?>"
-                                                               name="<?= $current_tab; ?>-<?= $input['name']; ?>"
+                                                               name="<?= $currentTab; ?>-<?= $input['name']; ?>"
                                                                title="">
                                                         <div class="form__file-zone-text">
                                                             <span>Перетащите фото сюда</span>
@@ -57,23 +57,23 @@
                                         <?php else: ?>
 
                                             <div class="adding-post__<?= $input['field_type']; ?>-wrapper form__<?= $input['field_type']; ?>-wrapper">
-                                                <label class="adding-post__label form__label" for="<?= $current_tab; ?>-<?= $input['name']; ?>">
+                                                <label class="adding-post__label form__label" for="<?= $currentTab; ?>-<?= $input['name']; ?>">
                                                     <?= $input['title']; ?> <?= ($input['required']) ? '<span class="form__input-required">*</span>' : ''; ?>
                                                 </label>
                                                 <div class="form__input-section <?php if (isset($errors[$form['name']][$input['name']])): ?>form__input-section--error<?php endif; ?>">
 
                                                     <?php if ($input['field_type'] === 'input'): ?>
                                                         <input class="adding-post__input form__input"
-                                                               id="<?= $current_tab; ?>-<?= $input['name']; ?>"
+                                                               id="<?= $currentTab; ?>-<?= $input['name']; ?>"
                                                                type="<?= $input['type']; ?>"
-                                                               name="<?= $current_tab; ?>-<?= $input['name']; ?>"
-                                                               value="<?= $_POST[$current_tab . '-' . $input['name']] ?? ''; ?>"
+                                                               name="<?= $currentTab; ?>-<?= $input['name']; ?>"
+                                                               value="<?= $_POST[$currentTab . '-' . $input['name']] ?? ''; ?>"
                                                                placeholder="<?= $input['placeholder'] ?? ''; ?>">
                                                     <?php elseif ($input['field_type'] === 'textarea'): ?>
                                                         <textarea class="adding-post__textarea form__textarea form__input"
-                                                                  id="<?= $current_tab; ?>-<?= $input['name']; ?>"
-                                                                  name="<?= $current_tab; ?>-<?= $input['name']; ?>"
-                                                                  placeholder="<?= $input['placeholder'] ?? ''; ?>"><?= $_POST[$current_tab . '-' . $input['name']] ?? ''; ?></textarea>
+                                                                  id="<?= $currentTab; ?>-<?= $input['name']; ?>"
+                                                                  name="<?= $currentTab; ?>-<?= $input['name']; ?>"
+                                                                  placeholder="<?= $input['placeholder'] ?? ''; ?>"><?= $_POST[$currentTab . '-' . $input['name']] ?? ''; ?></textarea>
                                                     <?php endif; ?>
 
                                                     <button class="form__error-button button" type="button">

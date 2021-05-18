@@ -103,7 +103,7 @@
                         </div>
                         <span class="post__view">500 просмотров</span>
                     </div>
-                    <?php if (count($post_tags)): ?>
+                    <?php if ($post_tags): ?>
                         <ul class="post__tags">
                             <?php foreach ($post_tags as $tag): ?>
                                 <li>

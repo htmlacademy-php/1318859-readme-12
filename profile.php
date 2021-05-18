@@ -11,7 +11,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 $title = 'readme: профиль';
-$current_tab = (isset($_GET["tab"])) ? $_GET["tab"] : 'posts';
+$currentTab = (isset($_GET["tab"])) ? $_GET["tab"] : 'posts';
 
 $tabs = [
     'posts' => 'посты',
@@ -19,22 +19,49 @@ $tabs = [
     'follows' => 'подписки',
 ];
 $user = get_user($con, $_GET['id']);
-$amount_of_user_posts = count(get_filtered_posts($con, 'u.id', $user['id']));
-$number_of_user_followers = count(get_followers($con, $user['id']));
-$user_posts = get_posts_of_user($con, $user['id']);
+$selfPage = ($_GET['id'] === $_SESSION['user']['id']);
 
-$liked_posts_of_user = get_liked_posts_of_user($con, $user['id']);
-$following_users_of_user = get_following_users_of_user($con, $user['id']);
+$amountOfUserPosts = count(get_filtered_posts($con, 'u.id', $user['id']));
+$amountOfUserFollowers = count(get_followers($con, $user['id']));
+$userPosts = get_posts_of_user($con, $user['id']);
+
+$likedPostsOfUser = get_liked_posts_of_user($con, $user['id']);
+$followingUsersOfUser = get_following_users_of_user($con, $user['id']); //те, на кого подписан пользователь
+$followersOfUser = get_followers($con, $user['id']); // подписчики пользователя
+
+if (isset($_GET['subscribed'])) {
+    add_follower($con, $_SESSION['user']['id'], $user['id']);
+    header("Location: /profile.php?id=" . $user['id']);
+    exit();
+}
+if (isset($_GET['unsubscribed'])) {
+    remove_follower($con, $_SESSION['user']['id'], $user['id']);
+    header("Location: /profile.php?id=" . $user['id']);
+    exit();
+}
+
+$subscribe = false;
+foreach ($followersOfUser as $follower) {
+    if ($follower['follower_id'] === intval($_SESSION['user']['id'])) {
+        $subscribe = true;
+    }
+}
+
+/*echo '<pre>';
+print_r($likedPostsOfUser);
+echo '</pre>';*/
 
 $main_content = include_template('profile.php', [
-    'user_posts' => $user_posts,
+    'userPosts' => $userPosts,
     'tabs' => $tabs,
     'user' => $user,
-    'current_tab' => $current_tab,
-    'amount_of_user_posts' => $amount_of_user_posts,
-    'number_of_user_followers' => $number_of_user_followers,
-    'liked_posts_of_user' => $liked_posts_of_user,
-    'following_users_of_user' => $following_users_of_user,
+    'selfPage' => $selfPage,
+    'currentTab' => $currentTab,
+    'amountOfUserPosts' => $amountOfUserPosts,
+    'amountOfUserFollowers' => $amountOfUserFollowers,
+    'likedPostsOfUser' => $likedPostsOfUser,
+    'followingUsersOfUser' => $followingUsersOfUser,
+    'subscribe' => $subscribe,
 ]);
 
 $layout = include_template('layout.php', [

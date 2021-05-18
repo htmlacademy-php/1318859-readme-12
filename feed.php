@@ -11,7 +11,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 $title = 'readme: моя лента';
-$current_tab = (isset($_GET["type"])) ? $_GET["type"] : '';
+$currentTab = (isset($_GET["type"])) ? $_GET["type"] : '';
 
 $tabs = [
     'photo' => 'фото',
@@ -21,14 +21,14 @@ $tabs = [
     'link' => 'ссылка',
 ];
 $user_id = $_SESSION['user']['id'];
-$user_posts = get_posts_of_user($con, $user_id);
+$userPosts = get_posts_of_user($con, $user_id);
 
-if (empty($current_tab)) {
-    $user_current_tab_posts = $user_posts;
+if (empty($currentTab)) {
+    $user_current_tab_posts = $userPosts;
 } else {
     $user_current_tab_posts = [];
-    foreach ($user_posts as $post) {
-        if ($current_tab === $post['class_name']) {
+    foreach ($userPosts as $post) {
+        if ($currentTab === $post['class_name']) {
             $user_current_tab_posts += [$post];
         }
     }
@@ -38,7 +38,7 @@ $main_content = include_template('my-feed.php', [
     'user_current_tab_posts' => $user_current_tab_posts,
     'tabs' => $tabs,
     'user_id' => $user_id,
-    'current_tab' => $current_tab,
+    'currentTab' => $currentTab,
 ]);
 
 $layout = include_template('layout.php', [
