@@ -29,6 +29,13 @@ $likedPostsOfUser = get_liked_posts_of_user($con, $user['id']);
 $followingUsersOfUser = get_following_users_of_user($con, $user['id']); //те, на кого подписан пользователь
 $followersOfUser = get_followers($con, $user['id']); // подписчики пользователя
 
+$liked_post_ids_by_session_user = get_all_liked_post_ids_by_user($con, $_SESSION['user']['id']);
+if (isset($_GET['liked_post_id'])) {
+    toggle_like($con, $_SESSION['user']['id'], $_GET['liked_post_id']);
+    header("Location: /profile.php?id=" . $user['id']);
+    exit();
+}
+
 if (isset($_GET['subscribed'])) {
     add_follower($con, $_SESSION['user']['id'], $user['id']);
     header("Location: /profile.php?id=" . $user['id']);
@@ -47,8 +54,15 @@ foreach ($followersOfUser as $follower) {
     }
 }
 
-/*echo '<pre>';
+echo '<pre>';
 print_r($likedPostsOfUser);
+echo '</pre>';
+
+/*echo '<pre>';
+print_r($userPosts);
+echo '</pre>';
+echo '<pre>';
+print_r(repost($con, $userPosts[0]['id']));
 echo '</pre>';*/
 
 $main_content = include_template('profile.php', [
@@ -62,6 +76,8 @@ $main_content = include_template('profile.php', [
     'likedPostsOfUser' => $likedPostsOfUser,
     'followingUsersOfUser' => $followingUsersOfUser,
     'subscribe' => $subscribe,
+    'liked_post_ids_by_session_user' => $liked_post_ids_by_session_user,
+    'con' => $con,
 ]);
 
 $layout = include_template('layout.php', [

@@ -155,7 +155,9 @@ function get_search_posts($con, $search) {
 }
 
 function get_post_tags($con, $post_id) {
-    $sql = "SELECT tag_name FROM posts_tags WHERE post_id = ?;";
+    $sql = "SELECT name FROM tags t
+            JOIN posts_tags pt ON t.id = pt.tag_id
+            WHERE pt.post_id = ?;";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $post_id);
     $post_tags = get_data($con, $stmt, false);
@@ -202,11 +204,12 @@ function get_liked_posts_of_user($con, $user_id) {
     $ids = implode(",", get_ids_of_user_posts($con, $user_id));
     // выбираем из таблицы лайков лайки постов пользователя, считаем количество лайков(строк в таблице) каждого поста
     // группируем по id поста, сортируем по дате последнего лайка.
-    $sql = "SELECT p.*, u.login, u.avatar, t.class_name, l.dt_add, COUNT(l.post_id) AS post_likes FROM likes l 
-            JOIN posts p ON p.id = l.post_id
-            JOIN users u ON p.user_id = u.id
-            JOIN types t ON p.type_id = t.id
-            WHERE l.post_id IN (" . $ids . ") GROUP BY l.post_id ORDER BY l.dt_add DESC;";
+    $sql = "SELECT p.*, u.login, u.avatar, l.user_id AS like_user_id, l.dt_add AS like_dt_add, t.class_name FROM posts p
+            JOIN likes l ON l.post_id = p.id
+            JOIN users u ON u.id = l.user_id
+            JOIN types t ON t.id = p.type_id
+            WHERE p.user_id = 4 AND (SELECT COUNT(*) FROM likes WHERE post_id = p.id ) > 0
+            ORDER BY l.dt_add DESC;";
     $stmt = mysqli_prepare($con, $sql);
     $liked_user_posts = get_data($con, $stmt, false);
     return $liked_user_posts;
@@ -219,4 +222,56 @@ function get_following_users_of_user($con, $user_id) {
     mysqli_stmt_bind_param($stmt, 'i', $user_id);
     $followingUsersOfUser = get_data($con, $stmt, false);
     return $followingUsersOfUser;
+}
+
+function toggle_like($con, $userId, $postId) {
+    $sql = "SELECT id FROM likes WHERE user_id = ? AND post_id = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 'ii', $userId, $postId);
+    $like = get_data($con, $stmt, true);
+
+    if ($like) {
+        $sql = "DELETE FROM likes WHERE user_id = '$userId' AND post_id = '$postId';";
+        $result = mysqli_query($con, $sql);
+        if (!$result) {
+            $error = mysqli_error($con);
+            print("Ошибка MySQL: " . $error);
+        }
+    } else {
+        $sql = "INSERT INTO likes SET user_id = '$userId', post_id = '$postId';";
+        $result = mysqli_query($con, $sql);
+        if (!$result) {
+            $error = mysqli_error($con);
+            print("Ошибка MySQL: " . $error);
+        }
+    }
+}
+
+function get_all_liked_post_ids_by_user($con, $user_id) {
+    $sql = "SELECT post_id FROM likes WHERE user_id = '$user_id';";
+    $stmt = mysqli_prepare($con, $sql);
+    $all_liked_post_ids_by_user_from_db = get_data($con, $stmt, false);
+    $all_liked_post_ids_by_user = [];
+    $i = 0;
+    foreach ($all_liked_post_ids_by_user_from_db as $item) {
+        $all_liked_post_ids_by_user += [$i => $item['post_id']];
+        $i++;
+    }
+    return $all_liked_post_ids_by_user;
+}
+
+function count_likes_of_post($con, $post_id) {
+    $sql = "SELECT id FROM likes WHERE post_id = '$post_id';";
+    $result = mysqli_query($con, $sql);
+    $records_count = mysqli_num_rows($result);
+    return $records_count;
+}
+
+function repost($con, $post_id) {
+    $post = get_post($con, 'p.id', $post_id);
+    $post['original_author'] = $post['user_id'];
+    $post['user_id'] = $_SESSION['user']['id'];
+    $post['dt_add'] = date("Y-m-d H:i:s");
+    $post['repost'] = true;
+    add_post($con, $post);
 }
