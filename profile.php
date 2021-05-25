@@ -36,6 +36,15 @@ if (isset($_GET['liked_post_id'])) {
     exit();
 }
 
+
+$reposted_post_ids_by_session_user = get_all_reposted_post_ids_by_user($con, $_SESSION['user']['id']);
+if (isset($_GET['reposted_post_id'])) {
+    repost($con, $_GET['reposted_post_id']);
+    header("Location: /profile.php?id=" . $user['id']);
+    exit();
+}
+
+
 if (isset($_GET['subscribed'])) {
     add_follower($con, $_SESSION['user']['id'], $user['id']);
     header("Location: /profile.php?id=" . $user['id']);
@@ -54,9 +63,9 @@ foreach ($followersOfUser as $follower) {
     }
 }
 
-echo '<pre>';
-print_r($likedPostsOfUser);
-echo '</pre>';
+/*echo '<pre>';
+print_r($userPosts);
+echo '</pre>';*/
 
 /*echo '<pre>';
 print_r($userPosts);
@@ -77,6 +86,7 @@ $main_content = include_template('profile.php', [
     'followingUsersOfUser' => $followingUsersOfUser,
     'subscribe' => $subscribe,
     'liked_post_ids_by_session_user' => $liked_post_ids_by_session_user,
+    'reposted_post_ids_by_session_user' => $reposted_post_ids_by_session_user,
     'con' => $con,
 ]);
 

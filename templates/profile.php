@@ -352,15 +352,15 @@
                                                     <span><?= count_likes_of_post($con, $post['id']) ?></span>
                                                     <span class="visually-hidden">количество лайков</span>
                                                 </a>
-                                                <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
-                                                    <svg class="post__indicator-icon" width="19" height="17">
+                                                <a class="post__indicator post__indicator--repost button <?= (in_array($post['id'], $reposted_post_ids_by_session_user)) ? 'post__indicator--repost-active' : '' ?>" href="profile.php?id=<?= $user['id'] ?>&reposted_post_id=<?= $post['id'] ?>" title="Репост">
+                                                    <svg class="post__indicator-icon post__indicator-icon--repost-active" width="19" height="17">
                                                         <use xlink:href="#icon-repost"></use>
                                                     </svg>
-                                                    <span>5</span>
+                                                    <span><?= count_reposts_of_post($con, $post['id']) ?></span>
                                                     <span class="visually-hidden">количество репостов</span>
                                                 </a>
                                             </div>
-                                            <time class="post__time" datetime="2019-01-30T23:41">15 минут назад</time>
+                                            <time class="post__time" datetime="<?= date_format(date_create($post['dt_add']), 'Y-m-d'); ?>"><?= print_date_diff($post['dt_add']); ?> назад</time>
                                         </div>
                                         <ul class="post__tags">
                                             <li><a href="#">#nature</a></li>
@@ -377,116 +377,6 @@
                                 </article>
                             <?php endforeach; ?>
 
-                            <?php foreach ($likedPostsOfUser as $post): ?>
-                                <article class="profile__post post post-<?= $post['class_name'] ?>">
-                                    <header class="post__header">
-                                        <h2><a href="post.php?id=<?= $post['id'] ?>"><?= $post['title'] ?></a></h2>
-                                    </header>
-                                    <div class="post__main">
-
-                                        <?php if ($post['class_name'] === 'photo'): ?>
-                                            <div class="post-photo__image-wrapper">
-                                                <img src="<?= $post['image']; ?>" alt="Фото от пользователя" width="760" height="396">
-                                            </div>
-
-                                        <?php elseif ($post['class_name'] === 'video'): ?>
-                                            <div class="post-video__block">
-                                                <div class="post-video__preview">
-                                                    <?= embed_youtube_cover(htmlspecialchars($post['video']), 760, 396); ?>
-                                                </div>
-                                                <div class="post-video__control">
-                                                    <button class="post-video__play post-video__play--paused button button--video" type="button">
-                                                        <span class="visually-hidden">Запустить видео</span></button>
-                                                    <div class="post-video__scale-wrapper">
-                                                        <div class="post-video__scale">
-                                                            <div class="post-video__bar">
-                                                                <div class="post-video__toggle"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <button class="post-video__fullscreen post-video__fullscreen--inactive button button--video" type="button">
-                                                        <span class="visually-hidden">Полноэкранный режим</span>
-                                                    </button>
-                                                </div>
-                                                <button class="post-video__play-big button" type="button">
-                                                    <svg class="post-video__play-big-icon" width="27" height="28">
-                                                        <use xlink:href="#icon-video-play-big"></use>
-                                                    </svg>
-                                                    <span class="visually-hidden">Запустить проигрыватель</span>
-                                                </button>
-                                            </div>
-
-                                        <?php elseif ($post['class_name'] === 'text'): ?>
-                                            <?php if (crop_text($post['text_content'], 1000)): ?>
-                                                <p><?= htmlspecialchars(crop_text($post['text_content'], 1000)) . '...' ?></p>
-                                                <a class="post-text__more-link" href="/post.php?id=<?= $post['id']; ?>">Читать
-                                                    далее</a>
-                                            <?php else: ?>
-                                                <p><?= htmlspecialchars($post['text_content']) ?></p>
-                                            <?php endif; ?>
-
-                                        <?php elseif ($post['class_name'] === 'quote'): ?>
-                                            <blockquote>
-                                                <p><?= htmlspecialchars($post['text_content']) ?></p>
-                                                <cite><?= htmlspecialchars($post['quote_author']) ?></cite>
-                                            </blockquote>
-
-                                        <?php elseif ($post['class_name'] === 'link'): ?>
-                                            <div class="post-link__wrapper">
-                                                <a class="post-link__external" href="<?= htmlspecialchars($post['link']) ?>" title="Перейти по ссылке">
-                                                    <div class="post-link__icon-wrapper">
-                                                        <img src="https://www.google.com/s2/favicons?domain=<?= htmlspecialchars(str_replace('www.', '', $post['link'])) ?>" alt="Иконка">
-                                                    </div>
-                                                    <div class="post-link__info">
-                                                        <h3><?= $post['title'] ?></h3>
-                                                        <span><?= htmlspecialchars($post['link']) ?></span>
-                                                    </div>
-                                                    <svg class="post-link__arrow" width="11" height="16">
-                                                        <use xlink:href="#icon-arrow-right-ad"></use>
-                                                    </svg>
-                                                </a>
-                                            </div>
-                                        <?php endif; ?>
-
-                                    </div>
-
-                                    <footer class="post__footer">
-                                        <div class="post__indicators">
-                                            <div class="post__buttons">
-                                                <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
-                                                    <svg class="post__indicator-icon" width="20" height="17">
-                                                        <use xlink:href="#icon-heart"></use>
-                                                    </svg>
-                                                    <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
-                                                        <use xlink:href="#icon-heart-active"></use>
-                                                    </svg>
-                                                    <span>250</span>
-                                                    <span class="visually-hidden">количество лайков</span>
-                                                </a>
-                                                <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
-                                                    <svg class="post__indicator-icon" width="19" height="17">
-                                                        <use xlink:href="#icon-repost"></use>
-                                                    </svg>
-                                                    <span>5</span>
-                                                    <span class="visually-hidden">количество репостов</span>
-                                                </a>
-                                            </div>
-                                            <time class="post__time" datetime="2019-01-30T23:41">15 минут назад</time>
-                                        </div>
-                                        <ul class="post__tags">
-                                            <li><a href="#">#nature</a></li>
-                                            <li><a href="#">#globe</a></li>
-                                            <li><a href="#">#photooftheday</a></li>
-                                            <li><a href="#">#canon</a></li>
-                                            <li><a href="#">#landscape</a></li>
-                                            <li><a href="#">#щикарныйвид</a></li>
-                                        </ul>
-                                    </footer>
-                                    <div class="comments">
-                                        <a class="comments__button button" href="#">Показать комментарии</a>
-                                    </div>
-                                </article>
-                            <?php endforeach; ?>
 
                             <article class="profile__post post post-text">
                                 <header class="post__header">
