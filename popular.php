@@ -16,10 +16,10 @@ $types = get_post_types($con);
 
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
-    $posts = get_filtered_posts($con, 't.id', intval($id));
+    $posts = get_filtered_posts($con, 't.id', intval($id), NUMBER_OF_PAGE_POSTS);
 } else {
     $id = '';
-    $posts = get_filtered_posts($con, '', null);
+    $posts = get_filtered_posts($con, '', null, NUMBER_OF_PAGE_POSTS);
 }
 
 $main_content = include_template('main.php', [

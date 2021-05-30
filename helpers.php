@@ -530,13 +530,7 @@ function moveUploadedImage($name) {
  * @return array
  */
 function getTagsFromPost($name) {
-    echo '<pre>';
-    print_r($_POST[$name]);
-    echo '</pre>';
     preg_match_all('/([\w0-9_])+/u', $_POST[$name], $postTags);
-    echo '<pre>';
-    print_r($postTags);
-    echo '</pre>';
     return $postTags[0];
 }
 

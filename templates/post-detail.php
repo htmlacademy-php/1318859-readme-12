@@ -107,7 +107,7 @@
                         <ul class="post__tags">
                             <?php foreach ($post_tags as $tag): ?>
                                 <li>
-                                    <a href="search.php?q=<?= $tag['tag_name'] ?>&type=tag">#<?= $tag['tag_name'] ?></a>
+                                    <a href="search.php?q=<?= $tag['name'] ?>&type=tag">#<?= $tag['name'] ?></a>
                                 </li>
                             <?php endforeach; ?>
                         </ul>

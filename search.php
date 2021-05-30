@@ -19,13 +19,7 @@ if (empty($search)) {
 }
 
 if ($_GET['type'] === 'tag') {
-    $post_ids = get_posts_with_tag($con, $search);
-    $posts = [];
-    foreach ($post_ids as $post_id) {
-        $post = find_posts_with_tag($con, $post_id['post_id']);
-        $posts += $post;
-    }
-
+    $posts = get_posts_with_tag($con, $search);
     $result_text = '#' . $search;
     $search_line_text = '';
 } else {

@@ -21,16 +21,19 @@ function get_all_tags($con) {
     return $tags;
 }
 
-function get_filtered_posts($con, $filtered_property, $value) {
-    $limit = NUMBER_OF_PAGE_POSTS;
+function get_filtered_posts($con, $filtered_property, $value, $limit) {
     if ($filtered_property) {
         $sql_filter = " WHERE $filtered_property = $value";
     } else {
         $sql_filter = "";
     }
-    $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id $sql_filter ORDER BY views_count DESC LIMIT ?;";
+    if ($limit) {
+        $sql_limit = " LIMIT $limit";
+    } else {
+        $sql_limit = "";
+    }
+    $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id $sql_filter ORDER BY views_count DESC $sql_limit;";
     $stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt, 'i', $limit);
     $filtered_posts = get_data($con, $stmt, false);
     return $filtered_posts;
 }
@@ -47,6 +50,18 @@ function get_post($con, $filtered_property, $value) {
     return $post;
 }
 
+function get_post_for_repost($con, $filtered_property, $value) {
+    if ($filtered_property) {
+        $sql_filter = " WHERE $filtered_property = $value";
+    } else {
+        $sql_filter = "";
+    }
+    $sql = "SELECT * FROM posts $sql_filter;";
+    $stmt = mysqli_prepare($con, $sql);
+    $post = get_data($con, $stmt, true);
+    return $post;
+}
+
 function get_user($con, $user_id) {
     $sql = "SELECT * FROM users WHERE id = ?;";
     $stmt = mysqli_prepare($con, $sql);
@@ -56,7 +71,9 @@ function get_user($con, $user_id) {
 }
 
 function get_followers($con, $following_user_id) {
-    $sql = "SELECT * FROM follows WHERE following_user_id = ?;";
+    $sql = "SELECT u.* FROM follows f 
+            JOIN users u ON u.id = f.follower_id 
+            WHERE following_user_id = ?;";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $following_user_id);
     $followers = get_data($con, $stmt, false);
@@ -131,7 +148,6 @@ function add_tags($con, $postTags, $db_tags, $post_id) {
     foreach ($postTags as $tag) {
         if (!in_array($tag, $tag_names)) {
             $sql = "INSERT INTO tags SET name = '$tag';";
-            print_r($sql);
             $result = mysqli_query($con, $sql);
             if (!$result) {
                 $error = mysqli_error($con);
@@ -173,19 +189,16 @@ function get_post_tags($con, $post_id) {
 }
 
 function get_posts_with_tag($con, $tag_name) {
-    $sql = "SELECT post_id FROM posts_tags WHERE tag_name = ?;";
+    $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p 
+            JOIN users u ON p.user_id = u.id 
+            JOIN types t ON p.type_id = t.id 
+            JOIN posts_tags pt ON pt.post_id = p.id
+            JOIN tags tg ON tg.id = pt.tag_id
+            WHERE tg.name = ?;";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 's', $tag_name);
     $post_tags = get_data($con, $stmt, false);
     return $post_tags;
-}
-
-function find_posts_with_tag($con, $post_id) {
-    $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id WHERE p.id = ?;";
-    $stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt, 'i', $post_id);
-    $filtered_posts = get_data($con, $stmt, false);
-    return $filtered_posts;
 }
 
 function get_posts_of_user($con, $user_id) {
@@ -296,12 +309,18 @@ function count_reposts_of_post($con, $post_id) {
 }
 
 function repost($con, $post_id) {
-    $post = get_post($con, 'p.id', $post_id);
-    if ($post /*&& если этот пост ещё не репостил текущий пользователь*/) {
+    $post = get_post_for_repost($con, 'id', $post_id);
+    $sql = "SELECT * FROM posts WHERE user_id = ? AND repost_id = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 'ii', intval($_SESSION['user']['id']), $post_id);
+    $isReposted = get_data($con, $stmt, true);
+    if ($post && !$isReposted) {
         $post['author_id'] = $post['user_id'];
         $post['user_id'] = $_SESSION['user']['id'];
         $post['dt_add'] = date("Y-m-d H:i:s");
         $post['repost_id'] = $post['id'];
+        $post['views_count'] = intval($post['views_count']);
+        unset($post['id']);
         add_post($con, $post);
         header("Location: /profile.php?id=" . $post['user_id']);
     }

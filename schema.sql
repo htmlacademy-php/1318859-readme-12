@@ -28,7 +28,6 @@ CREATE TABLE posts
   views_count  INT,
   user_id      INT          NOT NULL,
   type_id      INT          NOT NULL,
-  tag_id       INT,
   author_id    INT,
   repost_id    INT
 );
