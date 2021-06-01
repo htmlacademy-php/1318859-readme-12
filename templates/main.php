@@ -7,43 +7,29 @@
             <div class="popular__sorting sorting">
                 <b class="popular__sorting-caption sorting__caption">Сортировка:</b>
                 <ul class="popular__sorting-list sorting__list">
-                    <li class="sorting__item sorting__item--popular">
-                        <a class="sorting__link sorting__link--active" href="#">
-                            <span>Популярность</span>
-                            <svg class="sorting__icon" width="10" height="12">
-                                <use xlink:href="#icon-sort"></use>
-                            </svg>
-                        </a>
-                    </li>
-                    <li class="sorting__item">
-                        <a class="sorting__link" href="#">
-                            <span>Лайки</span>
-                            <svg class="sorting__icon" width="10" height="12">
-                                <use xlink:href="#icon-sort"></use>
-                            </svg>
-                        </a>
-                    </li>
-                    <li class="sorting__item">
-                        <a class="sorting__link" href="#">
-                            <span>Дата</span>
-                            <svg class="sorting__icon" width="10" height="12">
-                                <use xlink:href="#icon-sort"></use>
-                            </svg>
-                        </a>
-                    </li>
+                    <?php foreach ($sortTypes as $key => $sortType): ?>
+                        <li class="sorting__item <?= (($key === 'popular' && !isset($_GET['sort'])) || ($_GET['sort']) === $key) ? 'sorting__item--active' : '' ?>">
+                            <a class="sorting__link <?= (($key === 'popular' && !isset($_GET['sort'])) || ($_GET['sort']) === $key) ? 'sorting__link--active' : '' ?>" href="popular.php?sort=<?= $key ?><?= ($_GET['type_id']) ? '&type_id=' . $_GET['type_id'] : '' ?>">
+                                <span><?= $sortType['title'] ?></span>
+                                <svg class="sorting__icon" width="10" height="12">
+                                    <use xlink:href="#icon-sort"></use>
+                                </svg>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
             </div>
             <div class="popular__filters filters">
                 <b class="popular__filters-caption filters__caption">Тип контента:</b>
                 <ul class="popular__filters-list filters__list">
                     <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                        <a class="filters__button filters__button--ellipse filters__button--all  <?php if ($id === ''): ?>filters__button--active<?php endif; ?>" href="/">
+                        <a class="filters__button filters__button--ellipse filters__button--all  <?php if ($typeId === ''): ?>filters__button--active<?php endif; ?>" href="popular.php">
                             <span>Все</span>
                         </a>
                     </li>
                     <?php foreach ($types as $type): ?>
                         <li class="popular__filters-item filters__item">
-                            <a class="filters__button filters__button--<?= $type['class_name']; ?> <?php if ($id === strval($type['id'])): ?>filters__button--active<?php endif; ?> button" href="/?id=<?= $type['id']; ?>">
+                            <a class="filters__button filters__button--<?= $type['class_name']; ?> <?php if ($typeId === strval($type['id'])): ?>filters__button--active<?php endif; ?> button" href="popular.php?type_id=<?= $type['id']; ?>">
                                 <span class="visually-hidden">
                                 <?php if ($type['title'] === 'Картинка'): ?>
                                     Фото
@@ -98,7 +84,7 @@
                             <div class="post-video__block">
                                 <div class="post-video__preview">
                                     <?= embed_youtube_cover(htmlspecialchars($post['video']), 360, 188); ?>
-                                    <img src="img/coast-medium.jpg" alt="Превью к видео" width="360" height="188">
+                                    <!--<img src="img/coast-medium.jpg" alt="Превью к видео" width="360" height="188">-->
                                 </div>
                                 <a href="post-details.html" class="post-video__play-big button">
                                     <svg class="post-video__play-big-icon" width="14" height="14">
@@ -120,13 +106,13 @@
 
                     <footer class="post__footer">
                         <div class="post__author">
-                            <a class="post__author-link" href="#" title="Автор">
+                            <a class="post__author-link" href="profile.php?id=<?= $post['user_id'] ?>" title="Автор">
                                 <div class="post__avatar-wrapper">
-                                    <img class="post__author-avatar" src="img/<?= $post['avatar'] ?>" alt="Аватар пользователя">
+                                    <img class="post__author-avatar" src="<?= $post['avatar'] ?>" alt="Аватар пользователя">
                                 </div>
                                 <div class="post__info">
                                     <b class="post__author-name"><?= htmlspecialchars($post['login']) ?></b>
-                                    <time class="post__time" datetime="<?= generate_random_date($key) ?>" title="<?= date_format(date_create($post['dt_add']), 'd.m.Y H:i'); ?>">
+                                    <time class="post__time" datetime="<?= date_format(date_create($post['dt_add']), 'Y-m-d'); ?>" title="<?= date_format(date_create($post['dt_add']), 'd.m.Y H:i'); ?>">
                                         <?= print_date_diff($post['dt_add']); ?> назад
                                     </time>
                                 </div>
@@ -134,16 +120,20 @@
                         </div>
                         <div class="post__indicators">
                             <div class="post__buttons">
-                                <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
+                                <a class="post__indicator post__indicator--likes button <?= (in_array($post['id'], $liked_post_ids_by_session_user)) ? 'post__indicator--likes-active' : '' ?>"
+                                   href="<?= $_SERVER['REQUEST_URI'] ?>&liked_post_id=<?= $post['id'] ?>"
+                                   title="Лайк">
                                     <svg class="post__indicator-icon" width="20" height="17">
                                         <use xlink:href="#icon-heart"></use>
                                     </svg>
                                     <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
                                         <use xlink:href="#icon-heart-active"></use>
                                     </svg>
-                                    <span>0</span>
+                                    <span><?= count_likes_of_post($con, $post['id']) ?></span>
                                     <span class="visually-hidden">количество лайков</span>
                                 </a>
+
+
                                 <a class="post__indicator post__indicator--comments button" href="#" title="Комментарии">
                                     <svg class="post__indicator-icon" width="19" height="17">
                                         <use xlink:href="#icon-comment"></use>

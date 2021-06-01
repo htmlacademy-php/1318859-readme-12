@@ -21,7 +21,7 @@ function get_all_tags($con) {
     return $tags;
 }
 
-function get_filtered_posts($con, $filtered_property, $value, $limit) {
+function get_filtered_posts($con, $filtered_property, $value, $limit, $order = 'views_count', $direction = 'DESC') {
     if ($filtered_property) {
         $sql_filter = " WHERE $filtered_property = $value";
     } else {
@@ -32,7 +32,15 @@ function get_filtered_posts($con, $filtered_property, $value, $limit) {
     } else {
         $sql_limit = "";
     }
-    $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id $sql_filter ORDER BY views_count DESC $sql_limit;";
+    if ($order) {
+        $sql_order = " ORDER BY $order $direction";
+    } else {
+        $sql_order = "";
+    }
+    $sql = "SELECT p.*, u.login, u.avatar, t.class_name, (SELECT COUNT(*) FROM likes l WHERE l.post_id = p.id)  AS likes_count FROM posts p 
+            JOIN users u ON p.user_id = u.id 
+            JOIN types t ON p.type_id = t.id 
+            $sql_filter $sql_order $sql_limit;";
     $stmt = mysqli_prepare($con, $sql);
     $filtered_posts = get_data($con, $stmt, false);
     return $filtered_posts;
