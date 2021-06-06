@@ -39,20 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'user_id' => $bd_post_user_id
         ];
 
-        echo '<pre>';
-        print_r($_FILES['photo-userpic-file']);
-        echo '</pre>';
-
-        echo '<pre>';
-        print_r($_POST);
-        echo '</pre>';
-
         if ($currentTab === 'photo') {
-            if (isset($_POST['photo-userpic-file'])) {
-                $db_post_image = '/uploads/' . basename($_FILES['photo-userpic-file']['name']);
-                echo '<pre>';
-                print_r($_FILES['photo-userpic-file']);
-                echo '</pre>';
+            if (isset($_FILES['photo-userpic-file']['name'])) {
+                $db_post_image = '/uploads/' . time() . '-' . $_FILES['photo-userpic-file']['name'];
             } else {
                 $db_post_image = '/uploads' . strrchr($_POST['photo-url'], '/');
             }
@@ -88,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
         }
         $new_post_id = add_post($con, $db_data);
+        /*sendNewPostNotification();*/
 
         if (isset($_POST[$currentTab . '-tags'])) {
             $post_tags = getTagsFromPost($currentTab . '-tags');

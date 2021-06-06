@@ -88,19 +88,20 @@ function get_followers($con, $following_user_id) {
     return $followers;
 }
 
-function add_follower($con, $follower_id, $following_user_id) {
-    $followers = get_followers($con, $following_user_id);
+function add_follower($con, $follower_user, $following_user) {
+    $followers = get_followers($con, $following_user['id']);
     foreach ($followers as $follower) {
-        if ($follower['follower_id'] === intval($follower_id)) {
+        if ($follower['follower_id'] === intval($follower_user['id'])) {
             return false;
         }
     }
-    $sql = "INSERT INTO follows SET follower_id = '$follower_id', following_user_id = '$following_user_id';";
+    $sql = "INSERT INTO follows SET follower_id = '" . $follower_user['id'] . "', following_user_id = '" . $following_user['id'] . "';";
     $result = mysqli_query($con, $sql);
     if (!$result) {
         $error = mysqli_error($con);
         print("Ошибка MySQL: " . $error);
     }
+    /*sendSubscribeNotification($follower_user, $following_user);*/
 }
 
 function remove_follower($con, $follower_id, $following_user_id) {
@@ -216,6 +217,17 @@ function get_posts_of_user($con, $user_id) {
     $filtered_posts = get_data($con, $stmt, false);
     return $filtered_posts;
 }
+
+/*function get_posts_of_users_following_by_user($con, $user_id) {
+    $sql = "SELECT p.*, u.login, u.avatar FROM posts p
+            JOIN follows f ON p.user_id = f.following_user_id 
+            JOIN users u ON u.id = f.follower_id
+            WHERE u.id = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $user_id);
+    $filtered_posts = get_data($con, $stmt, false);
+    return $filtered_posts;
+}*/
 
 // определяем id постов пользователя
 function get_ids_of_user_posts($con, $user_id) {

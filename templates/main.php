@@ -9,7 +9,7 @@
                 <ul class="popular__sorting-list sorting__list">
                     <?php foreach ($sortTypes as $key => $sortType): ?>
                         <li class="sorting__item <?= (($key === 'popular' && !isset($_GET['sort'])) || ($_GET['sort']) === $key) ? 'sorting__item--active' : '' ?>">
-                            <a class="sorting__link <?= (($key === 'popular' && !isset($_GET['sort'])) || ($_GET['sort']) === $key) ? 'sorting__link--active' : '' ?>" href="popular.php?sort=<?= $key ?><?= ($_GET['type_id']) ? '&type_id=' . $_GET['type_id'] : '' ?>">
+                            <a class="sorting__link <?= (($key === 'popular' && !isset($_GET['sort'])) || ($_GET['sort']) === $key) ? 'sorting__link--active' : '' ?>" href="popular.php?sort=<?= $key ?><?= (isset($_GET['type_id'])) ? '&type_id=' . $_GET['type_id'] : '' ?>">
                                 <span><?= $sortType['title'] ?></span>
                                 <svg class="sorting__icon" width="10" height="12">
                                     <use xlink:href="#icon-sort"></use>
@@ -146,6 +146,16 @@
                     </footer>
                 </article>
             <?php endforeach; ?>
+        </div>
+        <div class="popular__page-links">
+            <?php if ($pageNumber > 1): ?>
+                <a class="popular__page-link popular__page-link--prev button button--gray" href="popular.php?page_num=<?= ($pageNumber - 1) ?><?= (isset($_GET['sort'])) ? '&sort=' . $_GET['sort'] : '' ?><?= (isset($_GET['type_id'])) ? '&type_id=' . $_GET['type_id'] : '' ?>">Предыдущая страница</a>
+            <?php else: ?>
+                <a class="popular__page-link popular__page-link--hidden popular__page-link--prev button button--gray" href="popular.php?page_num=<?= $pageNumber ?><?= (isset($_GET['sort'])) ? '&sort=' . $_GET['sort'] : '' ?><?= (isset($_GET['type_id'])) ? '&type_id=' . $_GET['type_id'] : '' ?>">Предыдущая страница</a>
+            <?php endif; ?>
+            <?php if ($pageNumber < $maxPage): ?>
+                <a class="popular__page-link popular__page-link--next button button--gray" href="popular.php?page_num=<?= ($pageNumber + 1) ?><?= (isset($_GET['sort'])) ? '&sort=' . $_GET['sort'] : '' ?><?= (isset($_GET['type_id'])) ? '&type_id=' . $_GET['type_id'] : '' ?>">Следующая страница</a>
+            <?php endif; ?>
         </div>
     </div>
 </section>

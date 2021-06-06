@@ -27,12 +27,18 @@ if (empty($currentTab)) {
     $user_current_tab_posts = $userPosts;
 } else {
     $user_current_tab_posts = [];
+    $i = 0;
     foreach ($userPosts as $post) {
         if ($currentTab === $post['class_name']) {
-            $user_current_tab_posts += [$post];
+            $user_current_tab_posts[$i] = $post;
+            $i++;
         }
     }
 }
+
+echo '<pre>';
+print_r($userPosts);
+echo '</pre>';
 
 $main_content = include_template('my-feed.php', [
     'user_current_tab_posts' => $user_current_tab_posts,

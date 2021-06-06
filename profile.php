@@ -54,7 +54,7 @@ foreach ($followersOfUser as $i => $follower) {
 $liked_post_ids_by_session_user = get_all_liked_post_ids_by_user($con, $_SESSION['user']['id']);
 if (isset($_GET['liked_post_id'])) {
     toggle_like($con, $_SESSION['user']['id'], $_GET['liked_post_id']);
-    header("Location: /profile.php?id=" . $user['id']);
+    header("Location: " . $_SERVER['HTTP_REFERER']);
     exit();
 }
 
@@ -66,13 +66,13 @@ if (isset($_GET['reposted_post_id'])) {
 }
 
 if (isset($_GET['subscribed'])) {
-    add_follower($con, $_SESSION['user']['id'], $user['id']);
-    header("Location: /profile.php?id=" . $user['id']);
+    add_follower($con, $_SESSION['user'], $user);
+    header("Location: ".$_SERVER['HTTP_REFERER']);
     exit();
 }
 if (isset($_GET['unsubscribed'])) {
     remove_follower($con, $_SESSION['user']['id'], $user['id']);
-    header("Location: /profile.php?id=" . $user['id']);
+    header("Location: ".$_SERVER['HTTP_REFERER']);
     exit();
 }
 

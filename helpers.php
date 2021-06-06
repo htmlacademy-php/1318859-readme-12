@@ -515,7 +515,7 @@ function moveUploadedImage($name) {
     } else {
         $uploaddir = __DIR__ . '/uploads/';
     }
-    $uploadfile = $uploaddir . basename($_FILES[$name]['name']);
+    $uploadfile = $uploaddir . time() . '-' . $_FILES[$name]['name'];
 
     if (is_uploaded_file($_FILES[$name]['tmp_name'])) {
         move_uploaded_file($_FILES[$name]['tmp_name'], $uploadfile);
@@ -551,4 +551,65 @@ function validate_form($form, $configs) {
         }
     }
     return $errors;
+}
+
+function sendSubscribeNotification($follower, $following) {
+    include_once 'vendor/autoload.php';
+
+    $transport = new Swift_SmtpTransport("mailtrap.io", 25);
+    $transport->setUsername("keks@phpdemo.ru");
+    $transport->setPassword("htmlacademy");
+
+    $mailer = new Swift_Mailer($transport);
+
+    $email = [
+        'subject' => 'У вас новый подписчик',
+        'sender_email' => ['keks@phpdemo.ru' => 'Readme'],
+        'addressee_emails' => [$following['email']],
+        'message_content' => 'Здравствуйте, ' . $following['login'] . '. На вас подписался новый пользователь ' . $follower['login'] . '. Вот ссылка на его профиль: ' . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . 'profile.php?id=' . $follower['id'],
+    ];
+
+    /*echo '<pre>';
+    print_r($followersOfUser);
+    echo '</pre>';*/
+
+    $message = new Swift_Message();
+    $message->setSubject($email['subject']);
+    $message->setFrom($email['sender_email']);
+    $message->setBcc(['mixa.awesome@gmail.com']);
+
+    $msg_content = $email['message_content'];
+    $message->setBody($msg_content, 'text/html');
+
+    $result = $mailer->send($message);
+
+    if (!$result) {
+        print("Не удалось отправить рассылку");
+    }
+}
+
+function sendNewPostNotification() {
+    include_once 'vendor/autoload.php';
+
+    $transport = new Swift_SmtpTransport("mailtrap.io", 25);
+    $transport->setUsername("keks@phpdemo.ru");
+    $transport->setPassword("htmlacademy");
+
+    $mailer = new Swift_Mailer($transport);
+
+    $emails = [
+        'new_follower' => [
+            'subject' => 'У вас новый подписчик',
+            'sender_email' => ['keks@phpdemo.ru' => 'Readme'],
+            'addressee_emails' => [],
+            'message_content' => 'Здравствуйте, ' . $following['login'] . '. На вас подписался новый пользователь ' . $follower['login'] . '. Вот ссылка на его профиль: ' . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . 'profile.php?id=' . $follower['id'],
+        ],
+        'new_post' => [
+            'subject' => 'Новая публикация от пользователя ' . $_SESSION['user']['login'],
+            'sender_email' => ['keks@phpdemo.ru' => 'Readme'],
+            'addressee_emails' => [],
+            'message_content' => 'Здравствуйте, ' /*Как перечислить всех пользователей?*/ . '. Пользователь ' . $_SESSION['user']['login'] . ' только что опубликовал новую запись ' . /*зашоловок поста*/
+                '. Посмотрите её на странице пользователя: ' . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . 'profile.php?id=' . $_SESSION['user']['id'],
+        ],
+    ];
 }
