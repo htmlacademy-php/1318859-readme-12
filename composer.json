@@ -1,0 +1,8 @@
+{
+    "name": "da-ladno-4e-tam/readme",
+    "description": "html academy project",
+    "type": "project",
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}
