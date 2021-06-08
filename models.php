@@ -101,7 +101,7 @@ function add_follower($con, $follower_user, $following_user) {
         $error = mysqli_error($con);
         print("Ошибка MySQL: " . $error);
     }
-    /*sendSubscribeNotification($follower_user, $following_user);*/
+    sendSubscribeNotification($follower_user, $following_user);
 }
 
 function remove_follower($con, $follower_id, $following_user_id) {
@@ -124,9 +124,11 @@ function add_post($con, $data) {
         $error = mysqli_error($con);
         print("Ошибка MySQL: " . $error);
     } else {
-        $last_id = mysqli_insert_id($con);
+        $sql = "SELECT * FROM posts WHERE id = LAST_INSERT_ID()";
+        $stmt = mysqli_prepare($con, $sql);
+        $post = get_data($con, $stmt, true);
+        return $post;
     }
-    return $last_id;
 }
 
 function add_user($con, $data) {

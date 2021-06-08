@@ -76,8 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'type_id' => 5
             ];
         }
-        $new_post_id = add_post($con, $db_data);
-        /*sendNewPostNotification();*/
+        $new_post = add_post($con, $db_data);
+        $new_post_id = $new_post['id'];
+        $userFollowers = get_followers($con, $_SESSION['user']['id']);
+        sendNewPostNotification($new_post, $userFollowers);
 
         if (isset($_POST[$currentTab . '-tags'])) {
             $post_tags = getTagsFromPost($currentTab . '-tags');
