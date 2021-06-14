@@ -36,15 +36,16 @@ if (empty($currentTab)) {
     }
 }
 
-echo '<pre>';
+/*echo '<pre>';
 print_r($userPosts);
-echo '</pre>';
+echo '</pre>';*/
 
 $main_content = include_template('my-feed.php', [
     'user_current_tab_posts' => $user_current_tab_posts,
     'tabs' => $tabs,
     'user_id' => $user_id,
     'currentTab' => $currentTab,
+    'con' => $con,
 ]);
 
 $layout = include_template('layout.php', [

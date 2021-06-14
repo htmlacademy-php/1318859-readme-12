@@ -372,11 +372,11 @@ function validateFilled($name) {
  * @param int $max Максимальная длиня строки
  * @return string
  */
-function isCorrectLength($name, $min, $max) {
-    $len = strlen($_POST[$name]);
+function isCorrectMinLengthComment($name, $minLength) {
+    $len = strlen(trim($_POST[$name]));
 
-    if ($len < $min or $len > $max) {
-        return "Значение должно быть от $min до $max символов";
+    if ($len < $minLength) {
+        return "Комментарий должен быть не менее $minLength символов";
     }
 }
 

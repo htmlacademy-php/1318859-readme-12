@@ -91,7 +91,7 @@ function get_followers($con, $following_user_id) {
 function add_follower($con, $follower_user, $following_user) {
     $followers = get_followers($con, $following_user['id']);
     foreach ($followers as $follower) {
-        if ($follower['follower_id'] === intval($follower_user['id'])) {
+        if ($follower['id'] === intval($follower_user['id'])) {
             return false;
         }
     }
@@ -147,6 +147,27 @@ function add_user($con, $data) {
     return $user_id;
 }
 
+function add_comment($con, $data) {
+    $sql_data = '';
+    foreach ($data as $db_col_name => $value) {
+        $sql_data .= " $db_col_name = '$value',";
+    }
+    $sql = "INSERT INTO comments SET" . substr($sql_data, 0, -1) . ";";
+    $result = mysqli_query($con, $sql);
+    if (!$result) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+    }
+}
+
+function add_view($con, $post_id) {
+    $sql = "UPDATE posts SET `views_count` = `views_count` + 1 WHERE `id` = $post_id;";
+    $result = mysqli_query($con, $sql);
+    if (!$result) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+    }
+}
 
 function add_tags($con, $postTags, $db_tags, $post_id) {
     $post_tags_ids = [];
@@ -193,6 +214,17 @@ function get_post_tags($con, $post_id) {
     $sql = "SELECT name FROM tags t
             JOIN posts_tags pt ON t.id = pt.tag_id
             WHERE pt.post_id = ?;";
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $post_id);
+    $post_tags = get_data($con, $stmt, false);
+    return $post_tags;
+}
+
+function get_post_comments($con, $post_id) {
+    $sql = "SELECT u.*, c.content, c.dt_add AS publish_time FROM comments c
+            JOIN users u ON u.id = c.user_id
+            WHERE c.post_id = ?
+            ORDER BY publish_time DESC;";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $post_id);
     $post_tags = get_data($con, $stmt, false);
@@ -318,6 +350,13 @@ function get_all_reposted_post_ids_by_user($con, $user_id) {
 
 function count_likes_of_post($con, $post_id) {
     $sql = "SELECT id FROM likes WHERE post_id = '$post_id';";
+    $result = mysqli_query($con, $sql);
+    $records_count = mysqli_num_rows($result);
+    return $records_count;
+}
+
+function count_comments_of_post($con, $post_id) {
+    $sql = "SELECT id FROM comments WHERE post_id = '$post_id';";
     $result = mysqli_query($con, $sql);
     $records_count = mysqli_num_rows($result);
     return $records_count;

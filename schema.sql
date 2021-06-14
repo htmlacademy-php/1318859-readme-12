@@ -25,7 +25,7 @@ CREATE TABLE posts
   image        VARCHAR(255),
   video        VARCHAR(255),
   link         VARCHAR(255),
-  views_count  INT,
+  views_count  INT DEFAULT 0,
   user_id      INT          NOT NULL,
   type_id      INT          NOT NULL,
   author_id    INT,
