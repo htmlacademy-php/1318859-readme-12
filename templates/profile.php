@@ -9,7 +9,8 @@
                     </div>
                     <div class="profile__name-wrapper user__name-wrapper">
                         <span class="profile__name user__name"><?= $user['login'] ?></span>
-                        <time class="profile__user-time user__time" datetime="<?= date_format(date_create($user['dt_add']), 'Y-m-d'); ?>"><?= print_date_diff($user['dt_add']); ?>
+                        <time class="profile__user-time user__time" datetime="<?= date_format(date_create($user['dt_add']),
+                            'Y-m-d'); ?>"><?= print_date_diff($user['dt_add']); ?>
                             на сайте
                         </time>
                     </div>
@@ -17,11 +18,13 @@
                 <div class="profile__rating user__rating">
                     <p class="profile__rating-item user__rating-item user__rating-item--publications">
                         <span class="user__rating-amount"><?= $amountOfUserPosts ?></span>
-                        <span class="profile__rating-text user__rating-text"><?= get_noun_plural_form($amountOfUserPosts, 'публикация', 'публикации', 'публикаций') ?></span>
+                        <span class="profile__rating-text user__rating-text"><?= get_noun_plural_form($amountOfUserPosts,
+                                'публикация', 'публикации', 'публикаций') ?></span>
                     </p>
                     <p class="profile__rating-item user__rating-item user__rating-item--subscribers">
                         <span class="user__rating-amount"><?= $amountOfUserFollowers ?></span>
-                        <span class="profile__rating-text user__rating-text"><?= get_noun_plural_form($amountOfUserFollowers, 'подписчик', 'подписчика', 'подписчиков') ?></span>
+                        <span class="profile__rating-text user__rating-text"><?= get_noun_plural_form($amountOfUserFollowers,
+                                'подписчик', 'подписчика', 'подписчиков') ?></span>
                     </p>
                 </div>
 
@@ -74,7 +77,8 @@
                                                 </a>
                                                 <div class="post-mini__action">
                                                     <span class="post-mini__activity user__additional">Лайкнул вашу публикацию</span>
-                                                    <time class="post-mini__time user__additional" datetime="<?= date_format(date_create($post['like_dt_add']), 'Y-m-d'); ?>">
+                                                    <time class="post-mini__time user__additional" datetime="<?= date_format(date_create($post['like_dt_add']),
+                                                        'Y-m-d'); ?>">
                                                         <?= print_date_diff($post['like_dt_add']); ?> назад
                                                     </time>
                                                 </div>
@@ -94,7 +98,8 @@
                                                     </svg>
                                                 <?php elseif ($post['class_name'] === 'video'): ?>
                                                     <div class="post-mini__image-wrapper">
-                                                        <?= embed_youtube_cover(htmlspecialchars($post['video']), 109, 109); ?>
+                                                        <?= embed_youtube_cover(htmlspecialchars($post['video']), 109,
+                                                            109); ?>
                                                         <!--<img class="post-mini__image" src="../img/coast-small.png" width="109" height="109" alt="Превью публикации">-->
                                                         <span class="post-mini__play-big">
                                                             <svg class="post-mini__play-big-icon" width="12" height="13">
@@ -136,7 +141,8 @@
                                                 <a class="post-mini__name user__name" href="profile.php?id=<?= $follower['id'] ?>">
                                                     <span><?= $follower['login'] ?></span>
                                                 </a>
-                                                <time class="post-mini__time user__additional" datetime="<?= date_format(date_create($follower['dt_add']), 'Y-m-d'); ?>">
+                                                <time class="post-mini__time user__additional" datetime="<?= date_format(date_create($follower['dt_add']),
+                                                    'Y-m-d'); ?>">
                                                     <?= print_date_diff($follower['dt_add']); ?>
                                                     на сайте
                                                 </time>
@@ -145,11 +151,13 @@
                                         <div class="post-mini__rating user__rating">
                                             <p class="post-mini__rating-item user__rating-item user__rating-item--publications">
                                                 <span class="post-mini__rating-amount user__rating-amount"><?= $follower['amount_of_posts'] ?></span>
-                                                <span class="post-mini__rating-text user__rating-text"><?= get_noun_plural_form($follower['amount_of_posts'], 'публикация', 'публикации', 'публикаций') ?></span>
+                                                <span class="post-mini__rating-text user__rating-text"><?= get_noun_plural_form($follower['amount_of_posts'],
+                                                        'публикация', 'публикации', 'публикаций') ?></span>
                                             </p>
                                             <p class="post-mini__rating-item user__rating-item user__rating-item--subscribers">
                                                 <span class="post-mini__rating-amount user__rating-amount"><?= $follower['amount_of_followers'] ?></span>
-                                                <span class="post-mini__rating-text user__rating-text"><?= get_noun_plural_form($follower['amount_of_followers'], 'подписчик', 'подписчика', 'подписчиков') ?></span>
+                                                <span class="post-mini__rating-text user__rating-text"><?= get_noun_plural_form($follower['amount_of_followers'],
+                                                        'подписчик', 'подписчика', 'подписчиков') ?></span>
                                             </p>
                                         </div>
                                         <div class="post-mini__user-buttons user__buttons">
@@ -160,7 +168,7 @@
                                                         Отписаться
                                                     </a>
                                                 <?php else: ?>
-                                                    <a class="post-mini__user-button user__button user__button--subscription button button--main"href="profile.php?id=<?= $follower['id'] ?>&subscribed">
+                                                    <a class="post-mini__user-button user__button user__button--subscription button button--main" href="profile.php?id=<?= $follower['id'] ?>&subscribed">
                                                         Подписаться
                                                     </a>
                                                 <?php endif; ?>
@@ -193,7 +201,8 @@
                                         <?php elseif ($post['class_name'] === 'video'): ?>
                                             <div class="post-video__block">
                                                 <div class="post-video__preview">
-                                                    <?= embed_youtube_cover(htmlspecialchars($post['video']), 760, 396); ?>
+                                                    <?= embed_youtube_cover(htmlspecialchars($post['video']), 760,
+                                                        396); ?>
                                                 </div>
                                                 <div class="post-video__control">
                                                     <button class="post-video__play post-video__play--paused button button--video" type="button">
@@ -219,7 +228,8 @@
 
                                         <?php elseif ($post['class_name'] === 'text'): ?>
                                             <?php if (crop_text($post['text_content'], 1000)): ?>
-                                                <p><?= htmlspecialchars(crop_text($post['text_content'], 1000)) . '...' ?></p>
+                                                <p><?= htmlspecialchars(crop_text($post['text_content'],
+                                                        1000)) . '...' ?></p>
                                                 <a class="post-text__more-link" href="/post.php?id=<?= $post['id']; ?>">Читать
                                                     далее</a>
                                             <?php else: ?>
@@ -236,7 +246,8 @@
                                             <div class="post-link__wrapper">
                                                 <a class="post-link__external" href="<?= htmlspecialchars($post['link']) ?>" title="Перейти по ссылке">
                                                     <div class="post-link__icon-wrapper">
-                                                        <img src="https://www.google.com/s2/favicons?domain=<?= htmlspecialchars(str_replace('www.', '', $post['link'])) ?>" alt="Иконка">
+                                                        <img src="https://www.google.com/s2/favicons?domain=<?= htmlspecialchars(str_replace('www.',
+                                                            '', $post['link'])) ?>" alt="Иконка">
                                                     </div>
                                                     <div class="post-link__info">
                                                         <h3><?= $post['title'] ?></h3>
@@ -254,7 +265,8 @@
                                     <footer class="post__footer">
                                         <div class="post__indicators">
                                             <div class="post__buttons">
-                                                <a class="post__indicator post__indicator--likes button <?= (in_array($post['id'], $liked_post_ids_by_session_user)) ? 'post__indicator--likes-active' : '' ?>"
+                                                <a class="post__indicator post__indicator--likes button <?= (in_array($post['id'],
+                                                    $liked_post_ids_by_session_user)) ? 'post__indicator--likes-active' : '' ?>"
                                                    href="profile.php?id=<?= $user['id'] ?>&liked_post_id=<?= $post['id'] ?>"
                                                    title="Лайк">
                                                     <svg class="post__indicator-icon" width="20" height="17">
@@ -266,15 +278,18 @@
                                                     <span><?= count_likes_of_post($con, $post['id']) ?></span>
                                                     <span class="visually-hidden">количество лайков</span>
                                                 </a>
-                                                <a class="post__indicator post__indicator--repost button <?= (in_array($post['id'], $reposted_post_ids_by_session_user)) ? 'post__indicator--repost-active' : '' ?>" href="profile.php?id=<?= $user['id'] ?>&reposted_post_id=<?= $post['id'] ?>" title="Репост">
-                                                    <svg class="post__indicator-icon <?= (in_array($post['id'], $reposted_post_ids_by_session_user)) ? 'post__indicator-icon--repost-active' : '' ?>" width="19" height="17">
+                                                <a class="post__indicator post__indicator--repost button <?= (in_array($post['id'],
+                                                    $reposted_post_ids_by_session_user)) ? 'post__indicator--repost-active' : '' ?>" href="profile.php?id=<?= $user['id'] ?>&reposted_post_id=<?= $post['id'] ?>" title="Репост">
+                                                    <svg class="post__indicator-icon <?= (in_array($post['id'],
+                                                        $reposted_post_ids_by_session_user)) ? 'post__indicator-icon--repost-active' : '' ?>" width="19" height="17">
                                                         <use xlink:href="#icon-repost"></use>
                                                     </svg>
                                                     <span><?= count_reposts_of_post($con, $post['id']) ?></span>
                                                     <span class="visually-hidden">количество репостов</span>
                                                 </a>
                                             </div>
-                                            <time class="post__time" datetime="<?= date_format(date_create($post['dt_add']), 'Y-m-d'); ?>"><?= print_date_diff($post['dt_add']); ?>
+                                            <time class="post__time" datetime="<?= date_format(date_create($post['dt_add']),
+                                                'Y-m-d'); ?>"><?= print_date_diff($post['dt_add']); ?>
                                                 назад
                                             </time>
                                         </div>
@@ -421,7 +436,7 @@
                                 </form>
                             </article>
                         </section>
-                    <? endif; ?>
+                    <?php endif; ?>
 
                 </div>
             </div>

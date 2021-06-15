@@ -1,14 +1,14 @@
 <?php
 
-//if (!isset($_SESSION['user'])) {
-//    header("Location: /");
-//    exit();
-//}
-
 include_once 'config.php';
 include_once 'init.php';
 include_once 'helpers.php';
 include_once 'models.php';
+
+if (!isset($_SESSION['user'])) {
+    header("Location: /");
+    exit();
+}
 
 $liked_post_ids_by_session_user = get_all_liked_post_ids_by_user($con, $_SESSION['user']['id']);
 if (isset($_GET['liked_post_id'])) {
@@ -19,9 +19,9 @@ if (isset($_GET['liked_post_id'])) {
 
 $title = 'readme: страница результатов поиска';
 $search = trim($_GET['q']) ?? '';
-$firstSymbol = substr($search,0 ,1);
+$firstSymbol = substr($search, 0, 1);
 if (empty($search)) {
-    header("Location: ".$_SERVER['HTTP_REFERER']);
+    header("Location: " . $_SERVER['HTTP_REFERER']);
     exit();
 }
 
@@ -32,7 +32,7 @@ if (isset($_GET['type']) && $_GET['type'] === 'tag') {
 } else {
     if ($firstSymbol === '#') {
 
-        $posts = get_posts_with_tag($con, substr($search,1));
+        $posts = get_posts_with_tag($con, substr($search, 1));
         $result_text = $search;
         $search_line_text = '';
     } else {
@@ -64,5 +64,5 @@ $layout = include_template('layout.php', [
     'search' => $search,
     'search_line_text' => $search_line_text,
 ]);
-?>
-<?= $layout; ?>
+
+echo $layout;

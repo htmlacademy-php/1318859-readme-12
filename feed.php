@@ -20,32 +20,44 @@ $tabs = [
     'quote' => 'цитата',
     'link' => 'ссылка',
 ];
-$user_id = $_SESSION['user']['id'];
-$userPosts = get_posts_of_user($con, $user_id);
+$user_id = intval($_SESSION['user']['id']);
+$posts = get_posts_of_following_users($con, $user_id);
 
 if (empty($currentTab)) {
-    $user_current_tab_posts = $userPosts;
+    $current_tab_posts = $posts;
 } else {
-    $user_current_tab_posts = [];
+    $current_tab_posts = [];
     $i = 0;
-    foreach ($userPosts as $post) {
+    foreach ($posts as $post) {
         if ($currentTab === $post['class_name']) {
-            $user_current_tab_posts[$i] = $post;
+            $current_tab_posts[$i] = $post;
             $i++;
         }
     }
 }
 
-/*echo '<pre>';
-print_r($userPosts);
-echo '</pre>';*/
+$liked_post_ids_by_session_user = get_all_liked_post_ids_by_user($con, $user_id);
+if (isset($_GET['liked_post_id'])) {
+    toggle_like($con, $user_id, $_GET['liked_post_id']);
+    header("Location: " . $_SERVER['HTTP_REFERER']);
+    exit();
+}
+
+$reposted_post_ids_by_session_user = get_all_reposted_post_ids_by_user($con, $user_id);
+if (isset($_GET['reposted_post_id'])) {
+    repost($con, $_GET['reposted_post_id']);
+    header("Location: /profile.php?id=" . $user_id);
+    exit();
+}
 
 $main_content = include_template('my-feed.php', [
-    'user_current_tab_posts' => $user_current_tab_posts,
+    'current_tab_posts' => $current_tab_posts,
     'tabs' => $tabs,
     'user_id' => $user_id,
     'currentTab' => $currentTab,
     'con' => $con,
+    'liked_post_ids_by_session_user' => $liked_post_ids_by_session_user,
+    'reposted_post_ids_by_session_user' => $reposted_post_ids_by_session_user,
 ]);
 
 $layout = include_template('layout.php', [
@@ -55,5 +67,4 @@ $layout = include_template('layout.php', [
     'title' => $title,
 ]);
 
-?>
-<?= $layout; ?>
+echo $layout;

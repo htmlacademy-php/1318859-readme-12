@@ -8,7 +8,7 @@
             <div class="feed__main-wrapper">
                 <div class="feed__wrapper">
 
-                    <?php foreach ($user_current_tab_posts as $post): ?>
+                    <?php foreach ($current_tab_posts as $post): ?>
                         <article class="search__post post post-<?= $post['class_name']; ?>">
                             <header class="post__header post__author">
                                 <a class="post__author-link" href="profile.php?id=<?= $post['user_id'] ?>" title="Автор">
@@ -91,14 +91,15 @@
                             </div>
                             <footer class="post__footer post__indicators">
                                 <div class="post__buttons">
-                                    <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
+                                    <a class="post__indicator post__indicator--likes button <?= (in_array($post['id'],
+                                        $liked_post_ids_by_session_user)) ? 'post__indicator--likes-active' : '' ?>" href="feed.php?liked_post_id=<?= $post['id'] ?>" title="Лайк">
                                         <svg class="post__indicator-icon" width="20" height="17">
                                             <use xlink:href="#icon-heart"></use>
                                         </svg>
                                         <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
                                             <use xlink:href="#icon-heart-active"></use>
                                         </svg>
-                                        <span>250</span>
+                                        <span><?= count_likes_of_post($con, $post['id']) ?></span>
                                         <span class="visually-hidden">количество лайков</span>
                                     </a>
                                     <a class="post__indicator post__indicator--comments button" href="post.php?id=<?= $post['id'] ?>#last_comment" title="Комментарии">
@@ -108,11 +109,13 @@
                                         <span><?= count_comments_of_post($con, $post['id']) ?></span>
                                         <span class="visually-hidden">количество комментариев</span>
                                     </a>
-                                    <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
-                                        <svg class="post__indicator-icon" width="19" height="17">
+                                    <a class="post__indicator post__indicator--repost button <?= (in_array($post['id'],
+                                        $reposted_post_ids_by_session_user)) ? 'post__indicator--repost-active' : '' ?>" href="feed.php?reposted_post_id=<?= $post['id'] ?>" title="Репост">
+                                        <svg class="post__indicator-icon <?= (in_array($post['id'],
+                                            $reposted_post_ids_by_session_user)) ? 'post__indicator-icon--repost-active' : '' ?>" width="19" height="17">
                                             <use xlink:href="#icon-repost"></use>
                                         </svg>
-                                        <span>5</span>
+                                        <span><?= count_reposts_of_post($con, $post['id']) ?></span>
                                         <span class="visually-hidden">количество репостов</span>
                                     </a>
                                 </div>

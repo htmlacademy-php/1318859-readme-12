@@ -8,7 +8,7 @@ include_once 'models.php';
 $title = 'readme: вход на сайт';
 $form = include_once 'forms/auth-form.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = validate_form($form, $configs);
 
@@ -44,5 +44,5 @@ $layout = include_template('guest_layout.php', [
     'form' => $form,
     'errors' => $errors ?? '',
 ]);
-?>
-<?= $layout; ?>
+
+echo $layout;

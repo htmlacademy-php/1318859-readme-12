@@ -41,7 +41,7 @@ $layout = include_template('layout.php', [
     'main_content' => $main_content,
     'title' => $title,
 ]);
-?>
-<?= $layout; ?>
+
+echo $layout;
 
 

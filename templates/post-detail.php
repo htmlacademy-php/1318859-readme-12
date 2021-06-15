@@ -19,7 +19,8 @@
                             <div class="post-link__wrapper">
                                 <a class="post-link__external" href="<?= htmlspecialchars($post['link']) ?>" title="Перейти по ссылке">
                                     <div class="post-link__icon-wrapper">
-                                        <img src="https://www.google.com/s2/favicons?domain=<?= htmlspecialchars(str_replace('www.', '', $post['link'])) ?>" alt="Иконка">
+                                        <img src="https://www.google.com/s2/favicons?domain=<?= htmlspecialchars(str_replace('www.',
+                                            '', $post['link'])) ?>" alt="Иконка">
                                     </div>
                                     <div class="post-link__info">
                                         <h3><?= htmlspecialchars($post['title']) ?></h3>
@@ -76,7 +77,8 @@
 
                     <div class="post__indicators">
                         <div class="post__buttons">
-                            <a class="post__indicator post__indicator--likes button <?= (in_array($post['id'], $liked_post_ids_by_session_user)) ? 'post__indicator--likes-active' : '' ?>"
+                            <a class="post__indicator post__indicator--likes button <?= (in_array($post['id'],
+                                $liked_post_ids_by_session_user)) ? 'post__indicator--likes-active' : '' ?>"
                                href="post.php?id=<?= $id ?>&liked"
                                title="Лайк">
                                 <svg class="post__indicator-icon" width="20" height="17">
@@ -95,17 +97,20 @@
                                 <span><?= count_comments_of_post($con, $id) ?></span>
                                 <span class="visually-hidden">количество комментариев</span>
                             </a>
-                            <a class="post__indicator post__indicator--repost button <?= (in_array($post['id'], $reposted_post_ids_by_session_user)) ? 'post__indicator--repost-active' : '' ?>"
+                            <a class="post__indicator post__indicator--repost button <?= (in_array($post['id'],
+                                $reposted_post_ids_by_session_user)) ? 'post__indicator--repost-active' : '' ?>"
                                href="post.php?id=<?= $id ?>&reposted"
                                title="Репост">
-                                <svg class="post__indicator-icon <?= (in_array($post['id'], $reposted_post_ids_by_session_user)) ? 'post__indicator-icon--repost-active' : '' ?>" width="19" height="17">
+                                <svg class="post__indicator-icon <?= (in_array($post['id'],
+                                    $reposted_post_ids_by_session_user)) ? 'post__indicator-icon--repost-active' : '' ?>" width="19" height="17">
                                     <use xlink:href="#icon-repost"></use>
                                 </svg>
                                 <span><?= count_reposts_of_post($con, $id) ?></span>
                                 <span class="visually-hidden">количество репостов</span>
                             </a>
                         </div>
-                        <span class="post__view"><?= $viewsCount ?> <?= get_noun_plural_form($viewsCount, 'просмотр', 'просмотра', 'просмотров') ?></span>
+                        <span class="post__view"><?= $viewsCount ?> <?= get_noun_plural_form($viewsCount, 'просмотр',
+                                'просмотра', 'просмотров') ?></span>
                     </div>
                     <?php if ($post_tags): ?>
                         <ul class="post__tags">
@@ -155,7 +160,8 @@
                                                 <a class="comments__user-name" href="profile.php?id=<?= $postComments[$i]['id'] ?>">
                                                     <span><?= $postComments[$i]['login'] ?></span>
                                                 </a>
-                                                <time class="comments__time" datetime="<?= date_format(date_create($postComments[$i]['publish_time']), 'Y-m-d'); ?>">
+                                                <time class="comments__time" datetime="<?= date_format(date_create($postComments[$i]['publish_time']),
+                                                    'Y-m-d'); ?>">
                                                     <?= print_date_diff($postComments[$i]['publish_time']); ?> назад
                                                 </time>
                                             </div>
@@ -187,7 +193,8 @@
                             <a class="post-details__name user__name" href="profile.php?id=<?= $post['user_id'] ?>">
                                 <span><?= $post['login'] ?></span>
                             </a>
-                            <time class="post-details__time user__time" datetime="<?= date_format(date_create($author['dt_add']), 'Y-m-d'); ?>"><?= print_date_diff($author['dt_add']); ?>
+                            <time class="post-details__time user__time" datetime="<?= date_format(date_create($author['dt_add']),
+                                'Y-m-d'); ?>"><?= print_date_diff($author['dt_add']); ?>
                                 на сайте
                             </time>
                         </div>
@@ -195,11 +202,13 @@
                     <div class="post-details__rating user__rating">
                         <p class="post-details__rating-item user__rating-item user__rating-item--subscribers">
                             <span class="post-details__rating-amount user__rating-amount"><?= $amountOfUserFollowers ?></span>
-                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($amountOfUserFollowers, 'подписчик', 'подписчика', 'подписчиков') ?></span>
+                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($amountOfUserFollowers,
+                                    'подписчик', 'подписчика', 'подписчиков') ?></span>
                         </p>
                         <p class="post-details__rating-item user__rating-item user__rating-item--publications">
                             <span class="post-details__rating-amount user__rating-amount"><?= $amountOfUserPosts ?></span>
-                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($amountOfUserPosts, 'публикация', 'публикации', 'публикаций') ?></span>
+                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($amountOfUserPosts,
+                                    'публикация', 'публикации', 'публикаций') ?></span>
                         </p>
                     </div>
 

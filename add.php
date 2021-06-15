@@ -104,5 +104,5 @@ $layout = include_template('layout.php', [
     'user_avatar' => $_SESSION['user']['avatar'],
     'title' => $title,
 ]);
-?>
-<?= $layout; ?>
+
+echo $layout;

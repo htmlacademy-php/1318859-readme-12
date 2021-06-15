@@ -29,14 +29,9 @@ foreach ($userPosts as $i => $post) {
 }
 
 $likedPostsOfUser = get_liked_posts_of_user($con, $user['id']);
-$followingUsersOfUser = get_following_users_of_user($con, $user['id']); //те, на кого подписан пользователь
-$followersOfUser = get_followers($con, $user['id']); // подписчики пользователя
-$followingUsersOfSessionUser = get_following_users_of_user($con, intval($_SESSION['user']['id'])); // подписчики пользователя
-
-/*echo '<pre>';
-print_r('userPosts');
-print_r($userPosts);
-echo '</pre>';*/
+$followingUsersOfUser = get_following_users_of_user($con, $user['id']);
+$followersOfUser = get_followers($con, $user['id']);
+$followingUsersOfSessionUser = get_following_users_of_user($con, intval($_SESSION['user']['id']));
 
 foreach ($followersOfUser as $i => $follower) {
     $followersOfUser[$i]['amount_of_posts'] = count(get_filtered_posts($con, 'u.id', $follower['id'], null));
@@ -67,12 +62,12 @@ if (isset($_GET['reposted_post_id'])) {
 
 if (isset($_GET['subscribed'])) {
     add_follower($con, $_SESSION['user'], $user);
-    header("Location: ".$_SERVER['HTTP_REFERER']);
+    header("Location: " . $_SERVER['HTTP_REFERER']);
     exit();
 }
 if (isset($_GET['unsubscribed'])) {
     remove_follower($con, $_SESSION['user']['id'], $user['id']);
-    header("Location: ".$_SERVER['HTTP_REFERER']);
+    header("Location: " . $_SERVER['HTTP_REFERER']);
     exit();
 }
 
@@ -82,13 +77,6 @@ foreach ($followersOfUser as $follower) {
         $subscribe = true;
     }
 }
-
-/*echo '<pre>';
-print_r($userPosts);
-echo '</pre>';
-echo '<pre>';
-print_r(repost($con, $userPosts[0]['id']));
-echo '</pre>';*/
 
 $main_content = include_template('profile.php', [
     'userPosts' => $userPosts,
@@ -114,5 +102,4 @@ $layout = include_template('layout.php', [
     'title' => $title,
 ]);
 
-?>
-<?= $layout; ?>
+echo $layout;

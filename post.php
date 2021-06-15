@@ -47,12 +47,12 @@ if (isset($_GET["id"]) && in_array($_GET["id"], $existed_ids)) {
     $followersOfUser = get_followers($con, $author['id']);
     if (isset($_GET['subscribed'])) {
         add_follower($con, $_SESSION['user'], $author);
-        header("Location: ".$_SERVER['HTTP_REFERER']);
+        header("Location: " . $_SERVER['HTTP_REFERER']);
         exit();
     }
     if (isset($_GET['unsubscribed'])) {
         remove_follower($con, $_SESSION['user']['id'], $author['id']);
-        header("Location: ".$_SERVER['HTTP_REFERER']);
+        header("Location: " . $_SERVER['HTTP_REFERER']);
         exit();
     }
     $subscribe = false;
@@ -114,5 +114,5 @@ $layout = include_template('layout.php', [
     'user_avatar' => $_SESSION['user']['avatar'],
     'title' => $title,
 ]);
-?>
-<?= $layout; ?>
+
+echo $layout;
