@@ -578,6 +578,11 @@ function validate_form($form, $configs)
     return $errors;
 }
 
+/**
+ * Отправляет уведомление на почту о новом подписчике.
+ * @param array $follower Данные о подписчике
+ * @param array $following Данные об адресате
+ */
 function sendSubscribeNotification($follower, $following)
 {
     include_once 'vendor/autoload.php';
@@ -610,6 +615,11 @@ function sendSubscribeNotification($follower, $following)
     }
 }
 
+/**
+ * Отправляет уведомление о появлении нового поста на почту всем подписчикам.
+ * @param array $post Данные о посте
+ * @param array $followers данные об адресатах
+ */
 function sendNewPostNotification($post, $followers)
 {
     include_once 'vendor/autoload.php';

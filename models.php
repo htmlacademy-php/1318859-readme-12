@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Возвращает массив данных о типах поста.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @return array
+ */
 function get_post_types($con)
 {
     $sql = "SELECT * FROM types";
@@ -8,6 +13,11 @@ function get_post_types($con)
     return $types;
 }
 
+/**
+ * Возвращает массив данных о всех постах.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @return array
+ */
 function get_all_posts($con)
 {
     $sql = "SELECT * FROM posts;";
@@ -16,6 +26,11 @@ function get_all_posts($con)
     return $posts;
 }
 
+/**
+ * Возвращает массив данных о всех тегах.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @return array
+ */
 function get_all_tags($con)
 {
     $sql = "SELECT * FROM tags;";
@@ -24,6 +39,16 @@ function get_all_tags($con)
     return $tags;
 }
 
+/**
+ * Возвращает массив данных о постах по фильтру.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param string $filtered_property - название колонки из таблицы базы данных, по которой происходит фильтрация.
+ * @param string $value - значение свойства, по которому происходит фильтрация.
+ * @param int $limit - ограничение количества выводимых постов.
+ * @param string $order - название колонки из таблицы базы данных, по которой происходит сортировка.
+ * @param string $direction - направление сортировки.
+ * @return array
+ */
 function get_filtered_posts($con, $filtered_property, $value, $limit, $order = 'views_count', $direction = 'DESC')
 {
     if ($filtered_property) {
@@ -50,6 +75,13 @@ function get_filtered_posts($con, $filtered_property, $value, $limit, $order = '
     return $filtered_posts;
 }
 
+/**
+ * Возвращает массив данных о посте по фильтру.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param string $filtered_property - название колонки из таблицы базы данных, по которой происходит фильтрация.
+ * @param string $value - значение свойства, по которому происходит фильтрация.
+ * @return array
+ */
 function get_post($con, $filtered_property, $value)
 {
     if ($filtered_property) {
@@ -63,19 +95,26 @@ function get_post($con, $filtered_property, $value)
     return $post;
 }
 
-function get_post_for_repost($con, $filtered_property, $value)
+/**
+ * Возвращает массив данных о посте, который репостится.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $post_id - идентификатор поста в таблице `posts` базы данных.
+ * @return array
+ */
+function get_post_for_repost($con, $post_id)
 {
-    if ($filtered_property) {
-        $sql_filter = " WHERE $filtered_property = $value";
-    } else {
-        $sql_filter = "";
-    }
-    $sql = "SELECT * FROM posts $sql_filter;";
+    $sql = "SELECT * FROM posts WHERE id = $post_id;";
     $stmt = mysqli_prepare($con, $sql);
     $post = get_data($con, $stmt, true);
     return $post;
 }
 
+/**
+ * Возвращает массив данных о пользователе.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $user_id - идентификатор пользователя в таблице `users` базы данных.
+ * @return array
+ */
 function get_user($con, $user_id)
 {
     $sql = "SELECT * FROM users WHERE id = ?;";
@@ -85,6 +124,12 @@ function get_user($con, $user_id)
     return $user;
 }
 
+/**
+ * Возвращает массив данных о подписчиках пользователя.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $following_user_id - идентификатор пользователя в таблице `follows` базы данных, данные о чьих подписчиках выводятся.
+ * @return array
+ */
 function get_followers($con, $following_user_id)
 {
     $sql = "SELECT u.* FROM follows f 
@@ -96,6 +141,12 @@ function get_followers($con, $following_user_id)
     return $followers;
 }
 
+/**
+ * Добавляет в базу данных нового подписчика.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $follower_user - идентификатор добавляемого подписчика в таблице `follows` базы данных.
+ * @param int $following_user_id - идентификатор пользователя в таблице `follows` базы данных, чей подписчик добавляется.
+ */
 function add_follower($con, $follower_user, $following_user)
 {
     $followers = get_followers($con, $following_user['id']);
@@ -113,6 +164,13 @@ function add_follower($con, $follower_user, $following_user)
     sendSubscribeNotification($follower_user, $following_user);
 }
 
+/**
+ * Удаляет из базы данных подписчика.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $follower_user - идентификатор удаляемого подписчика в таблице `follows` базы данных.
+ * @param int $following_user_id - идентификатор пользователя в таблице `follows` базы данных, от которого отписывается удаляемый подписчик.
+ * @return array
+ */
 function remove_follower($con, $follower_id, $following_user_id)
 {
     $sql = "DELETE FROM follows WHERE follower_id = '$follower_id' AND following_user_id = '$following_user_id';";
@@ -123,6 +181,12 @@ function remove_follower($con, $follower_id, $following_user_id)
     }
 }
 
+/**
+ * Добавляет в базу данных новый пост.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param array $data - данные о добавляемом посте.
+ * @return array
+ */
 function add_post($con, $data)
 {
     $sql_data = '';
@@ -142,6 +206,12 @@ function add_post($con, $data)
     }
 }
 
+/**
+ * Добавляет в базу данных нового пользователя.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param array $data - данные о добавляемом пользователе.
+ * @return int
+ */
 function add_user($con, $data)
 {
     $sql_data = '';
@@ -159,6 +229,11 @@ function add_user($con, $data)
     return $user_id;
 }
 
+/**
+ * Добавляет в базу данных новый комментарий.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param array $data - данные о добавляемом комментарии.
+ */
 function add_comment($con, $data)
 {
     $sql_data = '';
@@ -173,6 +248,11 @@ function add_comment($con, $data)
     }
 }
 
+/**
+ * Добавляет посту один просмотр (увеличивает значение в столбце `views_count` таблицы `posts` у поста с идентификатором $post_id).
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $post_id - идентификатор поста.
+ */
 function add_view($con, $post_id)
 {
     $sql = "UPDATE posts SET `views_count` = `views_count` + 1 WHERE `id` = $post_id;";
@@ -183,6 +263,13 @@ function add_view($con, $post_id)
     }
 }
 
+/**
+ * Добавляет информацию о тегах нового поста в базу данных.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param array $postTags - массив тегов добавляемого поста.
+ * @param array $db_tags - массив существующих в базе данных тегов.
+ * @param int $post_id - идентификатор добавляемого поста.
+ */
 function add_tags($con, $postTags, $db_tags, $post_id)
 {
     $post_tags_ids = [];
@@ -217,16 +304,31 @@ function add_tags($con, $postTags, $db_tags, $post_id)
     }
 }
 
-
+/**
+ * Возвращает массив данных о постах по запросу в поисковой строке.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param string $search - поисковый запрос.
+ * @return array
+ */
 function get_search_posts($con, $search)
 {
-    $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id WHERE MATCH(p.title, p.text_content) AGAINST(?) ORDER BY views_count DESC";
+    $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p 
+            JOIN users u ON p.user_id = u.id 
+            JOIN types t ON p.type_id = t.id 
+            WHERE MATCH(p.title, p.text_content) AGAINST(?) 
+            ORDER BY views_count DESC";
 
     $stmt = db_get_prepare_stmt($con, $sql, [$search]);
     $posts = get_data($con, $stmt, false);
     return $posts;
 }
 
+/**
+ * Возвращает массив данных о тегах поста с идентификатором $post_id.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $post_id - идентификатор поста.
+ * @return array
+ */
 function get_post_tags($con, $post_id)
 {
     $sql = "SELECT name FROM tags t
@@ -238,6 +340,12 @@ function get_post_tags($con, $post_id)
     return $post_tags;
 }
 
+/**
+ * Возвращает массив данных о комментариях поста с идентификатором $post_id.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $post_id - идентификатор поста.
+ * @return array
+ */
 function get_post_comments($con, $post_id)
 {
     $sql = "SELECT u.*, c.content, c.dt_add AS publish_time FROM comments c
@@ -250,6 +358,12 @@ function get_post_comments($con, $post_id)
     return $post_tags;
 }
 
+/**
+ * Возвращает массив данных о постах с определённым тегом.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param string $tag_name - тег, по наличию которого выбираются посты.
+ * @return array
+ */
 function get_posts_with_tag($con, $tag_name)
 {
     $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p 
@@ -264,6 +378,12 @@ function get_posts_with_tag($con, $tag_name)
     return $post_tags;
 }
 
+/**
+ * Возвращает массив данных о постах пользователя с идентификатором $user_id.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $user_id - идентификатор пользователя.
+ * @return array
+ */
 function get_posts_of_user($con, $user_id)
 {
     $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p 
@@ -276,6 +396,12 @@ function get_posts_of_user($con, $user_id)
     return $filtered_posts;
 }
 
+/**
+ * Возвращает массив данных о постах пользователей, на которых подписан пользователь с идентификатором $user_id.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $user_id - идентификатор пользователя.
+ * @return array
+ */
 function get_posts_of_following_users($con, $user_id)
 {
     $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM posts p 
@@ -289,6 +415,12 @@ function get_posts_of_following_users($con, $user_id)
     return $filtered_posts;
 }
 
+/**
+ * Возвращает массив данных о постах, которые лайкнул пользователь с идентификатором $user_id.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $user_id - идентификатор пользователя.
+ * @return array
+ */
 function get_liked_posts_of_user($con, $user_id)
 {
     $sql = "SELECT p.*, u.login, u.avatar, l.user_id AS like_user_id, l.dt_add AS like_dt_add, t.class_name FROM posts p
@@ -302,6 +434,12 @@ function get_liked_posts_of_user($con, $user_id)
     return $liked_user_posts;
 }
 
+/**
+ * Возвращает массив данных о подписчиках пользователя с идентификатором $user_id.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $user_id - идентификатор пользователя.
+ * @return array
+ */
 function get_following_users_of_user($con, $user_id)
 {
     $sql = "SELECT u.* FROM users u JOIN follows f ON u.id = f.following_user_id WHERE f.follower_id = ?;";
@@ -311,22 +449,28 @@ function get_following_users_of_user($con, $user_id)
     return $followingUsersOfUser;
 }
 
-function toggle_like($con, $userId, $postId)
+/**
+ * Ставит/убирает лайк от пользователя с идентификатором $user_id посту с идентификатором $post_id.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $user_id - идентификатор пользователя.
+ * @param int $post_id - идентификатор поста.
+ */
+function toggle_like($con, $user_id, $post_id)
 {
     $sql = "SELECT id FROM likes WHERE user_id = ? AND post_id = ?;";
     $stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt, 'ii', $userId, $postId);
+    mysqli_stmt_bind_param($stmt, 'ii', $user_id, $post_id);
     $like = get_data($con, $stmt, true);
 
     if ($like) {
-        $sql = "DELETE FROM likes WHERE user_id = '$userId' AND post_id = '$postId';";
+        $sql = "DELETE FROM likes WHERE user_id = '$user_id' AND post_id = '$post_id';";
         $result = mysqli_query($con, $sql);
         if (!$result) {
             $error = mysqli_error($con);
             print("Ошибка MySQL: " . $error);
         }
     } else {
-        $sql = "INSERT INTO likes SET user_id = '$userId', post_id = '$postId';";
+        $sql = "INSERT INTO likes SET user_id = '$user_id', post_id = '$post_id';";
         $result = mysqli_query($con, $sql);
         if (!$result) {
             $error = mysqli_error($con);
@@ -335,6 +479,12 @@ function toggle_like($con, $userId, $postId)
     }
 }
 
+/**
+ * Возвращает массив с идентификаторами постов, лайкнутых пользователем с идентификатором $user_id.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $user_id - идентификатор пользователя.
+ * @return array
+ */
 function get_all_liked_post_ids_by_user($con, $user_id)
 {
     $sql = "SELECT post_id FROM likes WHERE user_id = '$user_id';";
@@ -349,6 +499,12 @@ function get_all_liked_post_ids_by_user($con, $user_id)
     return $all_liked_post_ids_by_user;
 }
 
+/**
+ * Возвращает массив с идентификаторами постов, репостнутых пользователем с идентификатором $user_id.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $user_id - идентификатор пользователя.
+ * @return array
+ */
 function get_all_reposted_post_ids_by_user($con, $user_id)
 {
     $sql = "SELECT repost_id FROM posts WHERE user_id = '$user_id' AND repost_id IS NOT NULL;";
@@ -363,6 +519,12 @@ function get_all_reposted_post_ids_by_user($con, $user_id)
     return $all_reposted_post_ids_by_user;
 }
 
+/**
+ * Возвращает количество лайков поста с идентификатором $post_id.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $post_id - идентификатор поста.
+ * @return array
+ */
 function count_likes_of_post($con, $post_id)
 {
     $sql = "SELECT id FROM likes WHERE post_id = '$post_id';";
@@ -371,6 +533,12 @@ function count_likes_of_post($con, $post_id)
     return $records_count;
 }
 
+/**
+ * Возвращает количество комментариев поста с идентификатором $post_id.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $post_id - идентификатор поста.
+ * @return array
+ */
 function count_comments_of_post($con, $post_id)
 {
     $sql = "SELECT id FROM comments WHERE post_id = '$post_id';";
@@ -379,6 +547,12 @@ function count_comments_of_post($con, $post_id)
     return $records_count;
 }
 
+/**
+ * Возвращает количество репостов поста с идентификатором $post_id.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $post_id - идентификатор поста.
+ * @return array
+ */
 function count_reposts_of_post($con, $post_id)
 {
     $sql = "SELECT id FROM posts WHERE repost_id = '$post_id';";
@@ -387,9 +561,15 @@ function count_reposts_of_post($con, $post_id)
     return $records_count;
 }
 
+/**
+ * Делает репост поста с идентификатором $post_id.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @param int $post_id - идентификатор поста.
+ * @return array
+ */
 function repost($con, $post_id)
 {
-    $post = get_post_for_repost($con, 'id', $post_id);
+    $post = get_post_for_repost($con, $post_id);
     $sql = "SELECT * FROM posts WHERE user_id = ? AND repost_id = ?;";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'ii', intval($_SESSION['user']['id']), $post_id);
