@@ -16,9 +16,9 @@
 function is_date_valid(string $date): bool
 {
     $format_to_check = 'Y-m-d';
-    $dateTimeObj = date_create_from_format($format_to_check, $date);
+    $date_time_obj = date_create_from_format($format_to_check, $date);
 
-    return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
+    return $date_time_obj !== false && array_sum(date_get_last_errors()) === 0;
 }
 
 /**
@@ -35,8 +35,8 @@ function db_get_prepare_stmt($link, $sql, $data = [])
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
-        $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
-        die($errorMsg);
+        $error_msg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
+        die($error_msg);
     }
 
     if ($data) {
@@ -73,8 +73,8 @@ function db_get_prepare_stmt($link, $sql, $data = [])
         $func(...$values);
 
         if (mysqli_errno($link) > 0) {
-            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
-            die($errorMsg);
+            $error_msg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
+            die($error_msg);
         }
     }
 
@@ -371,7 +371,7 @@ function get_data($con, $stmt, $is_row)
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateFilled($name)
+function validate_filled($name)
 {
     if (empty($_POST[$name])) {
         return "Это поле должно быть заполнено";
@@ -385,12 +385,12 @@ function validateFilled($name)
  * @param int $max Максимальная длиня строки
  * @return string
  */
-function isCorrectMinLengthComment($name, $minLength)
+function is_correct_min_length_comment($name, $min_length)
 {
     $len = strlen(trim($_POST[$name]));
 
-    if ($len < $minLength) {
-        return "Комментарий должен быть не менее $minLength символов";
+    if ($len < $min_length) {
+        return "Комментарий должен быть не менее $min_length символов";
     }
 }
 
@@ -399,7 +399,7 @@ function isCorrectMinLengthComment($name, $minLength)
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateUrl($name)
+function validate_url($name)
 {
     if (!filter_var($_POST[$name], FILTER_VALIDATE_URL)) {
         return "Значение поля должно быть корректным URL-адресом";
@@ -412,7 +412,7 @@ function validateUrl($name)
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateEmail($name)
+function validate_email($name)
 {
     if (!filter_var($_POST[$name], FILTER_VALIDATE_EMAIL)) {
         return "Значение поля должно быть корректным email-адресом";
@@ -426,7 +426,7 @@ function validateEmail($name)
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateUniqueEmail($con, $name)
+function validate_unique_email($con, $name)
 {
     $email = mysqli_real_escape_string($con, $_POST[$name]);
     $sql = "SELECT id FROM users WHERE email = '$email'";
@@ -444,7 +444,7 @@ function validateUniqueEmail($con, $name)
  * @param string $password Значение из поля "Пароль"
  * @return string
  */
-function validatePassword($password_repeat, $password)
+function validate_password($password_repeat, $password)
 {
     if ($_POST[$password_repeat] !== $_POST[$password]) {
         return "Пароли не совпадают.";
@@ -457,10 +457,10 @@ function validatePassword($password_repeat, $password)
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateImageTypeFromUrl($name)
+function validate_image_type_from_url($name)
 {
-    $fileType = strrchr($_POST[$name], '.');
-    $validTypes = [
+    $file_type = strrchr($_POST[$name], '.');
+    $valid_types = [
         '.png',
         '.jpg',
         '.jpeg',
@@ -468,9 +468,9 @@ function validateImageTypeFromUrl($name)
     ];
 
     $i = 0;
-    while ($i < count($validTypes)) {
-        if ($fileType === $validTypes[$i]) {
-            return validateImageUrlContent($name);
+    while ($i < count($valid_types)) {
+        if ($file_type === $valid_types[$i]) {
+            return validate_image_url_content($name);
         }
         $i++;
     }
@@ -482,13 +482,13 @@ function validateImageTypeFromUrl($name)
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateImageUrlContent($name)
+function validate_image_url_content($name)
 {
     $content = file_get_contents($_POST[$name]);
     if (!$content) {
         return "Не удалось загрузить файл. Пожалуйста, проверьте ещё раз указанный адрес.";
     }
-    moveImageFromUrl($name);
+    move_image_from_url($name);
     return false;
 }
 
@@ -496,10 +496,10 @@ function validateImageUrlContent($name)
  * Загружает изображение в папку /uploads.
  * @param string $name Значение атрибута 'name' поля формы
  */
-function moveImageFromUrl($name)
+function move_image_from_url($name)
 {
-    $fileName = strrchr($_POST[$name], '/');
-    $local = __DIR__ . '/uploads' . $fileName;
+    $file_name = strrchr($_POST[$name], '/');
+    $local = __DIR__ . '/uploads' . $file_name;
     file_put_contents($local, file_get_contents($_POST[$name]));
 }
 
@@ -508,18 +508,18 @@ function moveImageFromUrl($name)
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateImageType($name)
+function validate_image_type($name)
 {
-    $fileType = $_FILES[$name]["type"];
-    $validTypes = [
+    $file_type = $_FILES[$name]["type"];
+    $valid_types = [
         'image/png',
         'image/jpeg',
         'image/gif'
     ];
     $i = 0;
-    while ($i < count($validTypes)) {
-        if ($fileType === $validTypes[$i]) {
-            return moveUploadedImage($name);
+    while ($i < count($valid_types)) {
+        if ($file_type === $valid_types[$i]) {
+            return move_uploaded_image($name);
         }
         $i++;
     }
@@ -531,17 +531,17 @@ function validateImageType($name)
  * @param string $name Значение атрибута 'name' поля формы
  * @return false
  */
-function moveUploadedImage($name)
+function move_uploaded_image($name)
 {
     if ($name === 'userpic-file') {
-        $uploaddir = __DIR__ . '/uploads/users/';
+        $upload_dir = __DIR__ . '/uploads/users/';
     } else {
-        $uploaddir = __DIR__ . '/uploads/';
+        $upload_dir = __DIR__ . '/uploads/';
     }
-    $uploadfile = $uploaddir . time() . '-' . $_FILES[$name]['name'];
+    $upload_file = $upload_dir . time() . '-' . $_FILES[$name]['name'];
 
     if (is_uploaded_file($_FILES[$name]['tmp_name'])) {
-        move_uploaded_file($_FILES[$name]['tmp_name'], $uploadfile);
+        move_uploaded_file($_FILES[$name]['tmp_name'], $upload_file);
         return false;
     }
     return "Не удалось загрузить файл.";
@@ -552,10 +552,10 @@ function moveUploadedImage($name)
  * @param string $name Значение атрибута 'name' поля формы
  * @return array
  */
-function getTagsFromPost($name)
+function get_tags_from_post($name)
 {
-    preg_match_all('/([\w0-9_])+/u', $_POST[$name], $postTags);
-    return $postTags[0];
+    preg_match_all('/([\w0-9_])+/u', $_POST[$name], $post_tags);
+    return $post_tags[0];
 }
 
 /**
@@ -583,7 +583,7 @@ function validate_form($form, $configs)
  * @param array $follower Данные о подписчике
  * @param array $following Данные об адресате
  */
-function sendSubscribeNotification($follower, $following)
+function send_subscribe_notification($follower, $following)
 {
     include_once 'vendor/autoload.php';
 
@@ -620,7 +620,7 @@ function sendSubscribeNotification($follower, $following)
  * @param array $post Данные о посте
  * @param array $followers данные об адресатах
  */
-function sendNewPostNotification($post, $followers)
+function send_new_post_notification($post, $followers)
 {
     include_once 'vendor/autoload.php';
 

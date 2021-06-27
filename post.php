@@ -37,14 +37,14 @@ if (isset($_GET["id"]) && in_array($_GET["id"], $existed_ids)) {
 
     add_view($con, $id);
     $post = get_post($con, 'p.id', $id);
-    $selfPage = ($post['user_id'] === intval($_SESSION['user']['id']));
+    $self_page = ($post['user_id'] === intval($_SESSION['user']['id']));
     $author_post_id = $post['user_id'];
     $author = get_user($con, $author_post_id);
-    $amountOfUserPosts = count(get_filtered_posts($con, 'u.id', $author_post_id, null));
-    $amountOfUserFollowers = count(get_followers($con, $author_post_id));
+    $amount_of_user_posts = count(get_filtered_posts($con, 'u.id', $author_post_id, null));
+    $amount_of_user_followers = count(get_followers($con, $author_post_id));
     $post_tags = get_post_tags($con, $id);
 
-    $followersOfUser = get_followers($con, $author['id']);
+    $followers_of_user = get_followers($con, $author['id']);
     if (isset($_GET['subscribed'])) {
         add_follower($con, $_SESSION['user'], $author);
         header("Location: " . $_SERVER['HTTP_REFERER']);
@@ -56,13 +56,13 @@ if (isset($_GET["id"]) && in_array($_GET["id"], $existed_ids)) {
         exit();
     }
     $subscribe = false;
-    foreach ($followersOfUser as $follower) {
+    foreach ($followers_of_user as $follower) {
         if ($follower['id'] === intval($_SESSION['user']['id'])) {
             $subscribe = true;
         }
     }
 
-    $viewsCount = intval($post['views_count']);
+    $views_count = intval($post['views_count']);
     $form = include_once 'forms/comment-form.php';
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -81,27 +81,27 @@ if (isset($_GET["id"]) && in_array($_GET["id"], $existed_ids)) {
         }
     }
 
-    $postComments = get_post_comments($con, $id);
-    $countOfPostComments = count($postComments);
-    $countOfShownPostComments = min($countOfPostComments, NUMBER_OF_SHOWN_POST_COMMENTS);
+    $post_comments = get_post_comments($con, $id);
+    $count_of_post_comments = count($post_comments);
+    $count_of_shown_post_comments = min($count_of_post_comments, NUMBER_OF_SHOWN_POST_COMMENTS);
 
     $main_content = include_template('post-detail.php', [
         'con' => $con,
         'post' => $post,
         'form' => $form,
         'errors' => $errors ?? '',
-        'selfPage' => $selfPage,
+        'self_page' => $self_page,
         'id' => $id,
-        'amountOfUserPosts' => $amountOfUserPosts,
+        'amount_of_user_posts' => $amount_of_user_posts,
         'author' => $author,
-        'amountOfUserFollowers' => $amountOfUserFollowers,
+        'amount_of_user_followers' => $amount_of_user_followers,
         'post_tags' => $post_tags,
         'subscribe' => $subscribe,
-        'viewsCount' => $viewsCount,
+        'views_count' => $views_count,
         'liked_post_ids_by_session_user' => $liked_post_ids_by_session_user,
-        'postComments' => $postComments,
-        'countOfPostComments' => $countOfPostComments,
-        'countOfShownPostComments' => $countOfShownPostComments,
+        'post_comments' => $post_comments,
+        'count_of_post_comments' => $count_of_post_comments,
+        'count_of_shown_post_comments' => $count_of_shown_post_comments,
     ]);
 } else {
     header('HTTP/1.0 404 not found');
@@ -112,6 +112,7 @@ $layout = include_template('layout.php', [
     'main_content' => $main_content,
     'user_name' => $_SESSION['user']['login'],
     'user_avatar' => $_SESSION['user']['avatar'],
+    'user_id' => $_SESSION['user']['id'],
     'title' => $title,
 ]);
 

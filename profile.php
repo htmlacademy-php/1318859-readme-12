@@ -11,7 +11,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 $title = 'readme: профиль';
-$currentTab = (isset($_GET["tab"])) ? $_GET["tab"] : 'posts';
+$current_tab = (isset($_GET["tab"])) ? $_GET["tab"] : 'posts';
 
 $tabs = [
     'posts' => 'посты',
@@ -19,29 +19,29 @@ $tabs = [
     'follows' => 'подписки',
 ];
 $user = get_user($con, $_GET['id']);
-$selfPage = ($_GET['id'] === $_SESSION['user']['id']);
+$self_page = ($_GET['id'] === $_SESSION['user']['id']);
 
-$amountOfUserPosts = count(get_filtered_posts($con, 'u.id', $user['id'], null));
-$amountOfUserFollowers = count(get_followers($con, $user['id']));
-$userPosts = get_posts_of_user($con, $user['id']);
-foreach ($userPosts as $i => $post) {
-    $userPosts[$i]['post_tags'] = get_post_tags($con, $post['id']);
+$amount_of_user_posts = count(get_filtered_posts($con, 'u.id', $user['id'], null));
+$amount_of_user_followers = count(get_followers($con, $user['id']));
+$user_posts = get_posts_of_user($con, $user['id']);
+foreach ($user_posts as $i => $post) {
+    $user_posts[$i]['post_tags'] = get_post_tags($con, $post['id']);
 }
 
-$likedPostsOfUser = get_liked_posts_of_user($con, $user['id']);
-$followingUsersOfUser = get_following_users_of_user($con, $user['id']);
-$followersOfUser = get_followers($con, $user['id']);
+$liked_posts_of_user = get_liked_posts_of_user($con, $user['id']);
+$following_users_of_user = get_following_users_of_user($con, $user['id']);
+$followers_of_user = get_followers($con, $user['id']);
 $followingUsersOfSessionUser = get_following_users_of_user($con, intval($_SESSION['user']['id']));
 
-foreach ($followersOfUser as $i => $follower) {
-    $followersOfUser[$i]['amount_of_posts'] = count(get_filtered_posts($con, 'u.id', $follower['id'], null));
-    $followersOfUser[$i]['amount_of_followers'] = count(get_followers($con, $follower['id']));
+foreach ($followers_of_user as $i => $follower) {
+    $followers_of_user[$i]['amount_of_posts'] = count(get_filtered_posts($con, 'u.id', $follower['id'], null));
+    $followers_of_user[$i]['amount_of_followers'] = count(get_followers($con, $follower['id']));
     foreach ($followingUsersOfSessionUser as $followingUser) {
         if ($followingUser['id'] === $follower['id']) {
-            $followersOfUser[$i]['subscribed_by_session_user'] = true;
+            $followers_of_user[$i]['subscribed_by_session_user'] = true;
             break;
         } else {
-            $followersOfUser[$i]['subscribed_by_session_user'] = false;
+            $followers_of_user[$i]['subscribed_by_session_user'] = false;
         }
     }
 }
@@ -72,23 +72,23 @@ if (isset($_GET['unsubscribed'])) {
 }
 
 $subscribe = false;
-foreach ($followersOfUser as $follower) {
+foreach ($followers_of_user as $follower) {
     if ($follower['id'] === intval($_SESSION['user']['id'])) {
         $subscribe = true;
     }
 }
 
 $main_content = include_template('profile.php', [
-    'userPosts' => $userPosts,
+    'user_posts' => $user_posts,
     'tabs' => $tabs,
     'user' => $user,
-    'selfPage' => $selfPage,
-    'currentTab' => $currentTab,
-    'amountOfUserPosts' => $amountOfUserPosts,
-    'amountOfUserFollowers' => $amountOfUserFollowers,
-    'likedPostsOfUser' => $likedPostsOfUser,
-    'followingUsersOfUser' => $followingUsersOfUser,
-    'followersOfUser' => $followersOfUser,
+    'self_page' => $self_page,
+    'current_tab' => $current_tab,
+    'amount_of_user_posts' => $amount_of_user_posts,
+    'amount_of_user_followers' => $amount_of_user_followers,
+    'liked_posts_of_user' => $liked_posts_of_user,
+    'following_users_of_user' => $following_users_of_user,
+    'followers_of_user' => $followers_of_user,
     'subscribe' => $subscribe,
     'liked_post_ids_by_session_user' => $liked_post_ids_by_session_user,
     'reposted_post_ids_by_session_user' => $reposted_post_ids_by_session_user,
@@ -99,6 +99,7 @@ $layout = include_template('layout.php', [
     'main_content' => $main_content,
     'user_name' => $_SESSION['user']['login'],
     'user_avatar' => $_SESSION['user']['avatar'],
+    'user_id' => $_SESSION['user']['id'],
     'title' => $title,
 ]);
 

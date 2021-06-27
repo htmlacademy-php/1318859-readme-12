@@ -20,7 +20,7 @@ function get_post_types($con)
  */
 function get_all_posts($con)
 {
-    $sql = "SELECT * FROM posts;";
+    $sql = "SELECT * FROM `posts`;";
     $stmt = mysqli_prepare($con, $sql);
     $posts = get_data($con, $stmt, false);
     return $posts;
@@ -144,8 +144,8 @@ function get_followers($con, $following_user_id)
 /**
  * Добавляет в базу данных нового подписчика.
  * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
- * @param int $follower_user - идентификатор добавляемого подписчика в таблице `follows` базы данных.
- * @param int $following_user_id - идентификатор пользователя в таблице `follows` базы данных, чей подписчик добавляется.
+ * @param array $follower_user - массив данных о добавляемом подписчике.
+ * @param array $following_user - массив данных о пользователе, чей подписчик добавляется.
  */
 function add_follower($con, $follower_user, $following_user)
 {
@@ -161,15 +161,14 @@ function add_follower($con, $follower_user, $following_user)
         $error = mysqli_error($con);
         print("Ошибка MySQL: " . $error);
     }
-    sendSubscribeNotification($follower_user, $following_user);
+    send_subscribe_notification($follower_user, $following_user);
 }
 
 /**
  * Удаляет из базы данных подписчика.
  * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
- * @param int $follower_user - идентификатор удаляемого подписчика в таблице `follows` базы данных.
+ * @param int $follower_id - идентификатор удаляемого подписчика в таблице `follows` базы данных.
  * @param int $following_user_id - идентификатор пользователя в таблице `follows` базы данных, от которого отписывается удаляемый подписчик.
- * @return array
  */
 function remove_follower($con, $follower_id, $following_user_id)
 {
@@ -266,11 +265,11 @@ function add_view($con, $post_id)
 /**
  * Добавляет информацию о тегах нового поста в базу данных.
  * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
- * @param array $postTags - массив тегов добавляемого поста.
+ * @param array $post_tags - массив тегов добавляемого поста.
  * @param array $db_tags - массив существующих в базе данных тегов.
  * @param int $post_id - идентификатор добавляемого поста.
  */
-function add_tags($con, $postTags, $db_tags, $post_id)
+function add_tags($con, $post_tags, $db_tags, $post_id)
 {
     $post_tags_ids = [];
     $tag_names = [];
@@ -279,7 +278,7 @@ function add_tags($con, $postTags, $db_tags, $post_id)
         $tag_names += [$key => $db_tag['name']];
         $key += 1;
     }
-    foreach ($postTags as $tag) {
+    foreach ($post_tags as $tag) {
         if (!in_array($tag, $tag_names)) {
             $sql = "INSERT INTO tags SET name = '$tag';";
             $result = mysqli_query($con, $sql);
@@ -445,8 +444,8 @@ function get_following_users_of_user($con, $user_id)
     $sql = "SELECT u.* FROM users u JOIN follows f ON u.id = f.following_user_id WHERE f.follower_id = ?;";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $user_id);
-    $followingUsersOfUser = get_data($con, $stmt, false);
-    return $followingUsersOfUser;
+    $following_users_of_user = get_data($con, $stmt, false);
+    return $following_users_of_user;
 }
 
 /**
@@ -523,7 +522,7 @@ function get_all_reposted_post_ids_by_user($con, $user_id)
  * Возвращает количество лайков поста с идентификатором $post_id.
  * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
  * @param int $post_id - идентификатор поста.
- * @return array
+ * @return int
  */
 function count_likes_of_post($con, $post_id)
 {
@@ -537,7 +536,7 @@ function count_likes_of_post($con, $post_id)
  * Возвращает количество комментариев поста с идентификатором $post_id.
  * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
  * @param int $post_id - идентификатор поста.
- * @return array
+ * @return int
  */
 function count_comments_of_post($con, $post_id)
 {
@@ -551,7 +550,7 @@ function count_comments_of_post($con, $post_id)
  * Возвращает количество репостов поста с идентификатором $post_id.
  * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
  * @param int $post_id - идентификатор поста.
- * @return array
+ * @return int
  */
 function count_reposts_of_post($con, $post_id)
 {
@@ -565,7 +564,7 @@ function count_reposts_of_post($con, $post_id)
  * Делает репост поста с идентификатором $post_id.
  * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
  * @param int $post_id - идентификатор поста.
- * @return array
+ * @return boolean
  */
 function repost($con, $post_id)
 {
@@ -573,8 +572,8 @@ function repost($con, $post_id)
     $sql = "SELECT * FROM posts WHERE user_id = ? AND repost_id = ?;";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'ii', intval($_SESSION['user']['id']), $post_id);
-    $isReposted = get_data($con, $stmt, true);
-    if ($post && !$isReposted) {
+    $is_reposted = get_data($con, $stmt, true);
+    if ($post && !$is_reposted) {
         $post['author_id'] = $post['user_id'];
         $post['user_id'] = $_SESSION['user']['id'];
         $post['dt_add'] = date("Y-m-d H:i:s");

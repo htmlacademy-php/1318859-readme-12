@@ -17,18 +17,18 @@
                 </div>
                 <div class="profile__rating user__rating">
                     <p class="profile__rating-item user__rating-item user__rating-item--publications">
-                        <span class="user__rating-amount"><?= $amountOfUserPosts ?></span>
-                        <span class="profile__rating-text user__rating-text"><?= get_noun_plural_form($amountOfUserPosts,
+                        <span class="user__rating-amount"><?= $amount_of_user_posts ?></span>
+                        <span class="profile__rating-text user__rating-text"><?= get_noun_plural_form($amount_of_user_posts,
                                 'публикация', 'публикации', 'публикаций') ?></span>
                     </p>
                     <p class="profile__rating-item user__rating-item user__rating-item--subscribers">
-                        <span class="user__rating-amount"><?= $amountOfUserFollowers ?></span>
-                        <span class="profile__rating-text user__rating-text"><?= get_noun_plural_form($amountOfUserFollowers,
+                        <span class="user__rating-amount"><?= $amount_of_user_followers ?></span>
+                        <span class="profile__rating-text user__rating-text"><?= get_noun_plural_form($amount_of_user_followers,
                                 'подписчик', 'подписчика', 'подписчиков') ?></span>
                     </p>
                 </div>
 
-                <?php if (!$selfPage): ?>
+                <?php if (!$self_page): ?>
                     <div class="profile__user-buttons user__buttons">
                         <?php if ($subscribe): ?>
                             <a class="profile__user-button user__button user__button--subscription button button--quartz" href="profile.php?id=<?= $user['id'] ?>&unsubscribed">
@@ -51,7 +51,7 @@
                     <ul class="profile__tabs-list filters__list tabs__list">
                         <?php foreach ($tabs as $type => $name): ?>
                             <li class="profile__tabs-item filters__item">
-                                <a class="profile__tabs-link filters__button <?php if ($type === $currentTab): ?>filters__button--active tabs__item--active<?php endif; ?> tabs__item button" href="/profile.php?id=<?= $user['id'] ?>&tab=<?= $type ?>"><?= $name ?></a>
+                                <a class="profile__tabs-link filters__button <?php if ($type === $current_tab): ?>filters__button--active tabs__item--active<?php endif; ?> tabs__item button" href="/profile.php?id=<?= $user['id'] ?>&tab=<?= $type ?>"><?= $name ?></a>
                             </li>
                         <?php endforeach; ?>
                     </ul>
@@ -63,7 +63,7 @@
                         <section class="profile__likes tabs__content tabs__content--active">
                             <h2 class="visually-hidden">Лайки</h2>
                             <ul class="profile__likes-list">
-                                <?php foreach ($likedPostsOfUser as $post): ?>
+                                <?php foreach ($liked_posts_of_user as $post): ?>
                                     <li class="post-mini post-mini--<?= $post['class_name'] ?> post user">
                                         <div class="post-mini__user-info user__info">
                                             <div class="post-mini__avatar user__avatar">
@@ -100,7 +100,6 @@
                                                     <div class="post-mini__image-wrapper">
                                                         <?= embed_youtube_cover(htmlspecialchars($post['video']), 109,
                                                             109); ?>
-                                                        <!--<img class="post-mini__image" src="../img/coast-small.png" width="109" height="109" alt="Превью публикации">-->
                                                         <span class="post-mini__play-big">
                                                             <svg class="post-mini__play-big-icon" width="12" height="13">
                                                             <use xlink:href="#icon-video-play-big"></use>
@@ -129,7 +128,7 @@
                         <section class="profile__subscriptions tabs__content tabs__content--active">
                             <h2 class="visually-hidden">Подписки</h2>
                             <ul class="profile__subscriptions-list">
-                                <?php foreach ($followersOfUser as $follower): ?>
+                                <?php foreach ($followers_of_user as $follower): ?>
                                     <li class="post-mini post-mini--photo post user">
                                         <div class="post-mini__user-info user__info">
                                             <div class="post-mini__avatar user__avatar">
@@ -186,7 +185,7 @@
                         <section class="profile__posts tabs__content tabs__content--active">
                             <h2 class="visually-hidden">Публикации</h2>
 
-                            <?php foreach ($userPosts as $post): ?>
+                            <?php foreach ($user_posts as $post): ?>
                                 <article class="profile__post post post-<?= $post['class_name'] ?>">
                                     <header class="post__header">
                                         <h2><a href="post.php?id=<?= $post['id'] ?>"><?= $post['title'] ?></a></h2>
@@ -308,136 +307,8 @@
                                     </div>
                                 </article>
                             <?php endforeach; ?>
-
-
-                            <article class="profile__post post post-text">
-                                <header class="post__header">
-                                    <div class="post__author">
-                                        <a class="post__author-link" href="#" title="Автор">
-                                            <div class="post__avatar-wrapper post__avatar-wrapper--repost">
-                                                <img class="post__author-avatar" src="../img/userpic-tanya.jpg" alt="Аватар пользователя">
-                                            </div>
-                                            <div class="post__info">
-                                                <b class="post__author-name">Репост: Таня Фирсова</b>
-                                                <time class="post__time" datetime="2019-03-30T14:31">25 минут назад
-                                                </time>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </header>
-                                <div class="post__main">
-                                    <h2><a href="#">Полезный пост про Байкал</a></h2>
-                                    <p>
-                                        Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской
-                                        границы. Байкал считается самым глубоким озером в мире. Он окружен сетью
-                                        пешеходных
-                                        маршрутов, называемых Большой байкальской тропой. Деревня Листвянка,
-                                        расположенная
-                                        на западном берегу озера, – популярная отправная точка для летних экскурсий.
-                                        Зимой
-                                        здесь можно кататься на коньках и собачьих упряжках.
-                                    </p>
-                                    <a class="post-text__more-link" href="#">Читать далее</a>
-                                </div>
-                                <footer class="post__footer">
-                                    <div class="post__indicators">
-                                        <div class="post__buttons">
-                                            <a class="post__indicator post__indicator--likes button" href="#" title="Лайк">
-                                                <svg class="post__indicator-icon" width="20" height="17">
-                                                    <use xlink:href="#icon-heart"></use>
-                                                </svg>
-                                                <svg class="post__indicator-icon post__indicator-icon--like-active" width="20" height="17">
-                                                    <use xlink:href="#icon-heart-active"></use>
-                                                </svg>
-                                                <span>250</span>
-                                                <span class="visually-hidden">количество лайков</span>
-                                            </a>
-                                            <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
-                                                <svg class="post__indicator-icon" width="19" height="17">
-                                                    <use xlink:href="#icon-repost"></use>
-                                                </svg>
-                                                <span>5</span>
-                                                <span class="visually-hidden">количество репостов</span>
-                                            </a>
-                                        </div>
-                                        <time class="post__time" datetime="2019-01-30T23:41">15 минут назад</time>
-                                    </div>
-                                    <ul class="post__tags">
-                                        <li><a href="#">#nature</a></li>
-                                        <li><a href="#">#globe</a></li>
-                                        <li><a href="#">#photooftheday</a></li>
-                                        <li><a href="#">#canon</a></li>
-                                        <li><a href="#">#landscape</a></li>
-                                        <li><a href="#">#щикарныйвид</a></li>
-                                    </ul>
-                                </footer>
-                                <div class="comments">
-                                    <div class="comments__list-wrapper">
-                                        <ul class="comments__list">
-                                            <li class="comments__item user">
-                                                <div class="comments__avatar">
-                                                    <a class="user__avatar-link" href="#">
-                                                        <img class="comments__picture" src="../img/userpic-larisa.jpg" alt="Аватар пользователя">
-                                                    </a>
-                                                </div>
-                                                <div class="comments__info">
-                                                    <div class="comments__name-wrapper">
-                                                        <a class="comments__user-name" href="#">
-                                                            <span>Лариса Роговая</span>
-                                                        </a>
-                                                        <time class="comments__time" datetime="2019-03-20">1 ч назад
-                                                        </time>
-                                                    </div>
-                                                    <p class="comments__text">
-                                                        Красота!!!1!
-                                                    </p>
-                                                </div>
-                                            </li>
-                                            <li class="comments__item user">
-                                                <div class="comments__avatar">
-                                                    <a class="user__avatar-link" href="#">
-                                                        <img class="comments__picture" src="../img/userpic-larisa.jpg" alt="Аватар пользователя">
-                                                    </a>
-                                                </div>
-                                                <div class="comments__info">
-                                                    <div class="comments__name-wrapper">
-                                                        <a class="comments__user-name" href="#">
-                                                            <span>Лариса Роговая</span>
-                                                        </a>
-                                                        <time class="comments__time" datetime="2019-03-18">2 дня назад
-                                                        </time>
-                                                    </div>
-                                                    <p class="comments__text">
-                                                        Озеро Байкал – огромное древнее озеро в горах Сибири к северу от
-                                                        монгольской границы. Байкал считается самым глубоким озером в
-                                                        мире.
-                                                        Он окружен сетью пешеходных маршрутов, называемых Большой
-                                                        байкальской тропой. Деревня Листвянка, расположенная на западном
-                                                        берегу озера, – популярная отправная точка для летних экскурсий.
-                                                        Зимой здесь можно кататься на коньках и собачьих упряжках.
-                                                    </p>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <a class="comments__more-link" href="#">
-                                            <span>Показать все комментарии</span>
-                                            <sup class="comments__amount">45</sup>
-                                        </a>
-                                    </div>
-                                </div>
-                                <form class="comments__form form" action="#" method="post">
-                                    <div class="comments__my-avatar">
-                                        <img class="comments__picture" src="../img/userpic-medium.jpg" alt="Аватар пользователя">
-                                    </div>
-                                    <textarea class="comments__textarea form__textarea" placeholder="Ваш комментарий"></textarea>
-                                    <label class="visually-hidden">Ваш комментарий</label>
-                                    <button class="comments__submit button button--green" type="submit">Отправить
-                                    </button>
-                                </form>
-                            </article>
                         </section>
                     <?php endif; ?>
-
                 </div>
             </div>
         </div>

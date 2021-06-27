@@ -16,7 +16,7 @@
                                         <img class="post__author-avatar" src="<?= $post['avatar'] ?>" alt="Аватар пользователя" width="60" height="60">
                                     </div>
                                     <div class="post__info">
-                                        <b class="post__author-name"><?= $post['login'] ?></b>
+                                        <b class="post__author-name"><?= htmlspecialchars($post['login']) ?></b>
                                         <span class="post__time"><?= print_date_diff($post['dt_add']); ?> назад</span>
                                     </div>
                                 </a>
@@ -127,13 +127,13 @@
             </div>
             <ul class="feed__filters filters">
                 <li class="feed__filters-item filters__item">
-                    <a class="filters__button filters__button--active" href="feed.php?id=<?= $user_id ?>">
+                    <a class="filters__button filters__button--active" href="feed.php">
                         <span>Все</span>
                     </a>
                 </li>
                 <?php foreach ($tabs as $type => $tab_name): ?>
                     <li class="feed__filters-item filters__item">
-                        <a class="filters__button filters__button--<?= $type ?> <?= ($currentTab === $type) ? 'filters__button--active' : ''?> button" href="feed.php?id=<?= $user_id ?>&type=<?= $type ?>">
+                        <a class="filters__button filters__button--<?= $type ?> <?= ($current_tab === $type) ? 'filters__button--active' : ''?> button" href="feed.php?type=<?= $type ?>">
                             <span class="visually-hidden"><?= $tab_name ?></span>
                             <svg class="filters__icon" width="22" height="18">
                                 <use xlink:href="#icon-filter-<?= $type ?>"></use>

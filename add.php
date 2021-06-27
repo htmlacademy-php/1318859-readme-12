@@ -12,7 +12,7 @@ if (!isset($_SESSION['user'])) {
 
 $title = 'readme: добавление публикации';
 $types = get_post_types($con);
-$currentTab = (isset($_GET["type"])) ? $_GET["type"] : 'text';
+$current_tab = (isset($_GET["type"])) ? $_GET["type"] : 'text';
 $tabs = [
     'photo' => 'фото',
     'video' => 'видео',
@@ -20,9 +20,9 @@ $tabs = [
     'quote' => 'цитата',
     'link' => 'ссылка',
 ];
-$form = include_once 'forms/' . $currentTab . '-form.php';
+$form = include_once 'forms/' . $current_tab . '-form.php';
 
-$_GET["type"] = $currentTab;
+$_GET["type"] = $current_tab;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = validate_form($form, $configs);
@@ -32,14 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors[$form['name']])) {
-        $db_post_title = $_POST[$currentTab . '-heading'];
+        $db_post_title = $_POST[$current_tab . '-heading'];
         $bd_post_user_id = $_SESSION['user']['id'];
         $db_data = [
             'title' => $db_post_title,
             'user_id' => $bd_post_user_id
         ];
 
-        if ($currentTab === 'photo') {
+        if ($current_tab === 'photo') {
             if (isset($_FILES['photo-userpic-file']['name'])) {
                 $db_post_image = '/uploads/' . time() . '-' . $_FILES['photo-userpic-file']['name'];
             } else {
@@ -49,19 +49,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'image' => $db_post_image,
                 'type_id' => 1
             ];
-        } elseif ($currentTab === 'video') {
+        } elseif ($current_tab === 'video') {
             $db_post_video = $_POST['video-url'];
             $db_data += [
                 'video' => $db_post_video,
                 'type_id' => 2
             ];
-        } elseif ($currentTab === 'text') {
+        } elseif ($current_tab === 'text') {
             $db_post_text_content = $_POST['text-post'];
             $db_data += [
                 'text_content' => $db_post_text_content,
                 'type_id' => 3
             ];
-        } elseif ($currentTab === 'quote') {
+        } elseif ($current_tab === 'quote') {
             $db_post_text_content = $_POST['quote-text'];
             $db_post_quote_author = $_POST['quote-author'];
             $db_data += [
@@ -78,11 +78,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $new_post = add_post($con, $db_data);
         $new_post_id = $new_post['id'];
-        $userFollowers = get_followers($con, $_SESSION['user']['id']);
-        sendNewPostNotification($new_post, $userFollowers);
+        $user_followers = get_followers($con, $_SESSION['user']['id']);
+        send_new_post_notification($new_post, $user_followers);
 
-        if (isset($_POST[$currentTab . '-tags'])) {
-            $post_tags = getTagsFromPost($currentTab . '-tags');
+        if (isset($_POST[$current_tab . '-tags'])) {
+            $post_tags = get_tags_from_post($current_tab . '-tags');
             $db_tags = get_all_tags($con);
             add_tags($con, $post_tags, $db_tags, $new_post_id);
         }
@@ -95,13 +95,14 @@ $main_content = include_template('adding-post.php', [
     'tabs' => $tabs,
     'form' => $form,
     'types' => $types,
-    'currentTab' => $currentTab,
+    'current_tab' => $current_tab,
     'errors' => $errors ?? '',
 ]);
 $layout = include_template('layout.php', [
     'main_content' => $main_content,
     'user_name' => $_SESSION['user']['login'],
     'user_avatar' => $_SESSION['user']['avatar'],
+    'user_id' => $_SESSION['user']['id'],
     'title' => $title,
 ]);
 

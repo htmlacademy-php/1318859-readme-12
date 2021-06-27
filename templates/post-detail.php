@@ -45,7 +45,6 @@
                             <div class="post-video__block">
                                 <div class="post-video__preview">
                                     <?= embed_youtube_cover(htmlspecialchars($post['video']), 760, 507); ?>
-                                    <!--<img src="img/coast-medium.jpg" alt="Превью к видео" width="760" height="507">-->
                                 </div>
                                 <div class="post-video__control">
                                     <button class="post-video__play post-video__play--paused button button--video" type="button">
@@ -109,7 +108,7 @@
                                 <span class="visually-hidden">количество репостов</span>
                             </a>
                         </div>
-                        <span class="post__view"><?= $viewsCount ?> <?= get_noun_plural_form($viewsCount, 'просмотр',
+                        <span class="post__view"><?= $views_count ?> <?= get_noun_plural_form($views_count, 'просмотр',
                                 'просмотра', 'просмотров') ?></span>
                     </div>
                     <?php if ($post_tags): ?>
@@ -131,7 +130,7 @@
                                 <textarea class="comments__textarea form__textarea form__input"
                                           name="comment"
                                           placeholder="Ваш комментарий"
-                                          <?php if ($countOfShownPostComments === 0): ?>id="last_comment"<?php endif; ?>>
+                                          <?php if ($count_of_shown_post_comments === 0): ?>id="last_comment"<?php endif; ?>>
                                 </textarea>
                                 <label class="visually-hidden">Ваш комментарий</label>
                                 <?php if (!empty($errors[$form['name']])): ?>
@@ -148,35 +147,35 @@
 
                         <div class="comments__list-wrapper">
                             <ul class="comments__list">
-                                <?php for ($i = 0; $i < $countOfShownPostComments; $i++): ?>
-                                    <li class="comments__item user" <?php if ($i === $countOfShownPostComments - 1): ?>id="last_comment"<?php endif; ?>>
+                                <?php for ($i = 0; $i < $count_of_shown_post_comments; $i++): ?>
+                                    <li class="comments__item user" <?php if ($i === $count_of_shown_post_comments - 1): ?>id="last_comment"<?php endif; ?>>
                                         <div class="comments__avatar">
-                                            <a class="user__avatar-link" href="profile.php?id=<?= $postComments[$i]['id'] ?>">
-                                                <img class="comments__picture" src="<?= $postComments[$i]['avatar'] ?>" alt="Аватар пользователя">
+                                            <a class="user__avatar-link" href="profile.php?id=<?= $post_comments[$i]['id'] ?>">
+                                                <img class="comments__picture" src="<?= $post_comments[$i]['avatar'] ?>" alt="Аватар пользователя">
                                             </a>
                                         </div>
                                         <div class="comments__info">
                                             <div class="comments__name-wrapper">
-                                                <a class="comments__user-name" href="profile.php?id=<?= $postComments[$i]['id'] ?>">
-                                                    <span><?= $postComments[$i]['login'] ?></span>
+                                                <a class="comments__user-name" href="profile.php?id=<?= $post_comments[$i]['id'] ?>">
+                                                    <span><?= $post_comments[$i]['login'] ?></span>
                                                 </a>
-                                                <time class="comments__time" datetime="<?= date_format(date_create($postComments[$i]['publish_time']),
+                                                <time class="comments__time" datetime="<?= date_format(date_create($post_comments[$i]['publish_time']),
                                                     'Y-m-d'); ?>">
-                                                    <?= print_date_diff($postComments[$i]['publish_time']); ?> назад
+                                                    <?= print_date_diff($post_comments[$i]['publish_time']); ?> назад
                                                 </time>
                                             </div>
                                             <p class="comments__text">
-                                                <?= $postComments[$i]['content'] ?>
+                                                <?= $post_comments[$i]['content'] ?>
                                             </p>
                                         </div>
                                     </li>
                                 <?php endfor; ?>
                             </ul>
 
-                            <?php if ($countOfPostComments > NUMBER_OF_SHOWN_POST_COMMENTS): ?>
+                            <?php if ($count_of_post_comments > NUMBER_OF_SHOWN_POST_COMMENTS): ?>
                                 <a class="comments__more-link" href="#">
                                     <span>Показать все комментарии</span>
-                                    <sup class="comments__amount"><?= $countOfPostComments ?></sup>
+                                    <sup class="comments__amount"><?= $count_of_post_comments ?></sup>
                                 </a>
                             <?php endif; ?>
                         </div>
@@ -201,18 +200,18 @@
                     </div>
                     <div class="post-details__rating user__rating">
                         <p class="post-details__rating-item user__rating-item user__rating-item--subscribers">
-                            <span class="post-details__rating-amount user__rating-amount"><?= $amountOfUserFollowers ?></span>
-                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($amountOfUserFollowers,
+                            <span class="post-details__rating-amount user__rating-amount"><?= $amount_of_user_followers ?></span>
+                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($amount_of_user_followers,
                                     'подписчик', 'подписчика', 'подписчиков') ?></span>
                         </p>
                         <p class="post-details__rating-item user__rating-item user__rating-item--publications">
-                            <span class="post-details__rating-amount user__rating-amount"><?= $amountOfUserPosts ?></span>
-                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($amountOfUserPosts,
+                            <span class="post-details__rating-amount user__rating-amount"><?= $amount_of_user_posts ?></span>
+                            <span class="post-details__rating-text user__rating-text"><?= get_noun_plural_form($amount_of_user_posts,
                                     'публикация', 'публикации', 'публикаций') ?></span>
                         </p>
                     </div>
 
-                    <?php if (!$selfPage): ?>
+                    <?php if (!$self_page): ?>
                         <div class="post-details__user-buttons user__buttons">
                             <?php if ($subscribe): ?>
                                 <a class="user__button user__button--subscription button button--quartz" href="profile.php?id=<?= $post['user_id'] ?>&unsubscribed">

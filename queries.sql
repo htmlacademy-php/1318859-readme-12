@@ -1,4 +1,3 @@
--- создание типов постов;
 INSERT INTO types SET
     title = 'Картинка',
     class_name = 'photo';
@@ -15,7 +14,6 @@ INSERT INTO types SET
     title = 'Ссылка',
     class_name = 'link';
 
--- создание пользователей;
 INSERT INTO users SET
     email = 'larisa@test.ru',
     login = 'Лариса',
@@ -32,7 +30,6 @@ INSERT INTO users SET
     password = 'viktor777',
     avatar = 'userpic-mark.jpg';
 
--- создание комментариев;
 INSERT INTO comments SET
     content = 'It is so interesting!',
     user_id = 1,
@@ -42,7 +39,6 @@ INSERT INTO comments SET
     user_id = 2,
     post_id = 4;
 
--- создание постов;
 INSERT INTO posts SET
     title = 'Цитата',
     text_content = 'Мы в жизни любим только раз, а после ищем лишь похожих',
@@ -75,17 +71,12 @@ INSERT INTO posts SET
     user_id = 2,
     type_id = 5;
 
--- получение списка постов с сортировкой по популярности и вместе с именами авторов и типом контента;
 SELECT p.*, u.login, t.class_name FROM posts p JOIN users u ON p.user_id = u.id JOIN types t ON p.type_id = t.id  ORDER BY views_count DESC;
 
--- получение списка постов для пользователя №1;
 SELECT * FROM posts WHERE user_id = 1;
 
--- получение списка комментариев для поста №2 с логином пользователя, оставившего комментарий;
 SELECT c.*, u.login FROM comments c JOIN users u ON c.user_id = u.id WHERE post_id = 2;
 
--- добавление лайка посту №1 от пользователя №2;
 INSERT INTO likes SET post_id = 1, user_id = 2;
 
--- подписка пользователя №3 на пользователя №1;
 INSERT INTO follows SET follower_id = 3, following_user_id = 1;

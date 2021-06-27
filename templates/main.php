@@ -7,10 +7,10 @@
             <div class="popular__sorting sorting">
                 <b class="popular__sorting-caption sorting__caption">Сортировка:</b>
                 <ul class="popular__sorting-list sorting__list">
-                    <?php foreach ($sortTypes as $key => $sortType): ?>
+                    <?php foreach ($sort_types as $key => $sort_type): ?>
                         <li class="sorting__item <?= (($key === 'popular' && !isset($_GET['sort'])) || ($_GET['sort']) === $key) ? 'sorting__item--active' : '' ?>">
                             <a class="sorting__link <?= (($key === 'popular' && !isset($_GET['sort'])) || ($_GET['sort']) === $key) ? 'sorting__link--active' : '' ?>" href="popular.php?sort=<?= $key ?><?= (isset($_GET['type_id'])) ? '&type_id=' . $_GET['type_id'] : '' ?>">
-                                <span><?= $sortType['title'] ?></span>
+                                <span><?= $sort_type['title'] ?></span>
                                 <svg class="sorting__icon" width="10" height="12">
                                     <use xlink:href="#icon-sort"></use>
                                 </svg>
@@ -23,13 +23,13 @@
                 <b class="popular__filters-caption filters__caption">Тип контента:</b>
                 <ul class="popular__filters-list filters__list">
                     <li class="popular__filters-item popular__filters-item--all filters__item filters__item--all">
-                        <a class="filters__button filters__button--ellipse filters__button--all  <?php if ($typeId === ''): ?>filters__button--active<?php endif; ?>" href="popular.php">
+                        <a class="filters__button filters__button--ellipse filters__button--all  <?php if ($type_id === ''): ?>filters__button--active<?php endif; ?>" href="popular.php">
                             <span>Все</span>
                         </a>
                     </li>
                     <?php foreach ($types as $type): ?>
                         <li class="popular__filters-item filters__item">
-                            <a class="filters__button filters__button--<?= $type['class_name']; ?> <?php if ($typeId === strval($type['id'])): ?>filters__button--active<?php endif; ?> button" href="popular.php?type_id=<?= $type['id']; ?>">
+                            <a class="filters__button filters__button--<?= $type['class_name']; ?> <?php if ($type_id === strval($type['id'])): ?>filters__button--active<?php endif; ?> button" href="popular.php?type_id=<?= $type['id']; ?>">
                                 <span class="visually-hidden">
                                 <?php if ($type['title'] === 'Картинка'): ?>
                                     Фото
@@ -84,7 +84,6 @@
                             <div class="post-video__block">
                                 <div class="post-video__preview">
                                     <?= embed_youtube_cover(htmlspecialchars($post['video']), 360, 188); ?>
-                                    <!--<img src="img/coast-medium.jpg" alt="Превью к видео" width="360" height="188">-->
                                 </div>
                                 <a href="post-details.html" class="post-video__play-big button">
                                     <svg class="post-video__play-big-icon" width="14" height="14">
@@ -148,13 +147,13 @@
             <?php endforeach; ?>
         </div>
         <div class="popular__page-links">
-            <?php if ($pageNumber > 1): ?>
-                <a class="popular__page-link popular__page-link--prev button button--gray" href="popular.php?page_num=<?= ($pageNumber - 1) ?><?= (isset($_GET['sort'])) ? '&sort=' . $_GET['sort'] : '' ?><?= (isset($_GET['type_id'])) ? '&type_id=' . $_GET['type_id'] : '' ?>">Предыдущая страница</a>
+            <?php if ($page_number > 1): ?>
+                <a class="popular__page-link popular__page-link--prev button button--gray" href="popular.php?page_num=<?= ($page_number - 1) ?><?= (isset($_GET['sort'])) ? '&sort=' . $_GET['sort'] : '' ?><?= (isset($_GET['type_id'])) ? '&type_id=' . $_GET['type_id'] : '' ?>">Предыдущая страница</a>
             <?php else: ?>
-                <a class="popular__page-link popular__page-link--hidden popular__page-link--prev button button--gray" href="popular.php?page_num=<?= $pageNumber ?><?= (isset($_GET['sort'])) ? '&sort=' . $_GET['sort'] : '' ?><?= (isset($_GET['type_id'])) ? '&type_id=' . $_GET['type_id'] : '' ?>">Предыдущая страница</a>
+                <a class="popular__page-link popular__page-link--hidden popular__page-link--prev button button--gray" href="popular.php?page_num=<?= $page_number ?><?= (isset($_GET['sort'])) ? '&sort=' . $_GET['sort'] : '' ?><?= (isset($_GET['type_id'])) ? '&type_id=' . $_GET['type_id'] : '' ?>">Предыдущая страница</a>
             <?php endif; ?>
-            <?php if ($pageNumber < $maxPage): ?>
-                <a class="popular__page-link popular__page-link--next button button--gray" href="popular.php?page_num=<?= ($pageNumber + 1) ?><?= (isset($_GET['sort'])) ? '&sort=' . $_GET['sort'] : '' ?><?= (isset($_GET['type_id'])) ? '&type_id=' . $_GET['type_id'] : '' ?>">Следующая страница</a>
+            <?php if ($page_number < $max_page): ?>
+                <a class="popular__page-link popular__page-link--next button button--gray" href="popular.php?page_num=<?= ($page_number + 1) ?><?= (isset($_GET['sort'])) ? '&sort=' . $_GET['sort'] : '' ?><?= (isset($_GET['type_id'])) ? '&type_id=' . $_GET['type_id'] : '' ?>">Следующая страница</a>
             <?php endif; ?>
         </div>
     </div>

@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = validate_form($form, $configs);
 
     $email = mysqli_real_escape_string($con, $_POST['email']);
-    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $sql = "SELECT * FROM `users` WHERE `email` = '$email'";
     $res = mysqli_query($con, $sql);
 
     $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
@@ -29,12 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!count($errors[$form['name']])) {
-        header("Location: /feed.php?id=" . $_SESSION['user']['id']);
+        header("Location: /feed.php");
         exit();
     }
 } else {
     if (isset($_SESSION['user'])) {
-        header("Location: /feed.php?id=" . $_SESSION['user']['id']);
+        header("Location: /feed.php");
         exit();
     }
 }

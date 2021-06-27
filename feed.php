@@ -11,7 +11,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 $title = 'readme: моя лента';
-$currentTab = (isset($_GET["type"])) ? $_GET["type"] : '';
+$current_tab = (isset($_GET["type"])) ? $_GET["type"] : '';
 
 $tabs = [
     'photo' => 'фото',
@@ -23,13 +23,13 @@ $tabs = [
 $user_id = intval($_SESSION['user']['id']);
 $posts = get_posts_of_following_users($con, $user_id);
 
-if (empty($currentTab)) {
+if (empty($current_tab)) {
     $current_tab_posts = $posts;
 } else {
     $current_tab_posts = [];
     $i = 0;
     foreach ($posts as $post) {
-        if ($currentTab === $post['class_name']) {
+        if ($current_tab === $post['class_name']) {
             $current_tab_posts[$i] = $post;
             $i++;
         }
@@ -54,7 +54,7 @@ $main_content = include_template('my-feed.php', [
     'current_tab_posts' => $current_tab_posts,
     'tabs' => $tabs,
     'user_id' => $user_id,
-    'currentTab' => $currentTab,
+    'current_tab' => $current_tab,
     'con' => $con,
     'liked_post_ids_by_session_user' => $liked_post_ids_by_session_user,
     'reposted_post_ids_by_session_user' => $reposted_post_ids_by_session_user,
@@ -64,6 +64,7 @@ $layout = include_template('layout.php', [
     'main_content' => $main_content,
     'user_name' => $_SESSION['user']['login'],
     'user_avatar' => $_SESSION['user']['avatar'],
+    'user_id' => $_SESSION['user']['id'],
     'title' => $title,
 ]);
 

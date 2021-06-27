@@ -104,7 +104,7 @@
             <nav class="header__nav">
                 <ul class="header__my-nav">
                     <li class="header__my-page header__my-page--popular">
-                        <a class="header__page-link header__page-link--active" title="Популярный контент">
+                        <a class="header__page-link header__page-link--active" href="popular.php" title="Популярный контент">
                             <span class="visually-hidden">Популярный контент</span>
                         </a>
                     </li>
@@ -114,12 +114,11 @@
                         </a>
                     </li>
                     <li class="header__my-page header__my-page--messages">
-                        <a class="header__page-link" href="messages.php" title="Личные сообщения">
+                        <a class="header__page-link" href="#" title="Личные сообщения">
                             <span class="visually-hidden">Личные сообщения</span>
                         </a>
                     </li>
                 </ul>
-                <!-- здесь должен быть PHP код, который показывает следующий тег по условию -->
                 <ul class="header__user-nav">
                     <?php if (isset($user_name)): ?>
                         <li class="header__profile">
@@ -140,7 +139,7 @@
                                 <div class="header__profile-tooltip">
                                     <ul class="header__profile-nav">
                                         <li class="header__profile-nav-item">
-                                            <a class="header__profile-nav-link" href="#">
+                                            <a class="header__profile-nav-link" href="profile.php?id=<?= $user_id ?>">
                                                 <span class="header__profile-nav-text">Мой профиль</span>
                                             </a>
                                         </li>
@@ -167,7 +166,7 @@
                         </li>
                     <?php else: ?>
                         <li class="header__authorization">
-                            <a class="header__user-button header__authorization-button button" href="login.html">Вход</a>
+                            <a class="header__user-button header__authorization-button button" href="/">Вход</a>
                         </li>
                         <li>
                             <a class="header__user-button header__user-button--active header__register-button button">Регистрация</a>
@@ -237,8 +236,5 @@
         </div>
     </div>
 </footer>
-<!--<script src="libs/dropzone.js"></script>-->
-<!--<script src="js/dropzone-settings.js"></script>-->
-<!--<script src="js/main.js"></script>-->
 </body>
 </html>

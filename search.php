@@ -19,7 +19,7 @@ if (isset($_GET['liked_post_id'])) {
 
 $title = 'readme: страница результатов поиска';
 $search = trim($_GET['q']) ?? '';
-$firstSymbol = substr($search, 0, 1);
+$first_symbol = substr($search, 0, 1);
 if (empty($search)) {
     header("Location: " . $_SERVER['HTTP_REFERER']);
     exit();
@@ -30,7 +30,7 @@ if (isset($_GET['type']) && $_GET['type'] === 'tag') {
     $result_text = '#' . $search;
     $search_line_text = '';
 } else {
-    if ($firstSymbol === '#') {
+    if ($first_symbol === '#') {
 
         $posts = get_posts_with_tag($con, substr($search, 1));
         $result_text = $search;
@@ -60,6 +60,7 @@ $layout = include_template('layout.php', [
     'main_content' => $main_content,
     'user_name' => $_SESSION['user']['login'],
     'user_avatar' => $_SESSION['user']['avatar'],
+    'user_id' => $_SESSION['user']['id'],
     'title' => $title,
     'search' => $search,
     'search_line_text' => $search_line_text,
