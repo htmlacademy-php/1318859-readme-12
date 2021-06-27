@@ -97,9 +97,7 @@
 
                                 <?php if (!empty($errors[$form['name']])): ?>
                                     <div class="form__invalid-block">
-                                        <b class="form__invalid-slogan">Пожалуйста, исправьте
-                                            следующие
-                                            ошибки:</b>
+                                        <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                                         <ul class="form__invalid-list">
                                             <?php foreach ($form['inputs'] as $input): ?>
                                                 <?php if (!empty($errors[$form['name']][$input['name']])): ?>
@@ -108,12 +106,6 @@
                                                     </li>
                                                 <?php endif; ?>
                                             <?php endforeach; ?>
-
-                                            <? /*
-                                                <li class="form__invalid-item">Теги. Нужно указать минимум один тег.
-                                                    Каждый тег должен состоять из одного слова и отделяться пробелом
-                                                </li>
- */ ?>
                                         </ul>
                                     </div>
                                 <?php endif; ?>
@@ -125,28 +117,3 @@
         </div>
     </div>
 </main>
-
-<?php if (isset($_GET['success'])): ?>
-    <div class="modal modal--adding">
-        <div class="modal__wrapper">
-            <button class="modal__close-button button" type="button">
-                <svg class="modal__close-icon" width="18" height="18">
-                    <use xlink:href="#icon-close"></use>
-                </svg>
-                <span class="visually-hidden">Закрыть модальное окно</span></button>
-            <div class="modal__content">
-                <h1 class="modal__title">Пост добавлен</h1>
-                <p class="modal__desc">
-                    Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской границы. Байкал
-                    считается самым глубоким озером в мире. Он окружен сефтью пешеходных маршрутов, называемых Большой
-                    байкальской тропой. Деревня Листвянка, расположенная на западном берегу озера, – популярная
-                    отправная точка для летних экскурсий.
-                </p>
-                <div class="modal__buttons">
-                    <a class="modal__button button button--main" href="#">Синяя кнопка</a>
-                    <a class="modal__button button button--gray" href="#">Серая кнопка</a>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php endif; ?>

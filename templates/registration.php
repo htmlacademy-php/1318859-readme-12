@@ -27,7 +27,7 @@
                                 </div>
                             </div>
                         <?php endif; ?>
-                    <? endforeach; ?>
+                    <?php endforeach; ?>
                 </div>
 
                 <?php if (!empty($errors[$form['name']])): ?>
@@ -65,7 +65,7 @@
                         </div>
                         <div class="registration__file form__file dropzone-previews"></div>
                     <?php endif; ?>
-                <? endforeach; ?>
+                <?php endforeach; ?>
             </div>
             <button class="registration__submit button button--main" type="submit">Отправить</button>
         </form>

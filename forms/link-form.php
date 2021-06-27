@@ -12,7 +12,7 @@ return [
             'field_type' => 'input',
             'checks' => [
                 0 => function ($input, $configs) {
-                    return validateFilled($configs['current_tab'] . '-' . $input['name']);
+                    return validate_filled($configs['current_tab'] . '-' . $input['name']);
                 }
             ],
         ],
@@ -24,10 +24,10 @@ return [
             'field_type' => 'input',
             'checks' => [
                 0 => function ($input, $configs) {
-                    return validateFilled($configs['current_tab'] . '-' . $input['name']);
+                    return validate_filled($configs['current_tab'] . '-' . $input['name']);
                 },
                 1 => function ($input, $configs) {
-                    return validateUrl($configs['current_tab'] . '-' . $input['name']);
+                    return validate_url($configs['current_tab'] . '-' . $input['name']);
                 }
             ],
         ],

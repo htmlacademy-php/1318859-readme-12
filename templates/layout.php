@@ -81,7 +81,7 @@
 <header class="header">
     <div class="header__wrapper container">
         <div class="header__logo-wrapper">
-            <a class="header__logo-link" href="main.html">
+            <a class="header__logo-link" href="/">
                 <img class="header__logo" src="img/logo.svg" alt="Логотип readme" width="128" height="24">
             </a>
             <p class="header__topic">
@@ -103,23 +103,15 @@
         <div class="header__nav-wrapper">
             <nav class="header__nav">
                 <ul class="header__my-nav">
-                    <li class="header__my-page header__my-page--popular">
-                        <a class="header__page-link header__page-link--active" title="Популярный контент">
-                            <span class="visually-hidden">Популярный контент</span>
-                        </a>
-                    </li>
-                    <li class="header__my-page header__my-page--feed">
-                        <a class="header__page-link" href="feed.html" title="Моя лента">
-                            <span class="visually-hidden">Моя лента</span>
-                        </a>
-                    </li>
-                    <li class="header__my-page header__my-page--messages">
-                        <a class="header__page-link" href="messages.html" title="Личные сообщения">
-                            <span class="visually-hidden">Личные сообщения</span>
-                        </a>
-                    </li>
+                    <?php foreach ($nav_links as $nav_link): ?>
+                        <li class="header__my-page header__my-page--<?= $nav_link['class_name'] ?>">
+                            <a class="header__page-link <?php if (strpos($_SERVER['REQUEST_URI'],
+                                $nav_link['href'])): ?>header__page-link--active<?php endif; ?>" href="<?= $nav_link['href'] ?>" title="<?= $nav_link['title'] ?>">
+                                <span class="visually-hidden"><?= $nav_link['title'] ?></span>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
-                <!-- здесь должен быть PHP код, который показывает следующий тег по условию -->
                 <ul class="header__user-nav">
                     <?php if (isset($user_name)): ?>
                         <li class="header__profile">
@@ -140,7 +132,7 @@
                                 <div class="header__profile-tooltip">
                                     <ul class="header__profile-nav">
                                         <li class="header__profile-nav-item">
-                                            <a class="header__profile-nav-link" href="#">
+                                            <a class="header__profile-nav-link" href="profile.php?id=<?= $user_id ?>">
                                                 <span class="header__profile-nav-text">Мой профиль</span>
                                             </a>
                                         </li>
@@ -167,7 +159,7 @@
                         </li>
                     <?php else: ?>
                         <li class="header__authorization">
-                            <a class="header__user-button header__authorization-button button" href="login.html">Вход</a>
+                            <a class="header__user-button header__authorization-button button" href="/">Вход</a>
                         </li>
                         <li>
                             <a class="header__user-button header__user-button--active header__register-button button">Регистрация</a>
@@ -237,8 +229,5 @@
         </div>
     </div>
 </footer>
-<!--<script src="libs/dropzone.js"></script>-->
-<!--<script src="js/dropzone-settings.js"></script>-->
-<!--<script src="js/main.js"></script>-->
 </body>
 </html>

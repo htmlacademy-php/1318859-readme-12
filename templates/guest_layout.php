@@ -178,17 +178,6 @@
                 </p>
             </div>
             <div class="footer__my-info">
-                <ul class="footer__my-pages">
-                    <li class="footer__my-page footer__my-page--feed">
-                        <a class="footer__page-link" href="feed.html">Моя лента</a>
-                    </li>
-                    <li class="footer__my-page footer__my-page--popular">
-                        <a class="footer__page-link" href="popular.html">Популярный контент</a>
-                    </li>
-                    <li class="footer__my-page footer__my-page--messages">
-                        <a class="footer__page-link" href="messages.html">Личные сообщения</a>
-                    </li>
-                </ul>
                 <div class="footer__copyright">
                     <a class="footer__copyright-link" href="#">
                         <span>Разработано HTML Academy</span>

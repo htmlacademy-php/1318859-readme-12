@@ -1,2 +1,3 @@
 <?php
 define("NUMBER_OF_PAGE_POSTS", 6);
+define("NUMBER_OF_SHOWN_POST_COMMENTS", 5);

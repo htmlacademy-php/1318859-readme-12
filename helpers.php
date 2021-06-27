@@ -13,11 +13,12 @@
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date): bool {
+function is_date_valid(string $date): bool
+{
     $format_to_check = 'Y-m-d';
-    $dateTimeObj = date_create_from_format($format_to_check, $date);
+    $date_time_obj = date_create_from_format($format_to_check, $date);
 
-    return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
+    return $date_time_obj !== false && array_sum(date_get_last_errors()) === 0;
 }
 
 /**
@@ -29,12 +30,13 @@ function is_date_valid(string $date): bool {
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
-        $errorMsg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
-        die($errorMsg);
+        $error_msg = 'Не удалось инициализировать подготовленное выражение: ' . mysqli_error($link);
+        die($error_msg);
     }
 
     if ($data) {
@@ -71,8 +73,8 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
         $func(...$values);
 
         if (mysqli_errno($link) > 0) {
-            $errorMsg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
-            die($errorMsg);
+            $error_msg = 'Не удалось связать подготовленное выражение с параметрами: ' . mysqli_error($link);
+            die($error_msg);
         }
     }
 
@@ -101,7 +103,8 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form(int $number, string $one, string $two, string $many): string {
+function get_noun_plural_form(int $number, string $one, string $two, string $many): string
+{
     $number = (int)$number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
@@ -130,7 +133,8 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function include_template($name, array $data = [])
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -153,7 +157,8 @@ function include_template($name, array $data = []) {
  *
  * @return string Ошибку если валидация не прошла
  */
-function check_youtube_url($url) {
+function check_youtube_url($url)
+{
     $id = extract_youtube_id($url);
 
     set_error_handler(function () {
@@ -179,7 +184,8 @@ function check_youtube_url($url) {
  * @param string $youtube_url Ссылка на youtube видео
  * @return string
  */
-function embed_youtube_video($youtube_url) {
+function embed_youtube_video($youtube_url)
+{
     $res = "";
     $id = extract_youtube_id($youtube_url);
 
@@ -196,7 +202,8 @@ function embed_youtube_video($youtube_url) {
  * @param string $youtube_url Ссылка на youtube видео
  * @return string
  */
-function embed_youtube_cover($youtube_url, $width, $height) {
+function embed_youtube_cover($youtube_url, $width, $height)
+{
     $res = "";
     $id = extract_youtube_id($youtube_url);
 
@@ -213,7 +220,8 @@ function embed_youtube_cover($youtube_url, $width, $height) {
  * @param string $youtube_url Ссылка на youtube видео
  * @return array
  */
-function extract_youtube_id($youtube_url) {
+function extract_youtube_id($youtube_url)
+{
     $id = false;
 
     $parts = parse_url($youtube_url);
@@ -236,7 +244,8 @@ function extract_youtube_id($youtube_url) {
  * @param $index
  * @return false|string
  */
-function generate_random_date($index) {
+function generate_random_date($index)
+{
     $deltas = [
         ['minutes' => 59],
         ['hours' => 23],
@@ -272,7 +281,8 @@ function generate_random_date($index) {
  *
  * @return string Обрезанный текст в виде строки
  */
-function crop_text($text, $length = 300) {
+function crop_text($text, $length = 300)
+{
     $words = explode(' ', $text);
     $sum_length = 0;
     $words_cropped = [];
@@ -300,7 +310,8 @@ function crop_text($text, $length = 300) {
  *
  * @return string Текст в виде строки
  */
-function print_date_diff($date) {
+function print_date_diff($date)
+{
     $first_date = date_create($date);
     $now = date_create('now');
     $date_diff = date_diff($now, $first_date);
@@ -339,7 +350,8 @@ function print_date_diff($date) {
  *
  * @return array  В зависимости от $is_row одномерный или двумерный массив.
  */
-function get_data($con, $stmt, $is_row) {
+function get_data($con, $stmt, $is_row)
+{
     if ($con === false) {
         return print("Ошибка подключения: " . mysqli_connect_error());
     }
@@ -359,7 +371,8 @@ function get_data($con, $stmt, $is_row) {
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateFilled($name) {
+function validate_filled($name)
+{
     if (empty($_POST[$name])) {
         return "Это поле должно быть заполнено";
     }
@@ -372,11 +385,12 @@ function validateFilled($name) {
  * @param int $max Максимальная длиня строки
  * @return string
  */
-function isCorrectLength($name, $min, $max) {
-    $len = strlen($_POST[$name]);
+function is_correct_min_length_comment($name, $min_length)
+{
+    $len = strlen(trim($_POST[$name]));
 
-    if ($len < $min or $len > $max) {
-        return "Значение должно быть от $min до $max символов";
+    if ($len < $min_length) {
+        return "Комментарий должен быть не менее $min_length символов";
     }
 }
 
@@ -385,7 +399,8 @@ function isCorrectLength($name, $min, $max) {
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateUrl($name) {
+function validate_url($name)
+{
     if (!filter_var($_POST[$name], FILTER_VALIDATE_URL)) {
         return "Значение поля должно быть корректным URL-адресом";
     }
@@ -397,7 +412,8 @@ function validateUrl($name) {
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateEmail($name) {
+function validate_email($name)
+{
     if (!filter_var($_POST[$name], FILTER_VALIDATE_EMAIL)) {
         return "Значение поля должно быть корректным email-адресом";
     }
@@ -410,9 +426,10 @@ function validateEmail($name) {
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateUniqueEmail($con, $name) {
+function validate_unique_email($con, $name)
+{
     $email = mysqli_real_escape_string($con, $_POST[$name]);
-    $sql = "SELECT id FROM users WHERE email = '$email'";
+    $sql = "SELECT `id` FROM `users` WHERE `email` = '$email'";
     $res = mysqli_query($con, $sql);
 
     if (mysqli_num_rows($res) > 0) {
@@ -427,7 +444,8 @@ function validateUniqueEmail($con, $name) {
  * @param string $password Значение из поля "Пароль"
  * @return string
  */
-function validatePassword($password_repeat, $password) {
+function validate_password($password_repeat, $password)
+{
     if ($_POST[$password_repeat] !== $_POST[$password]) {
         return "Пароли не совпадают.";
     }
@@ -439,9 +457,10 @@ function validatePassword($password_repeat, $password) {
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateImageTypeFromUrl($name) {
-    $fileType = strrchr($_POST[$name], '.');
-    $validTypes = [
+function validate_image_type_from_url($name)
+{
+    $file_type = strrchr($_POST[$name], '.');
+    $valid_types = [
         '.png',
         '.jpg',
         '.jpeg',
@@ -449,9 +468,9 @@ function validateImageTypeFromUrl($name) {
     ];
 
     $i = 0;
-    while ($i < count($validTypes)) {
-        if ($fileType === $validTypes[$i]) {
-            return validateImageUrlContent($name);
+    while ($i < count($valid_types)) {
+        if ($file_type === $valid_types[$i]) {
+            return validate_image_url_content($name);
         }
         $i++;
     }
@@ -463,12 +482,13 @@ function validateImageTypeFromUrl($name) {
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateImageUrlContent($name) {
+function validate_image_url_content($name)
+{
     $content = file_get_contents($_POST[$name]);
     if (!$content) {
         return "Не удалось загрузить файл. Пожалуйста, проверьте ещё раз указанный адрес.";
     }
-    moveImageFromUrl($name);
+    move_image_from_url($name);
     return false;
 }
 
@@ -476,9 +496,10 @@ function validateImageUrlContent($name) {
  * Загружает изображение в папку /uploads.
  * @param string $name Значение атрибута 'name' поля формы
  */
-function moveImageFromUrl($name) {
-    $fileName = strrchr($_POST[$name], '/');
-    $local = __DIR__ . '/uploads' . $fileName;
+function move_image_from_url($name)
+{
+    $file_name = strrchr($_POST[$name], '/');
+    $local = __DIR__ . '/uploads' . $file_name;
     file_put_contents($local, file_get_contents($_POST[$name]));
 }
 
@@ -487,17 +508,18 @@ function moveImageFromUrl($name) {
  * @param string $name Значение атрибута 'name' поля формы
  * @return string
  */
-function validateImageType($name) {
-    $fileType = $_FILES[$name]["type"];
-    $validTypes = [
+function validate_image_type($name)
+{
+    $file_type = $_FILES[$name]["type"];
+    $valid_types = [
         'image/png',
         'image/jpeg',
         'image/gif'
     ];
     $i = 0;
-    while ($i < count($validTypes)) {
-        if ($fileType === $validTypes[$i]) {
-            return moveUploadedImage($name);
+    while ($i < count($valid_types)) {
+        if ($file_type === $valid_types[$i]) {
+            return move_uploaded_image($name);
         }
         $i++;
     }
@@ -509,16 +531,17 @@ function validateImageType($name) {
  * @param string $name Значение атрибута 'name' поля формы
  * @return false
  */
-function moveUploadedImage($name) {
+function move_uploaded_image($name)
+{
     if ($name === 'userpic-file') {
-        $uploaddir = __DIR__ . '/uploads/users/';
+        $upload_dir = __DIR__ . '/uploads/users/';
     } else {
-        $uploaddir = __DIR__ . '/uploads/';
+        $upload_dir = __DIR__ . '/uploads/';
     }
-    $uploadfile = $uploaddir . basename($_FILES[$name]['name']);
+    $upload_file = $upload_dir . time() . '-' . $_FILES[$name]['name'];
 
     if (is_uploaded_file($_FILES[$name]['tmp_name'])) {
-        move_uploaded_file($_FILES[$name]['tmp_name'], $uploadfile);
+        move_uploaded_file($_FILES[$name]['tmp_name'], $upload_file);
         return false;
     }
     return "Не удалось загрузить файл.";
@@ -529,9 +552,10 @@ function moveUploadedImage($name) {
  * @param string $name Значение атрибута 'name' поля формы
  * @return array
  */
-function getTagsFromPost($name) {
-    preg_match_all('/([A-Za-zА-Яа-я0-9])+/', $_POST[$name], $postTags);
-    return $postTags[0];
+function get_tags_from_post($name)
+{
+    preg_match_all('/([\w0-9_])+/u', $_POST[$name], $post_tags);
+    return $post_tags[0];
 }
 
 /**
@@ -540,7 +564,8 @@ function getTagsFromPost($name) {
  * @param array $configs Массив дополнительных параметров для проверок
  * @return array
  */
-function validate_form($form, $configs) {
+function validate_form($form, $configs)
+{
     $errors = [$form['name'] => []];
     foreach ($form['inputs'] as $input) {
         foreach ($input['checks'] as $check) {
@@ -551,4 +576,129 @@ function validate_form($form, $configs) {
         }
     }
     return $errors;
+}
+
+/**
+ * Отправляет уведомление на почту о новом подписчике.
+ * @param array $follower Данные о подписчике
+ * @param array $following Данные об адресате
+ */
+function send_subscribe_notification($follower, $following)
+{
+    include_once 'vendor/autoload.php';
+
+    $transport = new Swift_SmtpTransport("smtp.mailtrap.io", 2525);
+    $transport->setUsername("3aa53903ba72c2");
+    $transport->setPassword("d23b1bfd88dbec");
+
+    $mailer = new Swift_Mailer($transport);
+
+    $email = [
+        'subject' => 'У вас новый подписчик',
+        'sender_email' => ['keks@phpdemo.ru' => 'Readme'],
+        'addressee_emails' => [$following['email']],
+        'message_content' => 'Здравствуйте, ' . $following['login'] . '. На вас подписался новый пользователь ' . $follower['login'] . '. Вот ссылка на его профиль: ' . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/profile.php?id=' . $follower['id'],
+    ];
+
+    $message = new Swift_Message();
+    $message->setSubject($email['subject']);
+    $message->setFrom($email['sender_email']);
+    $message->setBcc(['mixa.awesome@gmail.com']);
+
+    $msg_content = $email['message_content'];
+    $message->setBody($msg_content, 'text/html');
+
+    $result = $mailer->send($message);
+
+    if (!$result) {
+        print("Не удалось отправить рассылку");
+    }
+}
+
+/**
+ * Отправляет уведомление о появлении нового поста на почту всем подписчикам.
+ * @param array $post Данные о посте
+ * @param array $followers данные об адресатах
+ */
+function send_new_post_notification($post, $followers)
+{
+    include_once 'vendor/autoload.php';
+
+    $transport = new Swift_SmtpTransport("smtp.mailtrap.io", 2525);
+    $transport->setUsername("3aa53903ba72c2");
+    $transport->setPassword("d23b1bfd88dbec");
+
+    $mailer = new Swift_Mailer($transport);
+
+    foreach ($followers as $follower) {
+        $email = [
+            'subject' => 'Новая публикация от пользователя ' . $_SESSION['user']['login'],
+            'sender_email' => ['keks@phpdemo.ru' => 'Readme'],
+            'addressee_emails' => [$follower['email']],
+            'message_content' => 'Здравствуйте, ' . $follower['login'] . '. Пользователь ' . $_SESSION['user']['login'] . ' только что опубликовал новую запись "' . $post['title'] . '". Посмотрите её на странице пользователя: ' . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/profile.php?id=' . $_SESSION['user']['id'],
+        ];
+
+        $message = new Swift_Message();
+        $message->setSubject($email['subject']);
+        $message->setFrom($email['sender_email']);
+        $message->setBcc(['mixa.awesome@gmail.com']);
+
+        $msg_content = $email['message_content'];
+        $message->setBody($msg_content, 'text/html');
+
+        $result = $mailer->send($message);
+
+        if (!$result) {
+            print("Не удалось отправить рассылку");
+        }
+    }
+}
+
+
+/**
+ * Формирует массив данных поста для занесения в базу данных в зависимости от типа поста.
+ * @param string $current_tab Тип поста
+ * @param array $db_data Массив данных о посте, не зависящий от типа поста
+ * @return array
+ */
+function build_post_data($current_tab, &$db_data)
+{
+    if ($current_tab === 'photo') {
+        if (isset($_FILES['photo-userpic-file']['name'])) {
+            $db_post_image = '/uploads/' . time() . '-' . $_FILES['photo-userpic-file']['name'];
+        } else {
+            $db_post_image = '/uploads' . strrchr(htmlspecialchars($_POST['photo-url']), '/');
+        }
+        $db_data += [
+            'image' => $db_post_image,
+            'type_id' => 1
+        ];
+    } elseif ($current_tab === 'video') {
+        $db_post_video = htmlspecialchars($_POST['video-url']);
+        $db_data += [
+            'video' => $db_post_video,
+            'type_id' => 2
+        ];
+    } elseif ($current_tab === 'text') {
+        $db_post_text_content = htmlspecialchars($_POST['text-post']);
+        $db_data += [
+            'text_content' => $db_post_text_content,
+            'type_id' => 3
+        ];
+    } elseif ($current_tab === 'quote') {
+        $db_post_text_content = htmlspecialchars($_POST['quote-text']);
+        $db_post_quote_author = htmlspecialchars($_POST['quote-author']);
+        $db_data += [
+            'text_content' => $db_post_text_content,
+            'quote_author' => $db_post_quote_author,
+            'type_id' => 4
+        ];
+    } else {
+        $db_post_link = htmlspecialchars($_POST['link-url']);
+        $db_data += [
+            'link' => $db_post_link,
+            'type_id' => 5
+        ];
+    }
+    return $db_data;
 }

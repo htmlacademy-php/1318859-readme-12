@@ -25,10 +25,11 @@ CREATE TABLE posts
   image        VARCHAR(255),
   video        VARCHAR(255),
   link         VARCHAR(255),
-  views_count  INT,
+  views_count  INT DEFAULT 0,
   user_id      INT          NOT NULL,
   type_id      INT          NOT NULL,
-  tag_id       INT
+  author_id    INT,
+  repost_id    INT
 );
 
 CREATE TABLE comments
@@ -43,6 +44,7 @@ CREATE TABLE comments
 CREATE TABLE likes
 (
   id      INT AUTO_INCREMENT PRIMARY KEY,
+  dt_add  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id INT NOT NULL,
   post_id INT NOT NULL
 );
@@ -82,5 +84,5 @@ CREATE TABLE posts_tags
   tag_id  INT
 )
 
-CREATE FULLTEXT INDEX ON posts (title, text_content (40));
+CREATE FULLTEXT INDEX post_ft_search ON posts(title, text_content (40));
 CREATE FULLTEXT INDEX t_name ON tags (name);

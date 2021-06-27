@@ -12,13 +12,13 @@ return [
             'field_type' => 'input',
             'checks' => [
                 0 => function ($input) {
-                    return validateFilled($input['name']);
+                    return validate_filled($input['name']);
                 },
                 1 => function ($input) {
-                    return validateEmail($input['name']);
+                    return validate_email($input['name']);
                 },
                 2 => function ($input, $configs) {
-                    return validateUniqueEmail($configs['con'], $input['name']);
+                    return validate_unique_email($configs['con'], $input['name']);
                 }
             ],
         ],
@@ -31,7 +31,7 @@ return [
             'field_type' => 'input',
             'checks' => [
                 0 => function ($input) {
-                    return validateFilled($input['name']);
+                    return validate_filled($input['name']);
                 }
             ],
         ],
@@ -44,7 +44,7 @@ return [
             'field_type' => 'input',
             'checks' => [
                 0 => function ($input) {
-                    return validateFilled($input['name']);
+                    return validate_filled($input['name']);
                 }
             ],
         ],
@@ -57,7 +57,7 @@ return [
             'field_type' => 'input',
             'checks' => [
                 0 => function ($input) {
-                    return validatePassword($input['name'], 'password');
+                    return validate_password($input['name'], 'password');
                 }
             ],
         ],
@@ -68,7 +68,7 @@ return [
             'field_type' => 'input-file',
             'checks' => (!empty($_FILES['userpic-file']) && $_FILES['userpic-file']["error"] !== 4) ? [
                 0 => function ($input) {
-                    return validateImageType($input['name']);
+                    return validate_image_type($input['name']);
                 }
             ] : [],
         ]

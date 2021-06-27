@@ -4,6 +4,11 @@ include_once 'init.php';
 include_once 'helpers.php';
 include_once 'models.php';
 
+if (isset($_SESSION['user'])) {
+    header("Location: /");
+    exit();
+}
+
 $title = 'readme: регистрация';
 
 $form = include_once 'forms/reg-form.php';
@@ -11,10 +16,10 @@ $form = include_once 'forms/reg-form.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = validate_form($form, $configs);
     if (empty($errors[$form['name']])) {
-        $db_email = $_POST['email'];
-        $db_login = $_POST['login'];
+        $db_email = htmlspecialchars($_POST['email']);
+        $db_login = htmlspecialchars($_POST['login']);
         $db_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $db_avatar = '/uploads/users/' . basename($_FILES['userpic-file']['name']);
+        $db_avatar = '/uploads/users/' . time() . '-' . $_FILES['userpic-file']['name'];
         $db_data = [
             'email' => $db_email,
             'login' => $db_login,
@@ -35,8 +40,9 @@ $main_content = include_template('registration.php', [
 $layout = include_template('layout.php', [
     'main_content' => $main_content,
     'title' => $title,
+    'nav_links' => $configs['nav_links'],
 ]);
-?>
-<?= $layout; ?>
+
+echo $layout;
 
 
