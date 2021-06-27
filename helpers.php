@@ -429,7 +429,7 @@ function validate_email($name)
 function validate_unique_email($con, $name)
 {
     $email = mysqli_real_escape_string($con, $_POST[$name]);
-    $sql = "SELECT id FROM users WHERE email = '$email'";
+    $sql = "SELECT `id` FROM `users` WHERE `email` = '$email'";
     $res = mysqli_query($con, $sql);
 
     if (mysqli_num_rows($res) > 0) {
