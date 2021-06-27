@@ -84,5 +84,5 @@ CREATE TABLE posts_tags
   tag_id  INT
 )
 
-CREATE FULLTEXT INDEX ON posts (title, text_content (40));
+CREATE FULLTEXT INDEX post_ft_search ON posts(title, text_content (40));
 CREATE FULLTEXT INDEX t_name ON tags (name);

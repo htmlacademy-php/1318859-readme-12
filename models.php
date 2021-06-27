@@ -289,17 +289,22 @@ function add_tags($con, $post_tags, $db_tags, $post_id)
                 print("Ошибка MySQL: " . $error);
             } else {
                 $tag_id = mysqli_insert_id($con);
-                $post_tags_ids[] = intval($tag_id);
+                $post_tags_ids[] = $tag_id;
+            }
+        } else {
+            foreach ($db_tags as $db_tag) {
+                if ($db_tag['name'] === $tag) {
+                    $post_tags_ids[] = $db_tag['id'];
+                }
+            }
+
         }
-    } else {
-    $post_tags_ids[] = intval($tag['id']);
-}
-}
-foreach ($post_tags_ids as $id) {
-    $sql = "INSERT INTO `posts_tags` SET `post_id` = '$post_id', `tag_id` = '$id';";
-    $result = mysqli_query($con, $sql);
-    if (!$result) {
-        $error = mysqli_error($con);
+    }
+    foreach ($post_tags_ids as $id) {
+        $sql = "INSERT INTO `posts_tags` SET `post_id` = '$post_id', `tag_id` = '$id';";
+        $result = mysqli_query($con, $sql);
+        if (!$result) {
+            $error = mysqli_error($con);
             print("Ошибка MySQL: " . $error);
         }
     }
@@ -316,8 +321,7 @@ function get_search_posts($con, $search)
     $sql = "SELECT p.*, u.login, u.avatar, t.class_name FROM `posts` p 
             JOIN `users` u ON p.user_id = u.id 
             JOIN `types` t ON p.type_id = t.id 
-            WHERE MATCH(p.title, p.text_content) AGAINST(?) 
-            ORDER BY `views_count` DESC";
+            WHERE MATCH(p.title, p.text_content) AGAINST(?)";
 
     $stmt = db_get_prepare_stmt($con, $sql, [$search]);
     $posts = get_data($con, $stmt, false);
