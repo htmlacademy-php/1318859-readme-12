@@ -103,21 +103,14 @@
         <div class="header__nav-wrapper">
             <nav class="header__nav">
                 <ul class="header__my-nav">
-                    <li class="header__my-page header__my-page--popular">
-                        <a class="header__page-link header__page-link--active" href="popular.php" title="Популярный контент">
-                            <span class="visually-hidden">Популярный контент</span>
-                        </a>
-                    </li>
-                    <li class="header__my-page header__my-page--feed">
-                        <a class="header__page-link" href="feed.php" title="Моя лента">
-                            <span class="visually-hidden">Моя лента</span>
-                        </a>
-                    </li>
-                    <li class="header__my-page header__my-page--messages">
-                        <a class="header__page-link" href="#" title="Личные сообщения">
-                            <span class="visually-hidden">Личные сообщения</span>
-                        </a>
-                    </li>
+                    <?php foreach ($nav_links as $nav_link): ?>
+                        <li class="header__my-page header__my-page--<?= $nav_link['class_name'] ?>">
+                            <a class="header__page-link <?php if (strpos($_SERVER['REQUEST_URI'],
+                                $nav_link['href'])): ?>header__page-link--active<?php endif; ?>" href="<?= $nav_link['href'] ?>" title="<?= $nav_link['title'] ?>">
+                                <span class="visually-hidden"><?= $nav_link['title'] ?></span>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
                 </ul>
                 <ul class="header__user-nav">
                     <?php if (isset($user_name)): ?>

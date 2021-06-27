@@ -62,6 +62,7 @@ $layout = include_template('layout.php', [
     'user_avatar' => $_SESSION['user']['avatar'],
     'user_id' => $_SESSION['user']['id'],
     'title' => $title,
+    'nav_links' => $configs['nav_links'],
     'search' => $search,
     'search_line_text' => $search_line_text,
 ]);

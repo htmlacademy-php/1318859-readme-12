@@ -40,6 +40,7 @@ $main_content = include_template('registration.php', [
 $layout = include_template('layout.php', [
     'main_content' => $main_content,
     'title' => $title,
+    'nav_links' => $configs['nav_links'],
 ]);
 
 echo $layout;

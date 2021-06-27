@@ -94,6 +94,7 @@ $layout = include_template('layout.php', [
     'user_avatar' => $_SESSION['user']['avatar'],
     'user_id' => $_SESSION['user']['id'],
     'title' => $title,
+    'nav_links' => $configs['nav_links'],
 ]);
 
 echo $layout;
