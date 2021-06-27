@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = validate_form($form, $configs);
 
-    $email = mysqli_real_escape_string($con, $_POST['email']);
+    $email = mysqli_real_escape_string($con, htmlspecialchars($_POST['email']));
     $sql = "SELECT * FROM `users` WHERE `email` = '$email'";
     $res = mysqli_query($con, $sql);
 

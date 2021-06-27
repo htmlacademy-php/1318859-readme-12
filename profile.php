@@ -11,15 +11,15 @@ if (!isset($_SESSION['user'])) {
 }
 
 $title = 'readme: профиль';
-$current_tab = (isset($_GET["tab"])) ? $_GET["tab"] : 'posts';
+$current_tab = (isset($_GET["tab"])) ? htmlspecialchars($_GET["tab"]) : 'posts';
 
 $tabs = [
     'posts' => 'посты',
     'likes' => 'лайки',
     'follows' => 'подписки',
 ];
-$user = get_user($con, $_GET['id']);
-$self_page = ($_GET['id'] === $_SESSION['user']['id']);
+$user = get_user($con, intval($_GET['id']));
+$self_page = (intval($_GET['id'] )=== intval($_SESSION['user']['id']));
 
 $amount_of_user_posts = count(get_filtered_posts($con, 'u.id', $user['id'], null));
 $amount_of_user_followers = count(get_followers($con, $user['id']));
@@ -48,14 +48,14 @@ foreach ($followers_of_user as $i => $follower) {
 
 $liked_post_ids_by_session_user = get_all_liked_post_ids_by_user($con, $_SESSION['user']['id']);
 if (isset($_GET['liked_post_id'])) {
-    toggle_like($con, $_SESSION['user']['id'], $_GET['liked_post_id']);
+    toggle_like($con, intval($_SESSION['user']['id']), intval($_GET['liked_post_id']));
     header("Location: " . $_SERVER['HTTP_REFERER']);
     exit();
 }
 
 $reposted_post_ids_by_session_user = get_all_reposted_post_ids_by_user($con, $_SESSION['user']['id']);
 if (isset($_GET['reposted_post_id'])) {
-    repost($con, $_GET['reposted_post_id']);
+    repost($con, intval($_GET['reposted_post_id']));
     header("Location: /profile.php?id=" . $user['id']);
     exit();
 }

@@ -37,9 +37,9 @@ $offset = ($page_number - 1) * $limit;
 
 if (isset($_GET["sort"])) {
     if (isset($_GET["type_id"])) {
-        $type_id = $_GET["type_id"];
-        $amount_of_posts = count(get_filtered_posts($con, 't.id', intval($type_id), null));
-        $posts = get_filtered_posts($con, 't.id', intval($type_id), $offset . ',' . $limit,
+        $type_id = intval($_GET["type_id"]);
+        $amount_of_posts = count(get_filtered_posts($con, 't.id', $type_id, null));
+        $posts = get_filtered_posts($con, 't.id', $type_id, $offset . ',' . $limit,
             $sort_types[$_GET["sort"]]["db_property"]);
     } else {
         $type_id = '';
@@ -48,9 +48,9 @@ if (isset($_GET["sort"])) {
     }
 } else {
     if (isset($_GET["type_id"])) {
-        $type_id = $_GET["type_id"];
-        $amount_of_posts = count(get_filtered_posts($con, 't.id', intval($type_id), null));
-        $posts = get_filtered_posts($con, 't.id', intval($type_id), $offset . ',' . $limit);
+        $type_id = intval($_GET["type_id"]);
+        $amount_of_posts = count(get_filtered_posts($con, 't.id', $type_id, null));
+        $posts = get_filtered_posts($con, 't.id', $type_id, $offset . ',' . $limit);
     } else {
         $type_id = '';
         $amount_of_posts = count(get_filtered_posts($con, '', null, null));
@@ -62,7 +62,7 @@ $max_page = ceil($amount_of_posts / NUMBER_OF_PAGE_POSTS);
 
 $liked_post_ids_by_session_user = get_all_liked_post_ids_by_user($con, $_SESSION['user']['id']);
 if (isset($_GET['liked_post_id'])) {
-    toggle_like($con, $_SESSION['user']['id'], $_GET['liked_post_id']);
+    toggle_like($con, intval($_SESSION['user']['id']), intval($_GET['liked_post_id']));
     if (isset($_SERVER['HTTP_REFERER'])) {
         $url = $_SERVER['HTTP_REFERER'];
     } else {

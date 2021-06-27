@@ -11,7 +11,7 @@ if (!isset($_SESSION['user'])) {
 }
 
 $title = 'readme: моя лента';
-$current_tab = (isset($_GET["type"])) ? $_GET["type"] : '';
+$current_tab = (isset($_GET["type"])) ? htmlspecialchars($_GET["type"]) : '';
 
 $tabs = [
     'photo' => 'фото',
@@ -38,14 +38,14 @@ if (empty($current_tab)) {
 
 $liked_post_ids_by_session_user = get_all_liked_post_ids_by_user($con, $user_id);
 if (isset($_GET['liked_post_id'])) {
-    toggle_like($con, $user_id, $_GET['liked_post_id']);
+    toggle_like($con, $user_id, intval($_GET['liked_post_id']));
     header("Location: " . $_SERVER['HTTP_REFERER']);
     exit();
 }
 
 $reposted_post_ids_by_session_user = get_all_reposted_post_ids_by_user($con, $user_id);
 if (isset($_GET['reposted_post_id'])) {
-    repost($con, $_GET['reposted_post_id']);
+    repost($con, intval($_GET['reposted_post_id']));
     header("Location: /profile.php?id=" . $user_id);
     exit();
 }

@@ -67,13 +67,13 @@
                                                                id="<?= $current_tab; ?>-<?= $input['name']; ?>"
                                                                type="<?= $input['type']; ?>"
                                                                name="<?= $current_tab; ?>-<?= $input['name']; ?>"
-                                                               value="<?= $_POST[$current_tab . '-' . $input['name']] ?? ''; ?>"
+                                                               value="<?= htmlspecialchars($_POST[$current_tab . '-' . $input['name']]) ?? ''; ?>"
                                                                placeholder="<?= $input['placeholder'] ?? ''; ?>">
                                                     <?php elseif ($input['field_type'] === 'textarea'): ?>
                                                         <textarea class="adding-post__textarea form__textarea form__input"
                                                                   id="<?= $current_tab; ?>-<?= $input['name']; ?>"
                                                                   name="<?= $current_tab; ?>-<?= $input['name']; ?>"
-                                                                  placeholder="<?= $input['placeholder'] ?? ''; ?>"><?= $_POST[$current_tab . '-' . $input['name']] ?? ''; ?></textarea>
+                                                                  placeholder="<?= $input['placeholder'] ?? ''; ?>"><?= htmlspecialchars($_POST[$current_tab . '-' . $input['name']]) ?? ''; ?></textarea>
                                                     <?php endif; ?>
 
                                                     <button class="form__error-button button" type="button">
@@ -97,9 +97,7 @@
 
                                 <?php if (!empty($errors[$form['name']])): ?>
                                     <div class="form__invalid-block">
-                                        <b class="form__invalid-slogan">Пожалуйста, исправьте
-                                            следующие
-                                            ошибки:</b>
+                                        <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                                         <ul class="form__invalid-list">
                                             <?php foreach ($form['inputs'] as $input): ?>
                                                 <?php if (!empty($errors[$form['name']][$input['name']])): ?>

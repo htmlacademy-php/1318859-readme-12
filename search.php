@@ -12,13 +12,13 @@ if (!isset($_SESSION['user'])) {
 
 $liked_post_ids_by_session_user = get_all_liked_post_ids_by_user($con, $_SESSION['user']['id']);
 if (isset($_GET['liked_post_id'])) {
-    toggle_like($con, $_SESSION['user']['id'], $_GET['liked_post_id']);
+    toggle_like($con, intval($_SESSION['user']['id']), intval($_GET['liked_post_id']));
     header("Location: " . $_SERVER['HTTP_REFERER']);
     exit();
 }
 
 $title = 'readme: страница результатов поиска';
-$search = trim($_GET['q']) ?? '';
+$search = trim(htmlspecialchars($_GET['q'])) ?? '';
 $first_symbol = substr($search, 0, 1);
 if (empty($search)) {
     header("Location: " . $_SERVER['HTTP_REFERER']);
