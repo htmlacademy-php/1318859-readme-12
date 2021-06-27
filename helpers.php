@@ -661,7 +661,7 @@ function send_new_post_notification($post, $followers)
  * @param array $db_data Массив данных о посте, не зависящий от типа поста
  * @return array
  */
-function build_post_data($current_tab, $db_data)
+function build_post_data($current_tab, &$db_data)
 {
     if ($current_tab === 'photo') {
         if (isset($_FILES['photo-userpic-file']['name'])) {
@@ -700,8 +700,5 @@ function build_post_data($current_tab, $db_data)
             'type_id' => 5
         ];
     }
-    echo '<pre>';
-    print_r($db_data);
-    echo '</pre>';
     return $db_data;
 }
