@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'title' => $db_post_title,
             'user_id' => $bd_post_user_id
         ];
-
+        /*build_post_data($current_tab, $db_data);*/
         if ($current_tab === 'photo') {
             if (isset($_FILES['photo-userpic-file']['name'])) {
                 $db_post_image = '/uploads/' . time() . '-' . $_FILES['photo-userpic-file']['name'];

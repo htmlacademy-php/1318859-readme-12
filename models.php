@@ -289,17 +289,17 @@ function add_tags($con, $post_tags, $db_tags, $post_id)
                 print("Ошибка MySQL: " . $error);
             } else {
                 $tag_id = mysqli_insert_id($con);
-                $post_tags_ids[] = $tag_id;
-            }
-        } else {
-            $post_tags_ids[] = $tag['id'];
+                $post_tags_ids[] = intval($tag_id);
         }
-    }
-    foreach ($post_tags_ids as $id) {
-        $sql = "INSERT INTO `posts_tags` SET `post_id` = '$post_id', `tag_id` = '$id';";
-        $result = mysqli_query($con, $sql);
-        if (!$result) {
-            $error = mysqli_error($con);
+    } else {
+    $post_tags_ids[] = intval($tag['id']);
+}
+}
+foreach ($post_tags_ids as $id) {
+    $sql = "INSERT INTO `posts_tags` SET `post_id` = '$post_id', `tag_id` = '$id';";
+    $result = mysqli_query($con, $sql);
+    if (!$result) {
+        $error = mysqli_error($con);
             print("Ошибка MySQL: " . $error);
         }
     }

@@ -128,7 +128,7 @@
             <form class="authorization__form form" action="index.php" method="post">
                 <?php foreach ($form['inputs'] as $input): ?>
                     <div class="authorization__input-wrapper form__input-wrapper <?php if (isset($errors[$form['name']][$input['name']])): ?>form__input-section--error<?php endif; ?>">
-                        <input class="authorization__input authorization__input--<?= $input['name']; ?> form__input" type="<?= $input['type']; ?>" name="<?= $input['name']; ?>" value="<?= htmlspecialchars($_POST[$input['name']]) ?? ''; ?>" placeholder="<?= $input['placeholder']; ?>">
+                        <input class="authorization__input authorization__input--<?= $input['name']; ?> form__input" type="<?= $input['type']; ?>" name="<?= $input['name']; ?>" value="<?= $_POST[$input['name']] ?? ''; ?>" placeholder="<?= $input['placeholder']; ?>">
                         <svg class="form__input-icon" width="<?= $input['icon']['width']; ?>" height="<?= $input['icon']['height']; ?>">
                             <use xlink:href="#icon-input-<?= $input['icon']['name']; ?>"></use>
                         </svg>
@@ -178,17 +178,6 @@
                 </p>
             </div>
             <div class="footer__my-info">
-                <ul class="footer__my-pages">
-                    <li class="footer__my-page footer__my-page--feed">
-                        <a class="footer__page-link" href="feed.html">Моя лента</a>
-                    </li>
-                    <li class="footer__my-page footer__my-page--popular">
-                        <a class="footer__page-link" href="popular.html">Популярный контент</a>
-                    </li>
-                    <li class="footer__my-page footer__my-page--messages">
-                        <a class="footer__page-link" href="messages.html">Личные сообщения</a>
-                    </li>
-                </ul>
                 <div class="footer__copyright">
                     <a class="footer__copyright-link" href="#">
                         <span>Разработано HTML Academy</span>

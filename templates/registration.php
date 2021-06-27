@@ -16,7 +16,7 @@
                                     <?php endif; ?>
                                 </label>
                                 <div class="form__input-section <?php if (isset($errors[$form['name']][$input['name']])): ?>form__input-section--error<?php endif; ?>">
-                                    <input class="registration__input form__input" id="<?= 'registration-' . $input['name']; ?>" type="<?= $input['type']; ?>" name="<?= $input['name']; ?>" value="<?= htmlspecialchars($_POST[$input['name']]) ?? ''; ?>" placeholder="<?= $input['placeholder']; ?>">
+                                    <input class="registration__input form__input" id="<?= 'registration-' . $input['name']; ?>" type="<?= $input['type']; ?>" name="<?= $input['name']; ?>" value="<?= $_POST[$input['name']] ?? ''; ?>" placeholder="<?= $input['placeholder']; ?>">
                                     <button class="form__error-button button" type="button">
                                         !<span class="visually-hidden">Информация об ошибке</span>
                                     </button>

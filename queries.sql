@@ -18,17 +18,17 @@ INSERT INTO users SET
     email = 'larisa@test.ru',
     login = 'Лариса',
     password = 'larisa777',
-    avatar = 'userpic-larisa-small.jpg';
+    avatar = '/img/userpic-larisa-small.jpg';
 INSERT INTO users SET
     email = 'vladik@test.ru',
     login = 'Владик',
     password = 'vladik777',
-    avatar = 'userpic.jpg';
+    avatar = '/img/userpic.jpg';
 INSERT INTO users SET
     email = 'viktor@test.ru',
     login = 'Виктор',
     password = 'viktor777',
-    avatar = 'userpic-mark.jpg';
+    avatar = '/img/userpic-mark.jpg';
 
 INSERT INTO comments SET
     content = 'It is so interesting!',

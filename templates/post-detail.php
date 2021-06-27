@@ -130,8 +130,7 @@
                                 <textarea class="comments__textarea form__textarea form__input"
                                           name="comment"
                                           placeholder="Ваш комментарий"
-                                          <?php if ($count_of_shown_post_comments === 0): ?>id="last_comment"<?php endif; ?>>
-                                </textarea>
+                                          <?php if ($count_of_shown_post_comments === 0): ?>id="last_comment"<?php endif; ?>><?= $_POST['comment'] ?? '' ?></textarea>
                                 <label class="visually-hidden">Ваш комментарий</label>
                                 <?php if (!empty($errors[$form['name']])): ?>
                                     <button class="form__error-button button" type="button">!</button>

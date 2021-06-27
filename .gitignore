@@ -9,3 +9,6 @@ Thumbs.db
 vendor
 uploads/*
 !uploads/.gitkeep
+uploads/users/*
+!uploads/users/.gitkeep
+!uploads/users/
