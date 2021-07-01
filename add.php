@@ -12,7 +12,6 @@ if (!isset($_SESSION['user'])) {
 
 $title = 'readme: добавление публикации';
 $types = get_post_types($con);
-$current_tab = (isset($_GET["type"])) ? htmlspecialchars($_GET["type"]) : 'text';
 $tabs = [
     'photo' => 'фото',
     'video' => 'видео',
@@ -20,6 +19,15 @@ $tabs = [
     'quote' => 'цитата',
     'link' => 'ссылка',
 ];
+
+foreach ($tabs as $type => $name) {
+    if (isset($_GET["type"]) && $_GET["type"] === $type) {
+        $current_tab = $_GET["type"];
+        break;
+    }
+    $current_tab = 'text';
+}
+
 $form = include_once 'forms/' . $current_tab . '-form.php';
 
 $_GET["type"] = $current_tab;

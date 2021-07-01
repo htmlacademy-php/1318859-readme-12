@@ -11,7 +11,6 @@ if (!isset($_SESSION['user'])) {
 }
 
 $title = 'readme: моя лента';
-$current_tab = (isset($_GET["type"])) ? htmlspecialchars($_GET["type"]) : '';
 
 $tabs = [
     'photo' => 'фото',
@@ -20,6 +19,15 @@ $tabs = [
     'quote' => 'цитата',
     'link' => 'ссылка',
 ];
+
+foreach ($tabs as $type => $name) {
+    if (isset($_GET["type"]) && $_GET["type"] === $type) {
+        $current_tab = $_GET["type"];
+        break;
+    }
+    $current_tab = '';
+}
+
 $user_id = intval($_SESSION['user']['id']);
 $posts = get_posts_of_following_users($con, $user_id);
 

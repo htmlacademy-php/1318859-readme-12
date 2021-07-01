@@ -57,7 +57,7 @@ if (isset($_GET["sort"])) {
         $posts = get_filtered_posts($con, '', null, $offset . ',' . $limit);
     }
 }
-$max_page = ceil($amount_of_posts / NUMBER_OF_PAGE_POSTS);
+$max_page = max(1, ceil($amount_of_posts / NUMBER_OF_PAGE_POSTS));
 
 $liked_post_ids_by_session_user = get_all_liked_post_ids_by_user($con, $_SESSION['user']['id']);
 if (isset($_GET['liked_post_id'])) {

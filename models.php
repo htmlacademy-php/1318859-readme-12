@@ -27,6 +27,19 @@ function get_all_posts($con)
 }
 
 /**
+ * Возвращает массив данных о всех пользователях.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
+ * @return array
+ */
+function get_all_users($con)
+{
+    $sql = "SELECT * FROM `users`;";
+    $stmt = mysqli_prepare($con, $sql);
+    $users = get_data($con, $stmt, false);
+    return $users;
+}
+
+/**
  * Возвращает массив данных о всех тегах.
  * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
  * @return array
