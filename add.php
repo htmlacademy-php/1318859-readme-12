@@ -26,7 +26,6 @@ $_GET["type"] = $current_tab;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = validate_form($form, $configs);
-
     if (isset($_POST["send"])) {
         $_GET["type"] = htmlspecialchars($_POST["type"]);
     }

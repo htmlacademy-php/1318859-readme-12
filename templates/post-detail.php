@@ -5,7 +5,6 @@
             <h2 class="visually-hidden">Публикация</h2>
             <div class="post-details__wrapper post-<?= $post['class_name'] ?>">
                 <div class="post-details__main-block post post--details">
-
                     <?php if ($post['class_name'] === 'quote'): ?>
                         <div class="post__main">
                             <blockquote>
@@ -13,7 +12,6 @@
                                 <cite><?= htmlspecialchars($post['quote_author']) ?></cite>
                             </blockquote>
                         </div>
-
                     <?php elseif ($post['class_name'] === 'link'): ?>
                         <div class="post__main">
                             <div class="post-link__wrapper">
@@ -32,14 +30,12 @@
                                 </a>
                             </div>
                         </div>
-
                     <?php elseif ($post['class_name'] === 'photo'): ?>
                         <div class="post__main">
                             <div class="post-details__image-wrapper post-photo__image-wrapper">
                                 <img src="<?= htmlspecialchars($post['image']) ?>" alt="Фото от пользователя" width="760" height="507">
                             </div>
                         </div>
-
                     <?php elseif ($post['class_name'] === 'video'): ?>
                         <div class="post__main">
                             <div class="post-video__block">
@@ -73,10 +69,9 @@
                             <p><?= htmlspecialchars($post['text_content']) ?></p>
                         </div>
                     <?php endif; ?>
-
                     <div class="post__indicators">
                         <div class="post__buttons">
-                            <a class="post__indicator post__indicator--likes button <?= (in_array($post['id'],
+                            <a class="post__indicator post__indicator--likes button <?= (isset($liked_post_ids_by_session_user) && in_array($post['id'],
                                 $liked_post_ids_by_session_user)) ? 'post__indicator--likes-active' : '' ?>"
                                href="post.php?id=<?= $id ?>&liked"
                                title="Лайк">
@@ -97,11 +92,11 @@
                                 <span class="visually-hidden">количество комментариев</span>
                             </a>
                             <a class="post__indicator post__indicator--repost button <?= (isset($reposted_post_ids_by_session_user) && in_array($post['id'],
-                                $reposted_post_ids_by_session_user)) ? 'post__indicator--repost-active' : '' ?>"
+                                    $reposted_post_ids_by_session_user)) ? 'post__indicator--repost-active' : '' ?>"
                                href="post.php?id=<?= $id ?>&reposted"
                                title="Репост">
                                 <svg class="post__indicator-icon <?= (isset($reposted_post_ids_by_session_user) && in_array($post['id'],
-                                    $reposted_post_ids_by_session_user)) ? 'post__indicator-icon--repost-active' : '' ?>" width="19" height="17">
+                                        $reposted_post_ids_by_session_user)) ? 'post__indicator-icon--repost-active' : '' ?>" width="19" height="17">
                                     <use xlink:href="#icon-repost"></use>
                                 </svg>
                                 <span><?= count_reposts_of_post($con, $id) ?></span>
@@ -142,42 +137,42 @@
                             </div>
                             <button class="comments__submit button button--green" type="submit">Отправить</button>
                         </form>
-
-
-                        <div class="comments__list-wrapper">
-                            <ul class="comments__list">
-                                <?php for ($i = 0; $i < $count_of_shown_post_comments; $i++): ?>
-                                    <li class="comments__item user" <?php if ($i === $count_of_shown_post_comments - 1): ?>id="last_comment"<?php endif; ?>>
-                                        <div class="comments__avatar">
-                                            <a class="user__avatar-link" href="profile.php?id=<?= $post_comments[$i]['id'] ?>">
-                                                <img class="comments__picture" src="<?= $post_comments[$i]['avatar'] ?>" alt="Аватар пользователя">
-                                            </a>
-                                        </div>
-                                        <div class="comments__info">
-                                            <div class="comments__name-wrapper">
-                                                <a class="comments__user-name" href="profile.php?id=<?= $post_comments[$i]['id'] ?>">
-                                                    <span><?= $post_comments[$i]['login'] ?></span>
+                        <?php if ($count_of_shown_post_comments > 0): ?>
+                            <div class="comments__list-wrapper">
+                                <ul class="comments__list">
+                                    <?php for ($i = 0; $i < $count_of_shown_post_comments; $i++): ?>
+                                        <li class="comments__item user" <?php if ($i === $count_of_shown_post_comments - 1): ?>id="last_comment"<?php endif; ?>>
+                                            <div class="comments__avatar">
+                                                <a class="user__avatar-link" href="profile.php?id=<?= $post_comments[$i]['id'] ?>">
+                                                    <img class="comments__picture" src="<?= $post_comments[$i]['avatar'] ?>" alt="Аватар пользователя">
                                                 </a>
-                                                <time class="comments__time" datetime="<?= date_format(date_create($post_comments[$i]['publish_time']),
-                                                    'Y-m-d'); ?>">
-                                                    <?= print_date_diff($post_comments[$i]['publish_time']); ?> назад
-                                                </time>
                                             </div>
-                                            <p class="comments__text">
-                                                <?= $post_comments[$i]['content'] ?>
-                                            </p>
-                                        </div>
-                                    </li>
-                                <?php endfor; ?>
-                            </ul>
-
-                            <?php if ($count_of_post_comments > NUMBER_OF_SHOWN_POST_COMMENTS): ?>
-                                <a class="comments__more-link" href="#">
-                                    <span>Показать все комментарии</span>
-                                    <sup class="comments__amount"><?= $count_of_post_comments ?></sup>
-                                </a>
-                            <?php endif; ?>
-                        </div>
+                                            <div class="comments__info">
+                                                <div class="comments__name-wrapper">
+                                                    <a class="comments__user-name" href="profile.php?id=<?= $post_comments[$i]['id'] ?>">
+                                                        <span><?= $post_comments[$i]['login'] ?></span>
+                                                    </a>
+                                                    <time class="comments__time" datetime="<?= date_format(date_create($post_comments[$i]['publish_time']),
+                                                        'Y-m-d'); ?>">
+                                                        <?= print_date_diff($post_comments[$i]['publish_time']); ?>
+                                                        назад
+                                                    </time>
+                                                </div>
+                                                <p class="comments__text">
+                                                    <?= $post_comments[$i]['content'] ?>
+                                                </p>
+                                            </div>
+                                        </li>
+                                    <?php endfor; ?>
+                                </ul>
+                                <?php if ($count_of_post_comments > NUMBER_OF_SHOWN_POST_COMMENTS): ?>
+                                    <a class="comments__more-link" href="#">
+                                        <span>Показать все комментарии</span>
+                                        <sup class="comments__amount"><?= $count_of_post_comments ?></sup>
+                                    </a>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="post-details__user user">
@@ -209,7 +204,6 @@
                                     'публикация', 'публикации', 'публикаций') ?></span>
                         </p>
                     </div>
-
                     <?php if (!$self_page): ?>
                         <div class="post-details__user-buttons user__buttons">
                             <?php if ($subscribe): ?>
@@ -224,7 +218,6 @@
                             <?php endif; ?>
                         </div>
                     <?php endif; ?>
-
                 </div>
             </div>
         </section>

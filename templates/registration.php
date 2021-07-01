@@ -15,33 +15,31 @@
                                         <span class="form__input-required">*</span>
                                     <?php endif; ?>
                                 </label>
-                                <div class="form__input-section <?php if (isset($errors[$form['name']][$input['name']])): ?>form__input-section--error<?php endif; ?>">
+                                <div class="form__input-section <?php if (!empty($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])): ?>form__input-section--error<?php endif; ?>">
                                     <input class="registration__input form__input" id="<?= 'registration-' . $input['name']; ?>" type="<?= $input['type']; ?>" name="<?= $input['name']; ?>" value="<?= $_POST[$input['name']] ?? ''; ?>" placeholder="<?= $input['placeholder']; ?>">
-                                    <button class="form__error-button button" type="button">
-                                        !<span class="visually-hidden">Информация об ошибке</span>
-                                    </button>
-                                    <div class="form__error-text">
-                                        <h3 class="form__error-title"><?= $input['title']; ?></h3>
-                                        <?php if (isset($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])): ?>
+                                    <?php if (!empty($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])): ?>
+                                        <button class="form__error-button button" type="button">
+                                            !<span class="visually-hidden">Информация об ошибке</span>
+                                        </button>
+                                        <div class="form__error-text">
+                                            <h3 class="form__error-title"><?= $input['title']; ?></h3>
                                             <p class="form__error-desc"><?= $errors[$form['name']][$input['name']]; ?></p>
-                                        <?php endif; ?>
-                                    </div>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
 
-                <?php if (!empty($errors[$form['name']])): ?>
+                <?php if (!empty($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])): ?>
                     <div class="form__invalid-block">
                         <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                         <ul class="form__invalid-list">
                             <?php foreach ($form['inputs'] as $input): ?>
-                                <?php if (isset($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])): ?>
-                                    <li class="form__invalid-item">
-                                        <?= (isset($input['title'])) ? $input['title'] . '. ' : '' ?><?= $errors[$form['name']][$input['name']]; ?>
-                                    </li>
-                                <?php endif; ?>
+                                <li class="form__invalid-item">
+                                    <?= (isset($input['title'])) ? $input['title'] . '. ' : '' ?><?= $errors[$form['name']][$input['name']]; ?>
+                                </li>
                             <?php endforeach; ?>
                         </ul>
                     </div>

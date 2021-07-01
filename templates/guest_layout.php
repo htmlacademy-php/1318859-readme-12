@@ -127,14 +127,18 @@
             <h2 class="visually-hidden">Авторизация</h2>
             <form class="authorization__form form" action="index.php" method="post">
                 <?php foreach ($form['inputs'] as $input): ?>
-                    <div class="authorization__input-wrapper form__input-wrapper <?php if (isset($errors[$form['name']][$input['name']])): ?>form__input-section--error<?php endif; ?>">
-                        <input class="authorization__input authorization__input--<?= $input['name']; ?> form__input" type="<?= $input['type']; ?>" name="<?= $input['name']; ?>" value="<?= $_POST[$input['name']] ?? ''; ?>" placeholder="<?= $input['placeholder']; ?>">
+                    <div class="authorization__input-wrapper form__input-wrapper <?php if (!empty($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])): ?>form__input-section--error<?php endif; ?>">
+                        <input class="authorization__input authorization__input--<?= $input['name']; ?> form__input"
+                               type="<?= $input['type']; ?>"
+                               name="<?= $input['name']; ?>"
+                               value="<?= $_POST[$input['name']] ?? ''; ?>"
+                               placeholder="<?= $input['placeholder']; ?>">
                         <svg class="form__input-icon" width="<?= $input['icon']['width']; ?>" height="<?= $input['icon']['height']; ?>">
                             <use xlink:href="#icon-input-<?= $input['icon']['name']; ?>"></use>
                         </svg>
                         <label class="visually-hidden"><?= $input['title']; ?></label>
                     </div>
-                    <?php if (isset($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])): ?>
+                    <?php if (!empty($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])): ?>
                         <span class="form__error-label form__error-label--login"><?= $errors[$form['name']][$input['name']]; ?></span>
                     <?php endif; ?>
                 <?php endforeach; ?>

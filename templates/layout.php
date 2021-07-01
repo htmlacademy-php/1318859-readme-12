@@ -115,7 +115,7 @@
                 <ul class="header__user-nav">
                     <?php if (isset($user_name)): ?>
                         <li class="header__profile">
-                            <a class="header__profile-link" href="#">
+                            <a class="header__profile-link" href="profile.php?id=<?= $_SESSION['user']['id'] ?>">
                                 <div class="header__avatar-wrapper">
                                     <img class="header__profile-avatar" src="<?= $user_avatar ?>" alt="Аватар профиля">
                                 </div>

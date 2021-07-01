@@ -95,7 +95,7 @@
                             </div>
                             <footer class="post__footer post__indicators">
                                 <div class="post__buttons">
-                                    <a class="post__indicator post__indicator--likes button <?= (in_array($post['id'], $liked_post_ids_by_session_user)) ? 'post__indicator--likes-active' : '' ?>"
+                                    <a class="post__indicator post__indicator--likes button <?= (isset($liked_post_ids_by_session_user) && in_array($post['id'], $liked_post_ids_by_session_user)) ? 'post__indicator--likes-active' : '' ?>"
                                        href="search.php?liked_post_id=<?= $post['id'] ?>"
                                        title="Лайк">
                                         <svg class="post__indicator-icon" width="20" height="17">
