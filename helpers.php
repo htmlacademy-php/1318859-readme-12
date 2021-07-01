@@ -352,10 +352,6 @@ function print_date_diff($date)
  */
 function get_data($con, $stmt, $is_row)
 {
-    if ($con === false) {
-        return print("Ошибка подключения: " . mysqli_connect_error());
-    }
-
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     if ($is_row) {
@@ -379,10 +375,39 @@ function validate_filled($name)
 }
 
 /**
- * Проверяет, находится ли длина строки в пределах указанных значений и возвращает текст ошибки, если длина выходит за эти пределы.
+ * Сравнивает длину строки с максимально допустимой длиной и возвращает текст ошибки, если длина больше максимально допустимой.
  * @param string $name Значение атрибута 'name' поля формы
- * @param int $min Минимальная длиня строки
- * @param int $max Максимальная длиня строки
+ * @param int $max_length Максимальная длина строки
+ * @return string
+ */
+function validate_max_length($name, $max_length)
+{
+    $len = strlen(trim($_POST[$name]));
+
+    if ($len > $max_length) {
+        return "Количество символов не должно превышать $max_length";
+    }
+}
+
+/**
+ * Сравнивает длину имени файла изображения с максимально допустимой длиной и возвращает текст ошибки, если длина больше максимально допустимой.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @param int $max_length Максимальная длина строки
+ * @return string
+ */
+function validate_max_image_name_length($name, $max_length)
+{
+    $len = strlen(trim($_FILES[$name]['name']));
+
+    if ($len > $max_length) {
+        return "Количество символов в имени файла изображения не должно превышать $max_length";
+    }
+}
+
+/**
+ * Сравнивает длину введённого комментария с минимально допустимой длиной и возвращает текст ошибки, если длина меньше минимально допустимой.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @param int $min_length Минимальная длина строки
  * @return string
  */
 function is_correct_min_length_comment($name, $min_length)
@@ -484,7 +509,13 @@ function validate_image_type_from_url($name)
  */
 function validate_image_url_content($name)
 {
-    $content = file_get_contents($_POST[$name]);
+    $content = null;
+    try {
+        $content = file_get_contents($_POST[$name]);
+    } catch (Exception $e) {
+        return "Не удалось загрузить файл. Пожалуйста, проверьте ещё раз указанный адрес.";
+    }
+
     if (!$content) {
         return "Не удалось загрузить файл. Пожалуйста, проверьте ещё раз указанный адрес.";
     }
@@ -556,6 +587,26 @@ function get_tags_from_post($name)
 {
     preg_match_all('/([\w0-9_])+/u', $_POST[$name], $post_tags);
     return $post_tags[0];
+}
+
+/**
+ * Сравнивает длину каждого тега с максимально допустимой длиной и возвращает текст ошибки, если длина хотя бы одного из тегов больше максимально допустимой.
+ * @param string $name Значение атрибута 'name' поля формы
+ * @param int $max_length Максимальная длина строки
+ * @return string
+ */
+function validate_max_tag_name_length($name, $max_length)
+{
+    $tags = get_tags_from_post($name);
+
+    if (count($tags) > 0) {
+        foreach ($tags as $tag) {
+            $len = strlen($tag);
+            if ($len > $max_length) {
+                return "Тег должен быть короче $max_length символов";
+            }
+        }
+    }
 }
 
 /**

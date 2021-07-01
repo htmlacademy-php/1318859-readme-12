@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $main_content = include_template('registration.php', [
     'form' => $form,
-    'errors' => $errors ?? '',
+    'errors' => $errors ?? [],
 ]);
 $layout = include_template('layout.php', [
     'main_content' => $main_content,

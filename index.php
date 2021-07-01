@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $layout = include_template('guest_layout.php', [
     'title' => $title,
     'form' => $form,
-    'errors' => $errors ?? '',
+    'errors' => $errors ?? [],
 ]);
 
 echo $layout;

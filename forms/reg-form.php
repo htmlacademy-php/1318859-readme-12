@@ -10,14 +10,18 @@ return [
             'name' => 'email',
             'placeholder' => 'Укажите эл.почту',
             'field_type' => 'input',
+            'max_length' => 120,
             'checks' => [
                 0 => function ($input) {
                     return validate_filled($input['name']);
                 },
                 1 => function ($input) {
+                    return validate_max_length($input['name'], $input['max_length']);
+                },
+                2 => function ($input) {
                     return validate_email($input['name']);
                 },
-                2 => function ($input, $configs) {
+                3 => function ($input, $configs) {
                     return validate_unique_email($configs['con'], $input['name']);
                 }
             ],
@@ -29,9 +33,13 @@ return [
             'name' => 'login',
             'placeholder' => 'Укажите логин',
             'field_type' => 'input',
+            'max_length' => 60,
             'checks' => [
                 0 => function ($input) {
                     return validate_filled($input['name']);
+                },
+                1 => function ($input) {
+                    return validate_max_length($input['name'], $input['max_length']);
                 }
             ],
         ],
@@ -66,9 +74,13 @@ return [
             'type' => 'file',
             'name' => 'userpic-file',
             'field_type' => 'input-file',
+            'max_length' => 200,
             'checks' => (!empty($_FILES['userpic-file']) && $_FILES['userpic-file']["error"] !== 4) ? [
                 0 => function ($input) {
                     return validate_image_type($input['name']);
+                },
+                1 => function ($input) {
+                    return validate_max_image_name_length($input['name'], $input['max_length']);
                 }
             ] : [],
         ]

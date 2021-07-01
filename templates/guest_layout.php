@@ -134,7 +134,9 @@
                         </svg>
                         <label class="visually-hidden"><?= $input['title']; ?></label>
                     </div>
-                    <span class="form__error-label form__error-label--login"><?= $errors[$form['name']][$input['name']]; ?></span>
+                    <?php if (isset($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])): ?>
+                        <span class="form__error-label form__error-label--login"><?= $errors[$form['name']][$input['name']]; ?></span>
+                    <?php endif; ?>
                 <?php endforeach; ?>
                 <a class="authorization__recovery" href="#">Восстановить пароль</a>
                 <button class="authorization__submit button button--main" type="submit">Войти</button>

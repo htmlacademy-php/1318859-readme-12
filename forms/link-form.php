@@ -10,9 +10,13 @@ return [
             'name' => 'heading',
             'placeholder' => 'Введите заголовок',
             'field_type' => 'input',
+            'max_length' => 200,
             'checks' => [
                 0 => function ($input, $configs) {
                     return validate_filled($configs['current_tab'] . '-' . $input['name']);
+                },
+                1 => function ($input, $configs) {
+                    return validate_max_length($configs['current_tab'] . '-' . $input['name'], $input['max_length']);
                 }
             ],
         ],
@@ -22,11 +26,15 @@ return [
             'type' => 'url',
             'name' => 'url',
             'field_type' => 'input',
+            'max_length' => 250,
             'checks' => [
                 0 => function ($input, $configs) {
                     return validate_filled($configs['current_tab'] . '-' . $input['name']);
                 },
                 1 => function ($input, $configs) {
+                    return validate_max_length($configs['current_tab'] . '-' . $input['name'], $input['max_length']);
+                },
+                2 => function ($input, $configs) {
                     return validate_url($configs['current_tab'] . '-' . $input['name']);
                 }
             ],

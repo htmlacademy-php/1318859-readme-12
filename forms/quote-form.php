@@ -10,9 +10,13 @@ return [
             'name' => 'heading',
             'placeholder' => 'Введите заголовок',
             'field_type' => 'input',
+            'max_length' => 200,
             'checks' => [
                 0 => function ($input, $configs) {
                     return validate_filled($configs['current_tab'] . '-' . $input['name']);
+                },
+                1 => function ($input, $configs) {
+                    return validate_max_length($configs['current_tab'] . '-' . $input['name'], $input['max_length']);
                 }
             ],
         ],
@@ -35,9 +39,13 @@ return [
             'type' => 'text',
             'name' => 'author',
             'field_type' => 'input',
+            'max_length' => 200,
             'checks' => [
                 0 => function ($input, $configs) {
                     return validate_filled($configs['current_tab'] . '-' . $input['name']);
+                },
+                1 => function ($input, $configs) {
+                    return validate_max_length($configs['current_tab'] . '-' . $input['name'], $input['max_length']);
                 }
             ],
         ],

@@ -22,7 +22,9 @@
                                     </button>
                                     <div class="form__error-text">
                                         <h3 class="form__error-title"><?= $input['title']; ?></h3>
-                                        <p class="form__error-desc"><?= $errors[$form['name']][$input['name']]; ?></p>
+                                        <?php if (isset($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])): ?>
+                                            <p class="form__error-desc"><?= $errors[$form['name']][$input['name']]; ?></p>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -35,7 +37,7 @@
                         <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                         <ul class="form__invalid-list">
                             <?php foreach ($form['inputs'] as $input): ?>
-                                <?php if (!empty($errors[$form['name']][$input['name']])): ?>
+                                <?php if (isset($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])): ?>
                                     <li class="form__invalid-item">
                                         <?= (isset($input['title'])) ? $input['title'] . '. ' : '' ?><?= $errors[$form['name']][$input['name']]; ?>
                                     </li>

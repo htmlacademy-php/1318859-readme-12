@@ -96,11 +96,11 @@
                                 <span><?= count_comments_of_post($con, $id) ?></span>
                                 <span class="visually-hidden">количество комментариев</span>
                             </a>
-                            <a class="post__indicator post__indicator--repost button <?= (in_array($post['id'],
+                            <a class="post__indicator post__indicator--repost button <?= (isset($reposted_post_ids_by_session_user) && in_array($post['id'],
                                 $reposted_post_ids_by_session_user)) ? 'post__indicator--repost-active' : '' ?>"
                                href="post.php?id=<?= $id ?>&reposted"
                                title="Репост">
-                                <svg class="post__indicator-icon <?= (in_array($post['id'],
+                                <svg class="post__indicator-icon <?= (isset($reposted_post_ids_by_session_user) && in_array($post['id'],
                                     $reposted_post_ids_by_session_user)) ? 'post__indicator-icon--repost-active' : '' ?>" width="19" height="17">
                                     <use xlink:href="#icon-repost"></use>
                                 </svg>
