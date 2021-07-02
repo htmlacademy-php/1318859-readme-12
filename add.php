@@ -15,9 +15,9 @@ $types = get_post_types($con);
 $tabs = [
     'photo' => 'фото',
     'video' => 'видео',
-    'text' => 'текст',
+    'text'  => 'текст',
     'quote' => 'цитата',
-    'link' => 'ссылка',
+    'link'  => 'ссылка',
 ];
 
 foreach ($tabs as $type => $name) {
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db_post_title = htmlspecialchars($_POST[$current_tab . '-heading']);
         $bd_post_user_id = $_SESSION['user']['id'];
         $db_data = [
-            'title' => $db_post_title,
+            'title'   => $db_post_title,
             'user_id' => $bd_post_user_id
         ];
         build_post_data($current_tab, $db_data);
@@ -62,19 +62,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $main_content = include_template('adding-post.php', [
-    'tabs' => $tabs,
-    'form' => $form,
-    'types' => $types,
+    'tabs'        => $tabs,
+    'form'        => $form,
+    'types'       => $types,
     'current_tab' => $current_tab,
-    'errors' => $errors ?? '',
+    'errors'      => $errors ?? '',
 ]);
 $layout = include_template('layout.php', [
     'main_content' => $main_content,
-    'user_name' => $_SESSION['user']['login'],
-    'user_avatar' => $_SESSION['user']['avatar'],
-    'user_id' => $_SESSION['user']['id'],
-    'title' => $title,
-    'nav_links' => $configs['nav_links'],
+    'user_name'    => $_SESSION['user']['login'],
+    'user_avatar'  => $_SESSION['user']['avatar'],
+    'user_id'      => $_SESSION['user']['id'],
+    'title'        => $title,
+    'nav_links'    => $configs['nav_links'],
 ]);
 
 echo $layout;

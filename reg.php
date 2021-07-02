@@ -19,12 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db_email = htmlspecialchars($_POST['email']);
         $db_login = htmlspecialchars($_POST['login']);
         $db_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $db_avatar = '/uploads/users/' . time() . '-' . $_FILES['userpic-file']['name'];
+        $db_avatar = '/uploads/users/' . time() . '-'
+            . $_FILES['userpic-file']['name'];
         $db_data = [
-            'email' => $db_email,
-            'login' => $db_login,
+            'email'    => $db_email,
+            'login'    => $db_login,
             'password' => $db_password,
-            'avatar' => $db_avatar,
+            'avatar'   => $db_avatar,
         ];
 
         $new_user_id = add_user($con, $db_data);
@@ -34,15 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $main_content = include_template('registration.php', [
-    'form' => $form,
+    'form'   => $form,
     'errors' => $errors ?? [],
 ]);
 $layout = include_template('layout.php', [
     'main_content' => $main_content,
-    'title' => $title,
-    'nav_links' => $configs['nav_links'],
+    'title'        => $title,
+    'nav_links'    => $configs['nav_links'],
 ]);
 
 echo $layout;
-
-

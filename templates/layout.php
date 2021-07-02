@@ -104,10 +104,10 @@
             <nav class="header__nav">
                 <ul class="header__my-nav">
                     <?php foreach ($nav_links as $nav_link): ?>
-                        <li class="header__my-page header__my-page--<?= $nav_link['class_name'] ?>">
-                            <a class="header__page-link <?php if (strpos($_SERVER['REQUEST_URI'],
-                                $nav_link['href'])): ?>header__page-link--active<?php endif; ?>" href="<?= $nav_link['href'] ?>" title="<?= $nav_link['title'] ?>">
-                                <span class="visually-hidden"><?= $nav_link['title'] ?></span>
+                        <li class="header__my-page <?= $nav_link['class_name'] ? "header__my-page--" . $nav_link['class_name'] : "" ?>">
+                            <a class="header__page-link <?php if (strpos($_SERVER['REQUEST_URI'], $nav_link['href'])): ?>header__page-link--active<?php endif; ?>"
+                               href="<?= $nav_link['href'] ?? '' ?>" title="<?= $nav_link['title'] ?? '' ?>">
+                                <span class="visually-hidden"><?= $nav_link['title'] ?? '' ?></span>
                             </a>
                         </li>
                     <?php endforeach; ?>
@@ -117,7 +117,7 @@
                         <li class="header__profile">
                             <a class="header__profile-link" href="profile.php?id=<?= $_SESSION['user']['id'] ?>">
                                 <div class="header__avatar-wrapper">
-                                    <img class="header__profile-avatar" src="<?= $user_avatar ?>" alt="Аватар профиля">
+                                    <img class="header__profile-avatar" src="<?= $user_avatar ?? '' ?>" alt="Аватар профиля">
                                 </div>
                                 <div class="header__profile-name">
                                 <span>
@@ -132,7 +132,7 @@
                                 <div class="header__profile-tooltip">
                                     <ul class="header__profile-nav">
                                         <li class="header__profile-nav-item">
-                                            <a class="header__profile-nav-link" href="profile.php?id=<?= $user_id ?>">
+                                            <a class="header__profile-nav-link" href="profile.php?id=<?= $_SESSION['user']['id'] ?>">
                                                 <span class="header__profile-nav-text">Мой профиль</span>
                                             </a>
                                         </li>
@@ -208,10 +208,10 @@
             <div class="footer__my-info">
                 <ul class="footer__my-pages">
                     <li class="footer__my-page footer__my-page--feed">
-                        <a class="footer__page-link" href="feed.html">Моя лента</a>
+                        <a class="footer__page-link" href="feed.php">Моя лента</a>
                     </li>
                     <li class="footer__my-page footer__my-page--popular">
-                        <a class="footer__page-link" href="popular.html">Популярный контент</a>
+                        <a class="footer__page-link" href="popular.php">Популярный контент</a>
                     </li>
                     <li class="footer__my-page footer__my-page--messages">
                         <a class="footer__page-link" href="messages.html">Личные сообщения</a>

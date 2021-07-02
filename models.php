@@ -336,7 +336,8 @@ function get_search_posts($con, $search)
             JOIN `types` t ON p.type_id = t.id 
             WHERE MATCH(p.title, p.text_content) AGAINST(?)";
 
-    $stmt = db_get_prepare_stmt($con, $sql, [$search]);
+    $stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 's', $search);
     $posts = get_data($con, $stmt, false);
     return $posts;
 }
