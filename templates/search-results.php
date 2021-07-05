@@ -15,22 +15,27 @@
                     <?php foreach ($posts as $key => $post): ?>
                         <article class="search__post post post-<?= $post['class_name'] ?? '' ?>">
                             <header class="post__header post__author">
-                                <a class="post__author-link" href="profile.php?id=<?= $post['user_id'] ?? '' ?>" title="Автор">
+                                <a class="post__author-link" href="profile.php?id=<?= $post['user_id'] ??
+                                '' ?>" title="Автор">
                                     <div class="post__avatar-wrapper">
-                                        <img class="post__author-avatar" src="<?= $post['avatar'] ?? '' ?>" alt="Аватар пользователя" width="60" height="60">
+                                        <img class="post__author-avatar" src="<?= $post['avatar'] ??
+                                        '' ?>" alt="Аватар пользователя" width="60" height="60">
                                     </div>
                                     <div class="post__info">
                                         <b class="post__author-name"><?= $post['login'] ?? '' ?></b>
-                                        <span class="post__time"><?= print_date_diff($post['dt_add'] ?? '') ?> назад</span>
+                                        <span class="post__time"><?= print_date_diff($post['dt_add'] ??
+                                                '') ?> назад</span>
                                     </div>
                                 </a>
                             </header>
                             <div class="post__main">
 
                                 <?php if ($post['class_name'] === 'photo'): ?>
-                                    <h2><a href="/post.php?id=<?= $post['id'] ?? '' ?>"><?= $post['title'] ?? '' ?></a></h2>
+                                    <h2><a href="/post.php?id=<?= $post['id'] ?? '' ?>"><?= $post['title'] ?? '' ?></a>
+                                    </h2>
                                     <div class="post-photo__image-wrapper">
-                                        <img src="<?= $post['image'] ?? '' ?>" alt="Фото от пользователя" width="760" height="396">
+                                        <img src="<?= $post['image'] ??
+                                        '' ?>" alt="Фото от пользователя" width="760" height="396">
                                     </div>
 
                                 <?php elseif ($post['class_name'] === 'video'): ?>
@@ -60,7 +65,8 @@
                                     </div>
 
                                 <?php elseif ($post['class_name'] === 'text'): ?>
-                                    <h2><a href="/post.php?id=<?= $post['id'] ?? '' ?>"><?= $post['title'] ?? '' ?></a></h2>
+                                    <h2><a href="/post.php?id=<?= $post['id'] ?? '' ?>"><?= $post['title'] ?? '' ?></a>
+                                    </h2>
                                     <?php if (crop_text($post['text_content'], 1000)): ?>
                                         <p><?= htmlspecialchars(crop_text($post['text_content'], 1000)) . '...' ?></p>
                                         <a class="post-text__more-link" href="/post.php?id=<?= $post['id'] ?? '' ?>">Читать
@@ -77,9 +83,11 @@
 
                                 <?php elseif ($post['class_name'] === 'link'): ?>
                                     <div class="post-link__wrapper">
-                                        <a class="post-link__external" href="<?= htmlspecialchars($post['link']) ?? '' ?>" title="Перейти по ссылке">
+                                        <a class="post-link__external" href="<?= htmlspecialchars($post['link']) ??
+                                        '' ?>" title="Перейти по ссылке">
                                             <div class="post-link__icon-wrapper">
-                                                <img src="https://www.google.com/s2/favicons?domain=<?= htmlspecialchars(str_replace('www.', '', $post['link'] ?? '')) ?>" alt="Иконка">
+                                                <img src="https://www.google.com/s2/favicons?domain=<?= htmlspecialchars(str_replace('www.',
+                                                    '', $post['link'] ?? '')) ?>" alt="Иконка">
                                             </div>
                                             <div class="post-link__info">
                                                 <h3><?= $post['title'] ?? '' ?></h3>
@@ -95,7 +103,9 @@
                             </div>
                             <footer class="post__footer post__indicators">
                                 <div class="post__buttons">
-                                    <a class="post__indicator post__indicator--likes button <?= (isset($liked_post_ids_by_session_user) && in_array($post['id'], $liked_post_ids_by_session_user)) ? 'post__indicator--likes-active' : '' ?>"
+                                    <a class="post__indicator post__indicator--likes button <?= (isset($liked_post_ids_by_session_user)
+                                        && in_array($post['id'], $liked_post_ids_by_session_user))
+                                        ? 'post__indicator--likes-active' : '' ?>"
                                        href="search.php?liked_post_id=<?= $post['id'] ?? '' ?>"
                                        title="Лайк">
                                         <svg class="post__indicator-icon" width="20" height="17">

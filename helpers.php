@@ -23,7 +23,7 @@
  */
 function get_noun_plural_form($number, $one, $two, $many)
 {
-    $number = (int)$number;
+    $number = (int) $number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
 
@@ -85,8 +85,7 @@ function check_youtube_url($url)
     set_error_handler(function () {
     }, E_WARNING);
     $headers
-        = get_headers('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v='
-        . $id);
+        = get_headers('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=' . $id);
     restore_error_handler();
 
     if (!is_array($headers)) {
@@ -116,8 +115,7 @@ function embed_youtube_video($youtube_url, $width, $height)
 
     if ($id) {
         $src = "https://www.youtube.com/embed/" . $id;
-        $res = '<iframe width="' . $width . '" height="' . $height . '" src="'
-            . $src . '" frameborder="0"></iframe>';
+        $res = '<iframe width="' . $width . '" height="' . $height . '" src="' . $src . '" frameborder="0"></iframe>';
     }
 
     return $res;
@@ -137,8 +135,7 @@ function embed_youtube_cover($youtube_url, $width, $height)
 
     if ($id) {
         $src = sprintf("https://img.youtube.com/vi/%s/mqdefault.jpg", $id);
-        $res = '<img alt="youtube cover" width="' . $width . '" height="'
-            . $height . '" src="' . $src . '" />';
+        $res = '<img alt="youtube cover" width="' . $width . '" height="' . $height . '" src="' . $src . '" />';
     }
 
     return $res;
@@ -218,24 +215,19 @@ function print_date_diff($date)
         if ($amount !== 0) {
             switch ($period) {
                 case 'y':
-                    return "$amount " . get_noun_plural_form($amount, 'год',
-                            'года', 'лет');
+                    return "$amount " . get_noun_plural_form($amount, 'год', 'года', 'лет');
                     break;
                 case 'm':
-                    return "$amount " . get_noun_plural_form($amount, 'месяц',
-                            'месяца', 'месяцев');
+                    return "$amount " . get_noun_plural_form($amount, 'месяц', 'месяца', 'месяцев');
                     break;
                 case 'd':
-                    return "$amount " . get_noun_plural_form($amount, 'день',
-                            'дня', 'дней');
+                    return "$amount " . get_noun_plural_form($amount, 'день', 'дня', 'дней');
                     break;
                 case 'h':
-                    return "$amount " . get_noun_plural_form($amount, 'час',
-                            'часа', 'часов');
+                    return "$amount " . get_noun_plural_form($amount, 'час', 'часа', 'часов');
                     break;
                 case 'i':
-                    return "$amount " . get_noun_plural_form($amount, 'минуту',
-                            'минуты', 'минут');
+                    return "$amount " . get_noun_plural_form($amount, 'минуту', 'минуты', 'минут');
                     break;
                 default:
                     return 'несколько секунд';
@@ -247,9 +239,10 @@ function print_date_diff($date)
 /**
  * Получает данные из базы данных
  *
- * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
- * @param string $stmt   - подготовленное выражение в виде строки.
- * @param bool   $is_row - флаг, означающий получение одной строки из таблицы БД.
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает
+ *                           объект с данными, иначе - false.
+ * @param string $stmt       - подготовленное выражение в виде строки.
+ * @param bool   $is_row     - флаг, означающий получение одной строки из таблицы БД.
  *
  * @return array  В зависимости от $is_row одномерный или двумерный массив.
  */
@@ -274,13 +267,14 @@ function get_data($con, $stmt, $is_row)
  */
 function validate_filled($name)
 {
-    if (empty($_POST[$name])) {
+    if (empty(trim($_POST[$name]))) {
         return "Это поле должно быть заполнено";
     }
 }
 
 /**
- * Сравнивает длину строки с максимально допустимой длиной и возвращает текст ошибки, если длина больше максимально допустимой.
+ * Сравнивает длину строки с максимально допустимой длиной и возвращает текст ошибки, если длина больше максимально
+ * допустимой.
  *
  * @param string $name       Значение атрибута 'name' поля формы
  * @param int    $max_length Максимальная длина строки
@@ -297,7 +291,8 @@ function validate_max_length($name, $max_length)
 }
 
 /**
- * Сравнивает длину имени файла изображения с максимально допустимой длиной и возвращает текст ошибки, если длина больше максимально допустимой.
+ * Сравнивает длину имени файла изображения с максимально допустимой длиной и возвращает текст ошибки, если длина
+ * больше максимально допустимой.
  *
  * @param string $name       Значение атрибута 'name' поля формы
  * @param int    $max_length Максимальная длина строки
@@ -314,7 +309,8 @@ function validate_max_image_name_length($name, $max_length)
 }
 
 /**
- * Сравнивает длину введённого комментария с минимально допустимой длиной и возвращает текст ошибки, если длина меньше минимально допустимой.
+ * Сравнивает длину введённого комментария с минимально допустимой длиной и возвращает текст ошибки, если длина меньше
+ * минимально допустимой.
  *
  * @param string $name       Значение атрибута 'name' поля формы
  * @param int    $min_length Минимальная длина строки
@@ -363,8 +359,9 @@ function validate_email($name)
 /**
  * Проверяет введённый e-mail на уникальность, если не уникален, выдаёт текст ошибки.
  *
- * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает объект с данными, иначе - false.
- * @param string $name Значение атрибута 'name' поля формы
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает
+ *                           объект с данными, иначе - false.
+ * @param string $name       Значение атрибута 'name' поля формы
  *
  * @return string
  */
@@ -397,7 +394,8 @@ function validate_password($password_repeat, $password)
 }
 
 /**
- * Проверяет тип файла, загружаемого по ссылке. Если это не изображение, возвращает текст ошибки, иначе проверяет содежримое файла.
+ * Проверяет тип файла, загружаемого по ссылке. Если это не изображение, возвращает текст ошибки, иначе проверяет
+ * содежримое файла.
  *
  * @param string $name Значение атрибута 'name' поля формы
  *
@@ -410,7 +408,7 @@ function validate_image_type_from_url($name)
         '.png',
         '.jpg',
         '.jpeg',
-        '.gif'
+        '.gif',
     ];
 
     $i = 0;
@@ -424,7 +422,8 @@ function validate_image_type_from_url($name)
 }
 
 /**
- * Проверяет содержимое файла, загружаемого по ссылке. Если не находит изображение, возвращает текст ошибки, иначе загружает изображение в папку /uploads.
+ * Проверяет содержимое файла, загружаемого по ссылке. Если не находит изображение, возвращает текст ошибки, иначе
+ * загружает изображение в папку /uploads.
  *
  * @param string $name Значение атрибута 'name' поля формы
  *
@@ -432,13 +431,9 @@ function validate_image_type_from_url($name)
  */
 function validate_image_url_content($name)
 {
-    $content = null;
-    try {
-        $content = file_get_contents($_POST[$name]);
-    } catch (Exception $e) {
-        return "Не удалось загрузить файл. Пожалуйста, проверьте ещё раз указанный адрес.";
-    }
-
+    set_error_handler(function () { }, E_ALL);
+    $content = file_get_contents($_POST[$name]);
+    restore_error_handler();
     if (!$content) {
         return "Не удалось загрузить файл. Пожалуйста, проверьте ещё раз указанный адрес.";
     }
@@ -459,7 +454,8 @@ function move_image_from_url($name)
 }
 
 /**
- * Проверяет тип файла, загружаемого с компьютера. Если это не изображение, возвращает текст ошибки, иначе загружает изображение в папку /uploads.
+ * Проверяет тип файла, загружаемого с компьютера. Если это не изображение, возвращает текст ошибки, иначе загружает
+ * изображение в папку /uploads.
  *
  * @param string $name Значение атрибута 'name' поля формы
  *
@@ -471,7 +467,7 @@ function validate_image_type($name)
     $valid_types = [
         'image/png',
         'image/jpeg',
-        'image/gif'
+        'image/gif',
     ];
     $i = 0;
     while ($i < count($valid_types)) {
@@ -484,7 +480,8 @@ function validate_image_type($name)
 }
 
 /**
- * Перемещает загруженное с компьютера изображение из временной папки в папку /uploads и возвращает false. Если перемещение не удалось, возвращает текст ошибки.
+ * Перемещает загруженное с компьютера изображение из временной папки в папку /uploads и возвращает false. Если
+ * перемещение не удалось, возвращает текст ошибки.
  *
  * @param string $name Значение атрибута 'name' поля формы
  *
@@ -520,7 +517,8 @@ function get_tags_from_post($name)
 }
 
 /**
- * Сравнивает длину каждого тега с максимально допустимой длиной и возвращает текст ошибки, если длина хотя бы одного из тегов больше максимально допустимой.
+ * Сравнивает длину каждого тега с максимально допустимой длиной и возвращает текст ошибки, если длина хотя бы одного
+ * из тегов больше максимально допустимой.
  *
  * @param string $name       Значение атрибута 'name' поля формы
  * @param int    $max_length Максимальная длина строки
@@ -583,11 +581,9 @@ function send_subscribe_notification($follower, $following)
         'subject'          => 'У вас новый подписчик',
         'sender_email'     => ['keks@phpdemo.ru' => 'Readme'],
         'addressee_emails' => [$following['email']],
-        'message_content'  => 'Здравствуйте, ' . $following['login']
-            . '. На вас подписался новый пользователь ' . $follower['login']
-            . '. Вот ссылка на его профиль: ' . ((!empty($_SERVER['HTTPS']))
-                ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST']
-            . '/profile.php?id=' . $follower['id'],
+        'message_content'  => 'Здравствуйте, ' . $following['login'] . '. На вас подписался новый пользователь '
+            . $follower['login'] . '. Вот ссылка на его профиль: ' . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http')
+            . '://' . $_SERVER['HTTP_HOST'] . '/profile.php?id=' . $follower['id'],
     ];
 
     $message = new Swift_Message();
@@ -623,17 +619,13 @@ function send_new_post_notification($post, $followers)
 
     foreach ($followers as $follower) {
         $email = [
-            'subject'          => 'Новая публикация от пользователя '
-                . $_SESSION['user']['login'],
+            'subject'          => 'Новая публикация от пользователя ' . $_SESSION['user']['login'],
             'sender_email'     => ['keks@phpdemo.ru' => 'Readme'],
             'addressee_emails' => [$follower['email']],
-            'message_content'  => 'Здравствуйте, ' . $follower['login']
-                . '. Пользователь ' . $_SESSION['user']['login']
+            'message_content'  => 'Здравствуйте, ' . $follower['login'] . '. Пользователь ' . $_SESSION['user']['login']
                 . ' только что опубликовал новую запись "' . $post['title']
-                . '". Посмотрите её на странице пользователя: '
-                . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://'
-                . $_SERVER['HTTP_HOST'] . '/profile.php?id='
-                . $_SESSION['user']['id'],
+                . '". Посмотрите её на странице пользователя: ' . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http')
+                . '://' . $_SERVER['HTTP_HOST'] . '/profile.php?id=' . $_SESSION['user']['id'],
         ];
 
         $message = new Swift_Message();
@@ -665,27 +657,25 @@ function build_post_data($current_tab, &$db_data)
 {
     if ($current_tab === 'photo') {
         if (isset($_FILES['photo-userpic-file']['name'])) {
-            $db_post_image = '/uploads/' . time() . '-'
-                . $_FILES['photo-userpic-file']['name'];
+            $db_post_image = '/uploads/' . time() . '-' . $_FILES['photo-userpic-file']['name'];
         } else {
-            $db_post_image = '/uploads'
-                . strrchr(htmlspecialchars($_POST['photo-url']), '/');
+            $db_post_image = '/uploads' . strrchr(htmlspecialchars($_POST['photo-url']), '/');
         }
         $db_data += [
             'image'   => $db_post_image,
-            'type_id' => 1
+            'type_id' => 1,
         ];
     } elseif ($current_tab === 'video') {
         $db_post_video = htmlspecialchars($_POST['video-url']);
         $db_data += [
             'video'   => $db_post_video,
-            'type_id' => 2
+            'type_id' => 2,
         ];
     } elseif ($current_tab === 'text') {
         $db_post_text_content = htmlspecialchars($_POST['text-post']);
         $db_data += [
             'text_content' => $db_post_text_content,
-            'type_id'      => 3
+            'type_id'      => 3,
         ];
     } elseif ($current_tab === 'quote') {
         $db_post_text_content = htmlspecialchars($_POST['quote-text']);
@@ -693,13 +683,13 @@ function build_post_data($current_tab, &$db_data)
         $db_data += [
             'text_content' => $db_post_text_content,
             'quote_author' => $db_post_quote_author,
-            'type_id'      => 4
+            'type_id'      => 4,
         ];
     } else {
         $db_post_link = htmlspecialchars($_POST['link-url']);
         $db_data += [
             'link'    => $db_post_link,
-            'type_id' => 5
+            'type_id' => 5,
         ];
     }
     return $db_data;

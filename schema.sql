@@ -62,7 +62,8 @@ CREATE TABLE messages
   dt_add      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   content     TEXT NOT NULL,
   sender_id   INT,
-  receiver_id INT
+  receiver_id INT,
+  is_read     INT DEFAULT 0
 );
 
 CREATE TABLE tags
