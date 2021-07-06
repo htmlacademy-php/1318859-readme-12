@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $bd_post_user_id = $_SESSION['user']['id'];
         $db_data = [
             'title'   => $db_post_title,
-            'user_id' => $bd_post_user_id
+            'user_id' => $bd_post_user_id,
         ];
         build_post_data($current_tab, $db_data);
         $new_post = add_post($con, $db_data);
@@ -69,12 +69,13 @@ $main_content = include_template('adding-post.php', [
     'errors'      => $errors ?? '',
 ]);
 $layout = include_template('layout.php', [
-    'main_content' => $main_content,
-    'user_name'    => $_SESSION['user']['login'],
-    'user_avatar'  => $_SESSION['user']['avatar'],
-    'user_id'      => $_SESSION['user']['id'],
-    'title'        => $title,
-    'nav_links'    => $configs['nav_links'],
+    'main_content'                       => $main_content,
+    'user_name'                          => $_SESSION['user']['login'],
+    'user_avatar'                        => $_SESSION['user']['avatar'],
+    'user_id'                            => $_SESSION['user']['id'],
+    'title'                              => $title,
+    'nav_links'                          => $configs['nav_links'],
+    'count_session_user_unread_messages' => count_user_unread_messages($con, intval($_SESSION['user']['id'])),
 ]);
 
 echo $layout;

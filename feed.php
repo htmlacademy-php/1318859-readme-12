@@ -15,9 +15,9 @@ $title = 'readme: моя лента';
 $tabs = [
     'photo' => 'фото',
     'video' => 'видео',
-    'text' => 'текст',
+    'text'  => 'текст',
     'quote' => 'цитата',
-    'link' => 'ссылка',
+    'link'  => 'ссылка',
 ];
 
 foreach ($tabs as $type => $name) {
@@ -59,22 +59,23 @@ if (isset($_GET['reposted_post_id'])) {
 }
 
 $main_content = include_template('my-feed.php', [
-    'current_tab_posts' => $current_tab_posts,
-    'tabs' => $tabs,
-    'user_id' => $user_id,
-    'current_tab' => $current_tab,
-    'con' => $con,
-    'liked_post_ids_by_session_user' => $liked_post_ids_by_session_user,
+    'current_tab_posts'                 => $current_tab_posts,
+    'tabs'                              => $tabs,
+    'user_id'                           => $user_id,
+    'current_tab'                       => $current_tab,
+    'con'                               => $con,
+    'liked_post_ids_by_session_user'    => $liked_post_ids_by_session_user,
     'reposted_post_ids_by_session_user' => $reposted_post_ids_by_session_user,
 ]);
 
 $layout = include_template('layout.php', [
-    'main_content' => $main_content,
-    'user_name' => $_SESSION['user']['login'],
-    'user_avatar' => $_SESSION['user']['avatar'],
-    'user_id' => $_SESSION['user']['id'],
-    'title' => $title,
-    'nav_links' => $configs['nav_links'],
+    'main_content'                       => $main_content,
+    'user_name'                          => $_SESSION['user']['login'],
+    'user_avatar'                        => $_SESSION['user']['avatar'],
+    'user_id'                            => $_SESSION['user']['id'],
+    'title'                              => $title,
+    'nav_links'                          => $configs['nav_links'],
+    'count_session_user_unread_messages' => count_user_unread_messages($con, intval($_SESSION['user']['id'])),
 ]);
 
 echo $layout;

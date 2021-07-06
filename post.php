@@ -86,22 +86,22 @@ if (isset($_GET["id"]) && in_array($_GET["id"], $existed_ids)) {
     $count_of_shown_post_comments = min($count_of_post_comments, NUMBER_OF_SHOWN_POST_COMMENTS);
 
     $main_content = include_template('post-detail.php', [
-        'con' => $con,
-        'post' => $post,
-        'form' => $form,
-        'errors' => $errors ?? '',
-        'self_page' => $self_page,
-        'id' => $id,
-        'amount_of_user_posts' => $amount_of_user_posts,
-        'author' => $author,
-        'amount_of_user_followers' => $amount_of_user_followers,
-        'post_tags' => $post_tags,
-        'subscribe' => $subscribe,
-        'views_count' => $views_count,
+        'con'                            => $con,
+        'post'                           => $post,
+        'form'                           => $form,
+        'errors'                         => $errors ?? '',
+        'self_page'                      => $self_page,
+        'id'                             => $id,
+        'amount_of_user_posts'           => $amount_of_user_posts,
+        'author'                         => $author,
+        'amount_of_user_followers'       => $amount_of_user_followers,
+        'post_tags'                      => $post_tags,
+        'subscribe'                      => $subscribe,
+        'views_count'                    => $views_count,
         'liked_post_ids_by_session_user' => $liked_post_ids_by_session_user,
-        'post_comments' => $post_comments,
-        'count_of_post_comments' => $count_of_post_comments,
-        'count_of_shown_post_comments' => $count_of_shown_post_comments,
+        'post_comments'                  => $post_comments,
+        'count_of_post_comments'         => $count_of_post_comments,
+        'count_of_shown_post_comments'   => $count_of_shown_post_comments,
     ]);
 } else {
     header('HTTP/1.0 404 not found');
@@ -109,12 +109,13 @@ if (isset($_GET["id"]) && in_array($_GET["id"], $existed_ids)) {
 }
 
 $layout = include_template('layout.php', [
-    'main_content' => $main_content,
-    'user_name' => $_SESSION['user']['login'],
-    'user_avatar' => $_SESSION['user']['avatar'],
-    'user_id' => $_SESSION['user']['id'],
-    'title' => $title,
-    'nav_links' => $configs['nav_links'],
+    'main_content'                       => $main_content,
+    'user_name'                          => $_SESSION['user']['login'],
+    'user_avatar'                        => $_SESSION['user']['avatar'],
+    'user_id'                            => $_SESSION['user']['id'],
+    'title'                              => $title,
+    'nav_links'                          => $configs['nav_links'],
+    'count_session_user_unread_messages' => count_user_unread_messages($con, intval($_SESSION['user']['id'])),
 ]);
 
 echo $layout;

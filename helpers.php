@@ -237,6 +237,38 @@ function print_date_diff($date)
 }
 
 /**
+ * Выводит время (или дату) последнего сообщения
+ *
+ * @param string $last_message_time - дата в формате 'Y-m-d H:i:s'
+ *
+ * @return string Текст в виде строки
+ */
+function print_last_message_date($last_message_time)
+{
+    $translate_months = [
+        'Jan' => ' Янв.',
+        'Feb' => ' Фев.',
+        'Mar' => ' Марта',
+        'Apr' => ' Апр.',
+        'May' => ' Мая',
+        'Jun' => ' Июня',
+        'Jul' => ' Июля',
+        'Aug' => ' Авг.',
+        'Sep' => ' Сент.',
+        'Okt' => ' Окт.',
+        'Nov' => ' Нояб.',
+        'Dec' => ' Дек.',
+    ];
+    $last_message_date = date_create($last_message_time);
+    $today_start = date_create('today');
+    if ($last_message_date >= $today_start) {
+        return date_format($last_message_date, 'H:i');
+    }
+    $en_month = date_format($last_message_date, 'M');
+    return date_format($last_message_date, "j" . $translate_months[$en_month]);
+}
+
+/**
  * Получает данные из базы данных
  *
  * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает

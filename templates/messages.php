@@ -5,53 +5,52 @@
         <div class="messages__contacts">
 
             <ul class="messages__contacts-list tabs__list">
-                <?php if (isset($_GET['id'])): ?>
-                    <?php if (!in_array(intval($_GET["id"]), $existed_interlocutors_ids)): ?>
-                        <li class="messages__contacts-item">
-                            <a class="messages__contacts-tab tabs__item messages__contacts-tab--active tabs__item--active" href="message.php?id=<?= $id
-                            ?? '' ?>">
-                                <div class="messages__avatar-wrapper">
-                                    <img class="messages__avatar" src="<?= $user['avatar'] ??
-                                    '' ?>" alt="Аватар пользователя">
+                <?php if ((isset($_GET['id'])) && (!in_array(intval($_GET["id"]), $existed_interlocutors_ids))): ?>
+                    <li class="messages__contacts-item">
+                        <a class="messages__contacts-tab tabs__item messages__contacts-tab--active tabs__item--active" href="message.php?id=<?= $id
+                        ?? '' ?>">
+                            <div class="messages__avatar-wrapper">
+                                <img class="messages__avatar" src="<?= $current_interlocutor['avatar'] ??
+                                '' ?>" alt="Аватар пользователя">
+                            </div>
+                            <div class="messages__info">
+                                <span class="messages__contact-name"><?= $current_interlocutor['login'] ?></span>
+                                <div class="messages__preview">
                                 </div>
-                                <div class="messages__info">
-                                    <span class="messages__contact-name"><?= $user['login'] ?></span>
-                                    <div class="messages__preview">
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    <?php endif; ?>
-                    <?php foreach ($interlocutors as $interlocutor): ?>
-                        <li class="messages__contacts-item <?php if ($interlocutor['unread_messages']
-                            > 0
-                        ): ?>messages__contacts-item--new<?php endif; ?>">
-                            <a class="messages__contacts-tab tabs__item <?= ($interlocutor['user_id'] === $id)
-                                ? "messages__contacts-tab--active tabs__item--active"
-                                : "" ?>" href="message.php?id=<?= $interlocutor['user_id'] ?? '' ?>">
-                                <div class="messages__avatar-wrapper">
-                                    <img class="messages__avatar" src="<?= $interlocutor['avatar'] ??
-                                    '' ?>" alt="Аватар пользователя">
-                                    <?php if ($interlocutor['unread_messages'] > 0): ?>
-                                        <i class="messages__indicator"><?= $interlocutor['unread_messages'] ?? '' ?></i>
-                                    <?php endif; ?>
-                                </div>
-                                <div class="messages__info">
-                                    <span class="messages__contact-name"><?= $interlocutor['login'] ?? '' ?></span>
-                                    <div class="messages__preview">
-                                        <p class="messages__preview-text">
-                                            Озеро Байкал – огромное
-                                        </p>
-                                        <time class="messages__preview-time" datetime="<?= date_format(date_create($interlocutor['last_message_time']
-                                            ?? ''), 'Y-m-d'); ?>">
-                                            14:40
-                                        </time>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    <?php endforeach; ?>
+                            </div>
+                        </a>
+                    </li>
                 <?php endif; ?>
+                <?php foreach ($interlocutors as $interlocutor): ?>
+                    <li class="messages__contacts-item <?php if ($interlocutor['unread_messages']
+                        > 0
+                    ): ?>messages__contacts-item--new<?php endif; ?>">
+                        <a class="messages__contacts-tab tabs__item <?= (isset($id) && $interlocutor['user_id'] === $id)
+                            ? "messages__contacts-tab--active tabs__item--active"
+                            : "" ?>" href="message.php?id=<?= $interlocutor['user_id'] ?? '' ?>">
+                            <div class="messages__avatar-wrapper">
+                                <img class="messages__avatar" src="<?= $interlocutor['avatar'] ??
+                                '' ?>" alt="Аватар пользователя">
+                                <?php if ($interlocutor['unread_messages'] > 0): ?>
+                                    <i class="messages__indicator"><?= $interlocutor['unread_messages'] ?? '' ?></i>
+                                <?php endif; ?>
+                            </div>
+                            <div class="messages__info">
+                                <span class="messages__contact-name"><?= $interlocutor['login'] ?? '' ?></span>
+                                <div class="messages__preview">
+                                    <p class="messages__preview-text">
+                                        <?= $interlocutor['is_last_message_mine'] ? 'Вы: ' : '' ?>
+                                        <?= $interlocutor['last_message'] ?? '' ?>
+                                    </p>
+                                    <time class="messages__preview-time" datetime="<?= date_format(date_create($interlocutor['last_message_time']
+                                        ?? ''), 'Y-m-d'); ?>">
+                                        <?= print_last_message_date($interlocutor['last_message_time']) ?>
+                                    </time>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                <?php endforeach; ?>
                 <!--<li class="messages__contacts-item messages__contacts-item--new">
                     <a class="messages__contacts-tab tabs__item" href="#">
                         <div class="messages__avatar-wrapper">

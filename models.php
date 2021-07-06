@@ -770,7 +770,7 @@ function get_interlocutors_of_user($con, $user_id)
 }
 
 /**
- * Возвращает количество непрочитанных сообщений от пользователя с идентификатором $sender_id к пользователь с
+ * Возвращает количество непрочитанных сообщений от пользователя с идентификатором $sender_id к пользователю с
  * идентификатором $receiver_id.
  *
  * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает
@@ -787,4 +787,41 @@ function count_unread_messages($con, $sender_id, $receiver_id)
     $result = mysqli_query($con, $sql);
     $unread_messages_count = mysqli_num_rows($result);
     return $unread_messages_count;
+}
+
+/**
+ * Возвращает количество всех сообщений непрочитанных пользователем с идентификатором $receiver_id.
+ *
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает
+ *                           объект с данными, иначе - false.
+ * @param int $receiver_id   - идентификатор получателя.
+ *
+ * @return array
+ */
+function count_user_unread_messages($con, $receiver_id)
+{
+    $sql
+        = "SELECT id FROM `messages` WHERE `receiver_id` = $receiver_id AND `is_read` = 0;";
+    $result = mysqli_query($con, $sql);
+    $unread_messages_count = mysqli_num_rows($result);
+    return $unread_messages_count;
+}
+
+/**
+ * Меняет значение is_read у всех непрочитанных сообщений от пользователя с идентификатором $sender_id к пользователю с
+ * идентификатором $receiver_id со значения 0 на 1.
+ *
+ * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает
+ *                           объект с данными, иначе - false.
+ * @param int $post_id       - идентификатор поста.
+ */
+function read_all_user_messages($con, $sender_id, $receiver_id)
+{
+    $sql
+        = "UPDATE `messages` SET `is_read` = 1 WHERE `is_read` = 0 AND `sender_id` = $sender_id AND `receiver_id`= $receiver_id;";
+    $result = mysqli_query($con, $sql);
+    if (!$result) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+    }
 }

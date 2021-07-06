@@ -15,16 +15,16 @@ $types = get_post_types($con);
 $sort_types = [
     'popular' => [
         'db_property' => 'views_count',
-        'title' => 'Популярность'
+        'title'       => 'Популярность',
     ],
-    'likes' => [
+    'likes'   => [
         'db_property' => 'likes_count',
-        'title' => 'Лайки'
+        'title'       => 'Лайки',
     ],
-    'date' => [
+    'date'    => [
         'db_property' => 'dt_add',
-        'title' => 'Дата'
-    ]
+        'title'       => 'Дата',
+    ],
 ];
 
 $page_number = 1;
@@ -76,24 +76,25 @@ if (isset($_GET["page_num"]) && (intval($_GET["page_num"]) < 1 || intval($_GET["
     $main_content = include_template('404.php');
 } else {
     $main_content = include_template('main.php', [
-        'types' => $types,
-        'sort_types' => $sort_types,
-        'posts' => $posts,
-        'type_id' => $type_id,
-        'page_number' => $page_number,
-        'max_page' => $max_page,
+        'types'                          => $types,
+        'sort_types'                     => $sort_types,
+        'posts'                          => $posts,
+        'type_id'                        => $type_id,
+        'page_number'                    => $page_number,
+        'max_page'                       => $max_page,
         'liked_post_ids_by_session_user' => $liked_post_ids_by_session_user,
-        'con' => $con,
+        'con'                            => $con,
     ]);
 }
 
 $layout = include_template('layout.php', [
-    'main_content' => $main_content,
-    'user_name' => $_SESSION['user']['login'],
-    'user_avatar' => $_SESSION['user']['avatar'],
-    'user_id' => $_SESSION['user']['id'],
-    'title' => $title,
-    'nav_links' => $configs['nav_links'],
+    'main_content'                       => $main_content,
+    'user_name'                          => $_SESSION['user']['login'],
+    'user_avatar'                        => $_SESSION['user']['avatar'],
+    'user_id'                            => $_SESSION['user']['id'],
+    'title'                              => $title,
+    'nav_links'                          => $configs['nav_links'],
+    'count_session_user_unread_messages' => count_user_unread_messages($con, intval($_SESSION['user']['id'])),
 ]);
 
 echo $layout;

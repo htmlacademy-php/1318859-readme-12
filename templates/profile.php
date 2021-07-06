@@ -31,7 +31,8 @@
                             <a class="profile__user-button user__button user__button--subscription button button--quartz" href="profile.php?id=<?= $user['id'] ?? '' ?>&unsubscribed">
                                 Отписаться
                             </a>
-                            <a class="profile__user-button user__button user__button--writing button button--green" href="#">Сообщение</a>
+                            <a class="profile__user-button user__button user__button--writing button button--green" href="message.php?id=<?= $user['id']
+                            ?? '' ?>">Сообщение</a>
                         <?php else: ?>
                             <a class="profile__user-button user__button user__button--subscription button button--main" href="profile.php?id=<?= $user['id'] ?? '' ?>&subscribed">
                                 Подписаться
