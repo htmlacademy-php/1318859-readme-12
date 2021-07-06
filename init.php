@@ -12,24 +12,24 @@ if ($con === false) {
 mysqli_set_charset($con, "utf8");
 
 $configs = [
-    'con' => $con,
-    'current_tab' => (isset($_GET["type"])) ? $_GET["type"] : 'text',
+    'con'                => $con,
+    'current_tab'        => (isset($_GET["type"])) ? $_GET["type"] : 'text',
     'min_comment_length' => 4,
-    'nav_links' => [
-        'popular' => [
+    'nav_links'          => [
+        'popular'  => [
             'class_name' => 'popular',
-            'href' => 'popular.php',
-            'title' => 'Популярный контент'
+            'href'       => 'popular.php',
+            'title'      => 'Популярный контент',
         ],
-        'feed' => [
+        'feed'     => [
             'class_name' => 'feed',
-            'href' => 'feed.php',
-            'title' => 'Моя лента'
+            'href'       => 'feed.php',
+            'title'      => 'Моя лента',
         ],
         'messages' => [
             'class_name' => 'messages',
-            'href' => '#',
-            'title' => 'Личные сообщения'
+            'href'       => '#',
+            'title'      => 'Личные сообщения',
         ],
-    ]
+    ],
 ];

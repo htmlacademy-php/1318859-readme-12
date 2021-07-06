@@ -1,33 +1,33 @@
 <?php
 return [
-    'title' => 'Форма добавления ссылки',
-    'name' => 'link-form',
+    'title'  => 'Форма добавления ссылки',
+    'name'   => 'link-form',
     'inputs' => [
         [
-            'title' => 'Заголовок',
-            'required' => true,
-            'type' => 'text',
-            'name' => 'heading',
+            'title'       => 'Заголовок',
+            'required'    => true,
+            'type'        => 'text',
+            'name'        => 'heading',
             'placeholder' => 'Введите заголовок',
-            'field_type' => 'input',
-            'max_length' => 200,
-            'checks' => [
+            'field_type'  => 'input',
+            'max_length'  => 200,
+            'checks'      => [
                 0 => function ($input, $configs) {
                     return validate_filled($configs['current_tab'] . '-' . $input['name']);
                 },
                 1 => function ($input, $configs) {
                     return validate_max_length($configs['current_tab'] . '-' . $input['name'], $input['max_length']);
-                }
+                },
             ],
         ],
         [
-            'title' => 'Ссылка',
-            'required' => true,
-            'type' => 'url',
-            'name' => 'url',
+            'title'      => 'Ссылка',
+            'required'   => true,
+            'type'       => 'url',
+            'name'       => 'url',
             'field_type' => 'input',
             'max_length' => 250,
-            'checks' => [
+            'checks'     => [
                 0 => function ($input, $configs) {
                     return validate_filled($configs['current_tab'] . '-' . $input['name']);
                 },
@@ -36,17 +36,17 @@ return [
                 },
                 2 => function ($input, $configs) {
                     return validate_url($configs['current_tab'] . '-' . $input['name']);
-                }
+                },
             ],
         ],
         [
-            'title' => 'Теги',
-            'required' => false,
-            'type' => 'text',
-            'name' => 'tags',
+            'title'       => 'Теги',
+            'required'    => false,
+            'type'        => 'text',
+            'name'        => 'tags',
             'placeholder' => 'Введите теги',
-            'field_type' => 'input',
-            'checks' => [],
+            'field_type'  => 'input',
+            'checks'      => [],
         ],
     ],
 ];

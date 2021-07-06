@@ -15,8 +15,7 @@ return [
                     return validate_filled($input['name']);
                 },
                 1 => function ($input, $configs) {
-                    return is_correct_min_length_comment($input['name'],
-                        $configs['min_comment_length']);
+                    return is_correct_min_length_comment($input['name'], $configs['min_comment_length']);
                 },
             ],
         ],

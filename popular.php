@@ -39,8 +39,13 @@ if (isset($_GET["sort"])) {
     if (isset($_GET["type_id"])) {
         $type_id = intval($_GET["type_id"]);
         $amount_of_posts = count(get_filtered_posts($con, 't.id', $type_id, null));
-        $posts = get_filtered_posts($con, 't.id', $type_id, $offset . ',' . $limit,
-            $sort_types[$_GET["sort"]]["db_property"]);
+        $posts = get_filtered_posts(
+            $con,
+            't.id',
+            $type_id,
+            $offset . ',' . $limit,
+            $sort_types[$_GET["sort"]]["db_property"]
+        );
     } else {
         $type_id = '';
         $amount_of_posts = count(get_filtered_posts($con, '', null, null));

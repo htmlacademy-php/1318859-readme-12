@@ -15,8 +15,11 @@ $messages = get_messages_of_user($con, intval($_SESSION['user']['id']));
 $interlocutors = get_interlocutors_of_user($con, intval($_SESSION['user']['id']));
 
 foreach ($interlocutors as $key => $interlocutor) {
-    $interlocutors[$key]['unread_messages'] = count_unread_messages($con, $interlocutor['user_id'],
-        intval($_SESSION['user']['id']));
+    $interlocutors[$key]['unread_messages'] = count_unread_messages(
+        $con,
+        $interlocutor['user_id'],
+        intval($_SESSION['user']['id'])
+    );
     foreach ($messages as $message) {
         if ($message['dt_add'] === $interlocutor['last_message_time']
             && $message['sender_id'] === $interlocutor['user_id']

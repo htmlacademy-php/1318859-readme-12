@@ -31,7 +31,6 @@ if (isset($_GET['type']) && $_GET['type'] === 'tag') {
     $search_line_text = '';
 } else {
     if ($first_symbol === '#') {
-
         $posts = get_posts_with_tag($con, substr($search, 1));
         $result_text = $search;
         $search_line_text = '';

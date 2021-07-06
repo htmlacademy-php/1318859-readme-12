@@ -16,7 +16,7 @@ return [
             'checks'      => [
                 0 => function ($input) {
                     return validate_filled($input['name']);
-                }
+                },
             ],
         ],
         [
@@ -32,7 +32,7 @@ return [
             'checks'      => [
                 0 => function ($input) {
                     return validate_filled($input['name']);
-                }
+                },
             ],
         ],
     ],

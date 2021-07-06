@@ -94,7 +94,8 @@ function get_filtered_posts($con, $filtered_property, $value, $limit, $order = '
     } else {
         $sql_order = "";
     }
-    $sql = "SELECT p.*, u.login, u.avatar, t.class_name, (SELECT COUNT(*) FROM `likes` l WHERE l.post_id = p.id)  AS likes_count FROM `posts` p 
+    $sql = "SELECT p.*, u.login, u.avatar, t.class_name, 
+       (SELECT COUNT(*) FROM `likes` l WHERE l.post_id = p.id) AS likes_count FROM `posts` p 
             JOIN `users` u ON p.user_id = u.id 
             JOIN `types` t ON p.type_id = t.id 
             $sql_filter $sql_order $sql_limit;";
@@ -378,7 +379,6 @@ function add_tags($con, $post_tags, $db_tags, $post_id)
                     $post_tags_ids[] = $db_tag['id'];
                 }
             }
-
         }
     }
     foreach ($post_tags_ids as $id) {
@@ -531,7 +531,8 @@ function get_posts_of_following_users($con, $user_id)
  */
 function get_liked_posts_of_user($con, $user_id)
 {
-    $sql = "SELECT p.*, u.login, u.avatar, l.user_id AS like_user_id, l.dt_add AS like_dt_add, t.class_name FROM `posts` p
+    $sql = "SELECT p.*, u.login, u.avatar, l.user_id AS like_user_id, l.dt_add AS like_dt_add, t.class_name 
+            FROM `posts` p
             JOIN `likes` l ON l.post_id = p.id
             JOIN `users` u ON u.id = l.user_id
             JOIN `types` t ON t.id = p.type_id
@@ -783,7 +784,8 @@ function get_interlocutors_of_user($con, $user_id)
 function count_unread_messages($con, $sender_id, $receiver_id)
 {
     $sql
-        = "SELECT id FROM `messages` WHERE `sender_id` = $sender_id AND `receiver_id` = $receiver_id AND `is_read` = 0;";
+        = "SELECT id FROM `messages` 
+           WHERE `sender_id` = $sender_id AND `receiver_id` = $receiver_id AND `is_read` = 0;";
     $result = mysqli_query($con, $sql);
     $unread_messages_count = mysqli_num_rows($result);
     return $unread_messages_count;
@@ -818,7 +820,8 @@ function count_user_unread_messages($con, $receiver_id)
 function read_all_user_messages($con, $sender_id, $receiver_id)
 {
     $sql
-        = "UPDATE `messages` SET `is_read` = 1 WHERE `is_read` = 0 AND `sender_id` = $sender_id AND `receiver_id`= $receiver_id;";
+        = "UPDATE `messages` SET `is_read` = 1 
+           WHERE `is_read` = 0 AND `sender_id` = $sender_id AND `receiver_id`= $receiver_id;";
     $result = mysqli_query($con, $sql);
     if (!$result) {
         $error = mysqli_error($con);

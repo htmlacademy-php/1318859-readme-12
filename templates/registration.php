@@ -7,25 +7,27 @@
         <form class="registration__form form" action="reg.php" method="post" enctype="multipart/form-data">
             <div class="form__text-inputs-wrapper">
                 <div class="form__text-inputs">
-                    <?php foreach ($form['inputs'] as $input): ?>
-                        <?php if ($input['field_type'] === 'input'): ?>
+                    <?php foreach ($form['inputs'] as $input) : ?>
+                        <?php if ($input['field_type'] === 'input') : ?>
                             <div class="registration__input-wrapper form__input-wrapper">
                                 <label class="registration__label form__label" for="<?= 'registration-' . $input['name']
                                 ?? '' ?>"><?= $input['title'] ?? '' ?>
-                                    <?php if ($input['required']): ?>
+                                    <?php if ($input['required']) : ?>
                                         <span class="form__input-required">*</span>
                                     <?php endif; ?>
                                 </label>
-                                <div class="form__input-section <?php if (!empty($errors[$form['name']])
-                                    && isset($errors[$form['name']][$input['name']])
-                                ): ?>form__input-section--error<?php endif; ?>">
+                                <div class="form__input-section
+                                <?php if (!empty($errors[$form['name']])
+                                    && isset($errors[$form['name']][$input['name']])) : ?>
+                                    form__input-section--error
+                                <?php endif; ?>">
                                     <input class="registration__input form__input" id="<?= 'registration-'
                                     . $input['name'] ?? '' ?>" type="<?= $input['type'] ??
                                     '' ?>" name="<?= $input['name'] ?? '' ?>" value="<?= $_POST[$input['name']] ??
                                     ''; ?>" placeholder="<?= $input['placeholder'] ?? '' ?>">
                                     <?php if (!empty($errors[$form['name']])
                                         && isset($errors[$form['name']][$input['name']])
-                                    ): ?>
+                                    ) : ?>
                                         <button class="form__error-button button" type="button">
                                             !<span class="visually-hidden">Информация об ошибке</span>
                                         </button>
@@ -42,11 +44,11 @@
                     <?php endforeach; ?>
                 </div>
 
-                <?php if (!empty($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])): ?>
+                <?php if (!empty($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])) : ?>
                     <div class="form__invalid-block">
                         <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                         <ul class="form__invalid-list">
-                            <?php foreach ($form['inputs'] as $input): ?>
+                            <?php foreach ($form['inputs'] as $input) : ?>
                                 <li class="form__invalid-item">
                                     <?= (isset($input['title'])) ? $input['title'] . '. '
                                         : '' ?><?= $errors[$form['name']][$input['name']]; ?>
@@ -58,8 +60,8 @@
             </div>
 
             <div class="registration__input-file-container form__input-container form__input-container--file">
-                <?php foreach ($form['inputs'] as $input): ?>
-                    <?php if ($input['field_type'] === 'input-file'): ?>
+                <?php foreach ($form['inputs'] as $input) : ?>
+                    <?php if ($input['field_type'] === 'input-file') : ?>
                         <div class="registration__input-file-wrapper form__input-file-wrapper">
                             <div class="registration__file-zone form__file-zone dropzone">
                                 <input class="registration__input-file form__input-file" id="<?= $input['name'] ??
