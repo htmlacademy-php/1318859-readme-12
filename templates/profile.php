@@ -72,7 +72,7 @@
                                 <a class="profile__tabs-link filters__button
                                 <?php if ($type === $current_tab) : ?>
                                 filters__button--active tabs__item--active
-                                <?php endif; ?> tabs__item button" href="/profile.php?id=<?= $user['id']
+                                <?php endif; ?> tabs__item button" href="profile.php?id=<?= $user['id']
                                 ?? '' ?>&tab=<?= $type ?? '' ?>"><?= $name ?? '' ?></a>
                             </li>
                         <?php endforeach; ?>
@@ -88,18 +88,16 @@
                                         <li class="post-mini post-mini--<?= $post['class_name'] ?? '' ?> post user">
                                             <div class="post-mini__user-info user__info">
                                                 <div class="post-mini__avatar user__avatar">
-                                                    <a class="user__avatar-link" href="profile.php?id=
-                                                    <?= $post['like_user_id']
-                                                    ?? '' ?>">
+                                                    <a class="user__avatar-link"
+                                                       href="profile.php?id=<?= $post['like_user_id'] ?? '' ?>">
                                                         <img class="post-mini__picture user__picture" src="
                                                         <?= $post['avatar']
                                                         ?? '' ?>" alt="Аватар пользователя">
                                                     </a>
                                                 </div>
                                                 <div class="post-mini__name-wrapper user__name-wrapper">
-                                                    <a class="post-mini__name user__name" href="profile.php?id=
-                                                    <?= $post['like_user_id']
-                                                    ?? '' ?>">
+                                                    <a class="post-mini__name user__name"
+                                                       href="profile.php?id=<?= $post['like_user_id'] ?? '' ?>">
                                                         <span><?= $post['login'] ?? '' ?></span>
                                                     </a>
                                                     <div class="post-mini__action">
@@ -119,8 +117,9 @@
                                                 </div>
                                             </div>
                                             <div class="post-mini__preview">
-                                                <a class="post-mini__link" href="post.php?id=<?= $post['id'] ??
-                                                '' ?>" title="Перейти на публикацию">
+                                                <a class="post-mini__link"
+                                                   href="post.php?id=<?= $post['id'] ?? '' ?>"
+                                                   title="Перейти на публикацию">
                                                     <?php if ($post['class_name'] === 'photo') : ?>
                                                         <div class="post-mini__image-wrapper">
                                                             <img class="post-mini__image" src="<?= $post['image'] ??
@@ -228,15 +227,15 @@
                                                     <?php if ($follower['subscribed_by_session_user']) : ?>
                                                         <a class="post-mini__user-button user__button
                                                         user__button--subscription button button--quartz"
-                                                           href="profile.php?id=
-                                                           <?= $follower['id'] ?? '' ?>&unsubscribed">
+                                                           href="profile.php?id=<?= $follower['id']
+                                                            ?? '' ?>&unsubscribed">
                                                             Отписаться
                                                         </a>
                                                     <?php else : ?>
                                                         <a class="post-mini__user-button user__button
                                                         user__button--subscription button button--main"
-                                                           href="profile.php?id=
-                                                           <?= $follower['id'] ?? '' ?>&subscribed">
+                                                           href="profile.php?id=<?= $follower['id']
+                                                            ?? '' ?>&subscribed">
                                                             Подписаться
                                                         </a>
                                                     <?php endif; ?>
@@ -261,8 +260,9 @@
                                     <article class="profile__post post post-<?= $post['class_name'] ?? '' ?>">
                                         <header class="post__header">
                                             <h2>
-                                                <a href="post.php?id=<?= $post['id'] ?? '' ?>"><?= $post['title'] ??
-                                                    '' ?></a>
+                                                <a href="post.php?id=<?= $post['id'] ?? '' ?>">
+                                                    <?= $post['title'] ?? '' ?>
+                                                </a>
                                             </h2>
                                         </header>
                                         <div class="post__main">
@@ -305,9 +305,10 @@
                                                 <?php if (crop_text($post['text_content'], 1000)) : ?>
                                                     <p><?= htmlspecialchars(crop_text($post['text_content'], 1000))
                                                         . '...' ?></p>
-                                                    <a class="post-text__more-link" href="/post.php?id=<?= $post['id']
-                                                    ?? '' ?>">Читать
-                                                        далее</a>
+                                                    <a class="post-text__more-link"
+                                                       href="post.php?id=<?= $post['id'] ?? '' ?>">
+                                                        Читать далее
+                                                    </a>
                                                 <?php else : ?>
                                                     <p><?= htmlspecialchars($post['text_content']) ?? '' ?></p>
                                                 <?php endif; ?>
@@ -349,8 +350,8 @@
                                                     <?= (isset($liked_post_ids_by_session_user)
                                                         && in_array($post['id'], $liked_post_ids_by_session_user))
                                                         ? 'post__indicator--likes-active' : '' ?>"
-                                                       href="profile.php?id=<?= $user['id'] ?? '' ?>
-                                                       &liked_post_id=<?= $post['id'] ?? '' ?>"
+                                                       href="profile.php?id=<?= $user['id']
+                                                        ?? '' ?>&liked_post_id=<?= $post['id'] ?? '' ?>"
                                                        title="Лайк">
                                                         <svg class="post__indicator-icon" width="20" height="17">
                                                             <use xlink:href="#icon-heart"></use>
@@ -366,8 +367,9 @@
                                                     <?= (isset($reposted_post_ids_by_session_user)
                                                         && in_array($post['id'], $reposted_post_ids_by_session_user))
                                                         ? 'post__indicator--repost-active' : '' ?>"
-                                                       href="profile.php?id=<?= $user['id'] ?? '' ?>
-                                                       &reposted_post_id=<?= $post['id'] ?? '' ?>" title="Репост">
+                                                       href="profile.php?id=<?= $user['id']
+                                                        ?? '' ?>&reposted_post_id=<?= $post['id'] ?? '' ?>"
+                                                       title="Репост">
                                                         <svg class="post__indicator-icon
                                                         <?= (isset($reposted_post_ids_by_session_user)
                                                             && in_array(

@@ -173,8 +173,8 @@
                                                 id="last_comment"
                                             <?php endif; ?>>
                                             <div class="comments__avatar">
-                                                <a class="user__avatar-link" href="profile.php?id=
-                                                <?= $post_comments[$i]['id'] ?? '' ?>">
+                                                <a class="user__avatar-link"
+                                                   href="profile.php?id=<?= $post_comments[$i]['id'] ?? '' ?>">
                                                     <img class="comments__picture" src="<?= $post_comments[$i]['avatar']
                                                     ?? '' ?>" alt="Аватар пользователя">
                                                 </a>

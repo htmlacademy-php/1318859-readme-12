@@ -11,8 +11,9 @@
                         <?php foreach ($current_tab_posts as $post) : ?>
                             <article class="search__post post post-<?= $post['class_name'] ?? '' ?>">
                                 <header class="post__header post__author">
-                                    <a class="post__author-link" href="profile.php?id=<?= $post['user_id'] ??
-                                    '' ?>" title="Автор">
+                                    <a class="post__author-link"
+                                       href="profile.php?id=<?= $post['user_id'] ?? '' ?>"
+                                       title="Автор">
                                         <div class="post__avatar-wrapper">
                                             <img class="post__author-avatar" src="<?= $post['avatar'] ??
                                             '' ?>" alt="Аватар пользователя" width="60" height="60">
@@ -27,8 +28,11 @@
                                 </header>
                                 <div class="post__main">
                                     <?php if ($post['class_name'] === 'photo') : ?>
-                                        <h2><a href="/post.php?id=<?= $post['id'] ?? '' ?>"><?= $post['title'] ??
-                                                '' ?></a></h2>
+                                        <h2>
+                                            <a href="post.php?id=<?= $post['id'] ?? '' ?>">
+                                                <?= $post['title'] ?? '' ?>
+                                            </a>
+                                        </h2>
                                         <div class="post-photo__image-wrapper">
                                             <img src="<?= $post['image'] ??
                                             '' ?>" alt="Фото от пользователя" width="760" height="396">
@@ -61,13 +65,18 @@
                                             </button>
                                         </div>
                                     <?php elseif ($post['class_name'] === 'text') : ?>
-                                        <h2><a href="/post.php?id=<?= $post['id'] ?? '' ?>"><?= $post['title'] ??
-                                                '' ?></a></h2>
+                                        <h2>
+                                            <a href="post.php?id=<?= $post['id'] ?? '' ?>">
+                                                <?= $post['title'] ?? '' ?>
+                                            </a>
+                                        </h2>
                                         <?php if (crop_text($post['text_content'], 1000)) : ?>
                                             <p><?= htmlspecialchars(crop_text($post['text_content'], 1000))
                                                 . '...' ?></p>
-                                            <a class="post-text__more-link" href="/post.php?id=<?= $post['id'] ??
-                                            '' ?>">Читать далее</a>
+                                            <a class="post-text__more-link"
+                                               href="post.php?id=<?= $post['id'] ?? '' ?>">
+                                                Читать далее
+                                            </a>
                                         <?php else : ?>
                                             <p><?= htmlspecialchars($post['text_content']) ?? '' ?></p>
                                         <?php endif; ?>
@@ -79,8 +88,9 @@
                                         </blockquote>
                                     <?php elseif ($post['class_name'] === 'link') : ?>
                                         <div class="post-link__wrapper">
-                                            <a class="post-link__external" href="<?= htmlspecialchars($post['link']) ??
-                                            '' ?>" title="Перейти по ссылке">
+                                            <a class="post-link__external"
+                                               href="<?= htmlspecialchars($post['link']) ?? '' ?>"
+                                               title="Перейти по ссылке">
                                                 <div class="post-link__icon-wrapper">
                                                     <img src="https://www.google.com/s2/favicons?domain=
                                                     <?= htmlspecialchars(str_replace(

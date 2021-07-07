@@ -69,9 +69,8 @@
                                     <div class="messages__info-wrapper">
                                         <div class="messages__item-avatar">
                                             <a class="messages__author-link"
-                                               href="profile.php?id=
-                                               <?= ($message['sender_id'] === intval($_SESSION['user']['id']))
-                                                   ? $_SESSION['user']['id'] : $id ?>">
+                                               href="profile.php?id=<?= ($message['sender_id'] ===
+                                                   intval($_SESSION['user']['id'])) ? $_SESSION['user']['id'] : $id ?>">
                                                 <img class="messages__avatar" src="
                                                 <?= ($message['sender_id'] === intval($_SESSION['user']['id']))
                                                     ? $_SESSION['user']['avatar'] : $message['avatar'] ?>"
@@ -80,9 +79,8 @@
                                         </div>
                                         <div class="messages__item-info">
                                             <a class="messages__author"
-                                               href="profile.php?id=
-                                               <?= ($message['sender_id'] === intval($_SESSION['user']['id']))
-                                                   ? $_SESSION['user']['id'] : $id ?>">
+                                               href="profile.php?id=<?= ($message['sender_id'] ===
+                                                   intval($_SESSION['user']['id'])) ? $_SESSION['user']['id'] : $id ?>">
                                                 <?= ($message['sender_id'] === intval($_SESSION['user']['id']))
                                                     ? $_SESSION['user']['login'] : $message['login'] ?>
                                             </a>
