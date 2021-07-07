@@ -31,7 +31,6 @@ if (isset($_GET['type']) && $_GET['type'] === 'tag') {
     $search_line_text = '';
 } else {
     if ($first_symbol === '#') {
-
         $posts = get_posts_with_tag($con, substr($search, 1));
         $result_text = $search;
         $search_line_text = '';
@@ -48,23 +47,24 @@ if (!count($posts)) {
     ]);
 } else {
     $main_content = include_template('search-results.php', [
-        'con' => $con,
-        'posts' => $posts,
-        'search' => $search,
-        'result_text' => $result_text,
+        'con'                            => $con,
+        'posts'                          => $posts,
+        'search'                         => $search,
+        'result_text'                    => $result_text,
         'liked_post_ids_by_session_user' => $liked_post_ids_by_session_user,
     ]);
 }
 
 $layout = include_template('layout.php', [
-    'main_content' => $main_content,
-    'user_name' => $_SESSION['user']['login'],
-    'user_avatar' => $_SESSION['user']['avatar'],
-    'user_id' => $_SESSION['user']['id'],
-    'title' => $title,
-    'nav_links' => $configs['nav_links'],
-    'search' => $search,
-    'search_line_text' => $search_line_text,
+    'main_content'                       => $main_content,
+    'user_name'                          => $_SESSION['user']['login'],
+    'user_avatar'                        => $_SESSION['user']['avatar'],
+    'user_id'                            => $_SESSION['user']['id'],
+    'title'                              => $title,
+    'nav_links'                          => $configs['nav_links'],
+    'search'                             => $search,
+    'search_line_text'                   => $search_line_text,
+    'count_session_user_unread_messages' => count_user_unread_messages($con, intval($_SESSION['user']['id'])),
 ]);
 
 echo $layout;

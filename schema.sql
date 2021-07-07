@@ -62,7 +62,8 @@ CREATE TABLE messages
   dt_add      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   content     TEXT NOT NULL,
   sender_id   INT,
-  receiver_id INT
+  receiver_id INT,
+  is_read     INT DEFAULT 0
 );
 
 CREATE TABLE tags
@@ -82,7 +83,7 @@ CREATE TABLE posts_tags
 (
   post_id INT,
   tag_id  INT
-)
+);
 
 CREATE FULLTEXT INDEX post_ft_search ON posts(title, text_content (40));
 CREATE FULLTEXT INDEX t_name ON tags (name);

@@ -1,16 +1,16 @@
 <?php
 return [
-    'title' => 'Форма добавления комментария',
-    'name' => 'comment-form',
+    'title'  => 'Форма добавления комментария',
+    'name'   => 'comment-form',
     'inputs' => [
         [
-            'title' => 'Комментарий',
-            'required' => false,
-            'type' => 'textarea',
-            'name' => 'comment',
+            'title'       => 'Комментарий',
+            'required'    => false,
+            'type'        => 'textarea',
+            'name'        => 'comment',
             'placeholder' => 'Ваш комментарий',
-            'field_type' => 'textarea',
-            'checks' => [
+            'field_type'  => 'textarea',
+            'checks'      => [
                 0 => function ($input) {
                     return validate_filled($input['name']);
                 },

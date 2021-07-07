@@ -9,7 +9,6 @@ $title = 'readme: вход на сайт';
 $form = include_once 'forms/auth-form.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $errors = validate_form($form, $configs);
 
     $email = mysqli_real_escape_string($con, htmlspecialchars($_POST['email']));
@@ -40,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $layout = include_template('guest_layout.php', [
-    'title' => $title,
-    'form' => $form,
-    'errors' => $errors ?? '',
+    'title'  => $title,
+    'form'   => $form,
+    'errors' => $errors ?? [],
 ]);
 
 echo $layout;
