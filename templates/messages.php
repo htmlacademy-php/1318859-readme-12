@@ -3,7 +3,6 @@
     <section class="messages tabs">
         <h2 class="visually-hidden">Сообщения</h2>
         <div class="messages__contacts">
-
             <ul class="messages__contacts-list tabs__list">
                 <?php if ((isset($_GET['id'])) && (!in_array(intval($_GET["id"]), $existed_interlocutors_ids))) : ?>
                     <li class="messages__contacts-item">
@@ -23,7 +22,7 @@
                 <?php endif; ?>
                 <?php foreach ($interlocutors as $interlocutor) : ?>
                     <li class="messages__contacts-item
-                    <?php if ($interlocutor['unread_messages'] > 0) : ?>
+                    <?php if (isset($interlocutor['unread_messages']) && $interlocutor['unread_messages'] > 0) : ?>
                     messages__contacts-item--new
                     <?php endif; ?>">
                         <a class="messages__contacts-tab tabs__item <?= (isset($id) && $interlocutor['user_id'] === $id)
@@ -32,7 +31,8 @@
                             <div class="messages__avatar-wrapper">
                                 <img class="messages__avatar" src="<?= $interlocutor['avatar'] ??
                                 '' ?>" alt="Аватар пользователя">
-                                <?php if ($interlocutor['unread_messages'] > 0) : ?>
+                                <?php if (isset($interlocutor['unread_messages'])
+                                    && $interlocutor['unread_messages'] > 0) : ?>
                                     <i class="messages__indicator"><?= $interlocutor['unread_messages'] ?? '' ?></i>
                                 <?php endif; ?>
                             </div>

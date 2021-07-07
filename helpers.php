@@ -463,10 +463,7 @@ function validate_image_type_from_url($name)
  */
 function validate_image_url_content($name)
 {
-    set_error_handler(function () {
-    }, E_ALL);
     $content = file_get_contents($_POST[$name]);
-    restore_error_handler();
     if (!$content) {
         return "Не удалось загрузить файл. Пожалуйста, проверьте ещё раз указанный адрес.";
     }
