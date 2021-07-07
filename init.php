@@ -28,7 +28,7 @@ $configs = [
         ],
         'messages' => [
             'class_name' => 'messages',
-            'href'       => '#',
+            'href'       => 'message.php',
             'title'      => 'Личные сообщения',
         ],
     ],

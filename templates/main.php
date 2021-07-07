@@ -9,9 +9,9 @@
                 <ul class="popular__sorting-list sorting__list">
                     <?php foreach ($sort_types as $key => $sort_type) : ?>
                         <li class="sorting__item <?= (($key === 'popular' && !isset($_GET['sort']))
-                            || (isset($_GET['sort']) && $_GET['sort']) === $key) ? 'sorting__item--active' : '' ?>">
+                            || (isset($_GET['sort']) && $_GET['sort'] === $key)) ? 'sorting__item--active' : '' ?>">
                             <a class="sorting__link <?= (($key === 'popular' && !isset($_GET['sort']))
-                                || (isset($_GET['sort']) && $_GET['sort']) === $key) ? 'sorting__link--active' : '' ?>"
+                                || (isset($_GET['sort']) && $_GET['sort'] === $key)) ? 'sorting__link--active' : '' ?>"
                                href="popular.php?sort=<?= $key ?><?= (isset($_GET['type_id'])) ? '&type_id='
                                    . $_GET['type_id'] : '' ?>">
                                 <span><?= $sort_type['title'] ?? '' ?></span>
@@ -37,7 +37,7 @@
                     <?php foreach ($types as $type) : ?>
                         <li class="popular__filters-item filters__item">
                             <a class="filters__button filters__button--<?= $type['class_name'] ?? '' ?>
-                            <?php if ($type_id === strval($type['id'])) : ?>
+                            <?php if (intval($type_id) === $type['id']) : ?>
                             filters__button--active
                             <?php endif; ?>
                             button" href="popular.php?type_id=<?= $type['id'] ?? '' ?>">
@@ -64,8 +64,9 @@
                     <article class="popular__post <?= $post['class_name'] ? "post-" . $post['class_name'] : "" ?>">
                         <header class="post__header">
                             <h2>
-                                <a href="/post.php?id=<?= $post['id'] ?? '' ?>"><?= htmlspecialchars($post['title']) ??
-                                    '' ?></a>
+                                <a href="/post.php?id=<?= $post['id'] ?? '' ?>">
+                                    <?= htmlspecialchars($post['title']) ?? '' ?>
+                                </a>
                             </h2>
                         </header>
                         <div class="post__main">
@@ -114,7 +115,9 @@
                             <?php elseif ($post['class_name'] === 'text') : ?>
                                 <?php if (crop_text($post['text_content'])) : ?>
                                     <p><?= htmlspecialchars(crop_text($post['text_content'])) . '...' ?></p>
-                                    <a class="post-text__more-link" href="#">Читать далее</a>
+                                    <a class="post-text__more-link" href="post.php?id=<?= $post['id'] ?? '' ?>">
+                                        Читать далее
+                                    </a>
                                 <?php else : ?>
                                     <p><?= htmlspecialchars($post['text_content']) ?? '' ?></p>
                                 <?php endif; ?>

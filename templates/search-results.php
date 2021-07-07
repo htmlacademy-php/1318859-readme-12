@@ -31,7 +31,7 @@
                             <div class="post__main">
 
                                 <?php if ($post['class_name'] === 'photo') : ?>
-                                    <h2><a href="/post.php?id=<?= $post['id'] ?? '' ?>"><?= $post['title'] ?? '' ?></a>
+                                    <h2><a href="post.php?id=<?= $post['id'] ?? '' ?>"><?= $post['title'] ?? '' ?></a>
                                     </h2>
                                     <div class="post-photo__image-wrapper">
                                         <img src="<?= $post['image'] ??
@@ -67,11 +67,11 @@
                                     </div>
 
                                 <?php elseif ($post['class_name'] === 'text') : ?>
-                                    <h2><a href="/post.php?id=<?= $post['id'] ?? '' ?>"><?= $post['title'] ?? '' ?></a>
+                                    <h2><a href="post.php?id=<?= $post['id'] ?? '' ?>"><?= $post['title'] ?? '' ?></a>
                                     </h2>
                                     <?php if (crop_text($post['text_content'], 1000)) : ?>
                                         <p><?= htmlspecialchars(crop_text($post['text_content'], 1000)) . '...' ?></p>
-                                        <a class="post-text__more-link" href="/post.php?id=<?= $post['id'] ?? '' ?>">
+                                        <a class="post-text__more-link" href="post.php?id=<?= $post['id'] ?? '' ?>">
                                             Читать
                                             далее</a>
                                     <?php else : ?>
