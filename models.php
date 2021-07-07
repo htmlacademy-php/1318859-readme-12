@@ -764,7 +764,7 @@ function get_interlocutors_of_user($con, $user_id)
                 WHEN $user_id = m.receiver_id
                   THEN u.id = m.sender_id
               END
-            GROUP BY u.id ORDER BY last_message_time;";
+            GROUP BY u.id ORDER BY last_message_time DESC;";
     $stmt = mysqli_prepare($con, $sql);
     $interlocutors = get_data($con, $stmt, false);
     return $interlocutors;
