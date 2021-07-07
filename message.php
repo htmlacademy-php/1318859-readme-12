@@ -55,11 +55,19 @@ if (!isset($_GET["id"])) {
 ) {
     $id = intval($_GET["id"]);
     $current_interlocutor = [];
-    foreach ($interlocutors as $key => $interlocutor) {
-        if ($interlocutor['user_id'] === $id) {
-            $current_interlocutor = $interlocutors[$key];
+    if (in_array(intval($_GET["id"]), $existed_interlocutors_ids)) {
+        foreach ($interlocutors as $key => $interlocutor) {
+            if ($interlocutor['user_id'] === $id) {
+                $current_interlocutor = $interlocutors[$key];
+            }
         }
+    } else {
+        $user = get_user($con, $id);
+        $current_interlocutor['login'] = $user['login'];
+        $current_interlocutor['avatar'] = $user['avatar'];
+        $current_interlocutor['unread_messages'] = 0;
     }
+
 
     if ($current_interlocutor['unread_messages'] > 0) {
         read_all_user_messages($con, $id, intval($_SESSION['user']['id']));
