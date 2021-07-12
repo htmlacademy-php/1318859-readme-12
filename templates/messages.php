@@ -41,7 +41,7 @@
                                 <div class="messages__preview">
                                     <p class="messages__preview-text">
                                         <?= $interlocutor['is_last_message_mine'] ? 'Вы: ' : '' ?>
-                                        <?= $interlocutor['last_message'] ?? '' ?>
+                                        <?= htmlspecialchars($interlocutor['last_message'] ?? '') ?>
                                     </p>
                                     <time class="messages__preview-time"
                                           datetime="
@@ -90,9 +90,7 @@
                                             </time>
                                         </div>
                                     </div>
-                                    <p class="messages__text">
-                                        <?= $message['content'] ?? '' ?>
-                                    </p>
+                                    <p class="messages__text"><?= htmlspecialchars($message['content'] ?? '') ?></p>
                                 </li>
                             <?php endif; ?>
                         <?php endforeach; ?>
@@ -111,7 +109,8 @@
                         <?php endif; ?>">
                                 <textarea class="comments__textarea form__textarea form__input"
                                           name="message"
-                                          placeholder="Ваше сообщение"><?= $_POST['message'] ?? '' ?></textarea>
+                                          placeholder="Ваше сообщение"><?= htmlspecialchars($_POST['message']
+                                            ?? '') ?></textarea>
                             <label class="visually-hidden">Ваше сообщение</label>
                             <?php if (!empty($errors[$form['name']])) : ?>
                                 <button class="form__error-button button" type="button">!</button>

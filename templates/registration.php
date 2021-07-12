@@ -21,10 +21,12 @@
                                     && isset($errors[$form['name']][$input['name']])) : ?>
                                     form__input-section--error
                                 <?php endif; ?>">
-                                    <input class="registration__input form__input" id="<?= 'registration-'
-                                    . $input['name'] ?? '' ?>" type="<?= $input['type'] ??
-                                    '' ?>" name="<?= $input['name'] ?? '' ?>" value="<?= $_POST[$input['name']] ??
-                                    ''; ?>" placeholder="<?= $input['placeholder'] ?? '' ?>">
+                                    <input class="registration__input form__input"
+                                           id="<?= 'registration-' . $input['name'] ?? '' ?>"
+                                           type="<?= $input['type'] ?? '' ?>"
+                                           name="<?= $input['name'] ?? '' ?>"
+                                           value="<?= htmlspecialchars($_POST[$input['name']] ?? '') ?>"
+                                           placeholder="<?= $input['placeholder'] ?? '' ?>">
                                     <?php if (!empty($errors[$form['name']])
                                         && isset($errors[$form['name']][$input['name']])
                                     ) : ?>
@@ -33,8 +35,7 @@
                                         </button>
                                         <div class="form__error-text">
                                             <h3 class="form__error-title"><?= $input['title'] ?? '' ?></h3>
-                                            <p class="form__error-desc">
-                                                <?= $errors[$form['name']][$input['name']]; ?>
+                                            <p class="form__error-desc"><?= $errors[$form['name']][$input['name']]; ?>
                                             </p>
                                         </div>
                                     <?php endif; ?>

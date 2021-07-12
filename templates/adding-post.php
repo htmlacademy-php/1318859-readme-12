@@ -79,7 +79,8 @@
                                                 </label>
                                                 <div class="form__input-section
                                                 <?php if (!empty($errors[$form['name']])
-                                                    && isset($errors[$form['name']][$input['name']])) : ?>
+                                                    && isset($errors[$form['name']][$input['name']])
+                                                ) : ?>
                                                 form__input-section--error
                                                 <?php endif; ?>">
 
@@ -88,21 +89,22 @@
                                                                id="<?= $current_tab ?>-<?= $input['name'] ?? '' ?>"
                                                                type="<?= $input['type'] ?? '' ?>"
                                                                name="<?= $current_tab ?>-<?= $input['name'] ?? '' ?>"
-                                                               value="<?= $_POST[$current_tab . '-' . $input['name']] ??
-                                                                '' ?>"
+                                                               value="<?= htmlspecialchars($_POST[$current_tab . '-'
+                                                                   . $input['name']] ?? '') ?>"
                                                                placeholder="<?= $input['placeholder'] ?? '' ?>">
                                                     <?php elseif ($input['field_type'] === 'textarea') : ?>
                                                         <textarea class="adding-post__textarea
                                                         form__textarea form__input"
                                                                   id="<?= $current_tab ?>-<?= $input['name'] ?? '' ?>"
                                                                   name="<?= $current_tab ?>-<?= $input['name'] ?? '' ?>"
-                                                                  placeholder="<?= $input['placeholder'] ?? '' ?>">
-                                                            <?= $_POST[$current_tab . '-' . $input['name']] ?? ''; ?>
-                                                        </textarea>
+                                                                  placeholder="<?= $input['placeholder'] ??
+                                                                    '' ?>"><?= htmlspecialchars($_POST[$current_tab .
+                                                                '-' . $input['name']] ?? '') ?></textarea>
                                                     <?php endif; ?>
 
                                                     <?php if (!empty($errors[$form['name']])
-                                                        && isset($errors[$form['name']][$input['name']])) : ?>
+                                                        && isset($errors[$form['name']][$input['name']])
+                                                    ) : ?>
                                                         <button class="form__error-button button" type="button">
                                                             !<span class="visually-hidden">Информация об ошибке</span>
                                                         </button>
@@ -126,17 +128,17 @@
                                         <a class="adding-post__close" href="feed.php">Закрыть</a>
                                     </div>
                                 </div>
-
-                                <?php if (!empty($errors[$form['name']])
-                                    && isset($errors[$form['name']][$input['name']])) : ?>
+                                <?php if (!empty($errors[$form['name']])) : ?>
                                     <div class="form__invalid-block">
                                         <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                                         <ul class="form__invalid-list">
                                             <?php foreach ($form['inputs'] as $input) : ?>
-                                                <li class="form__invalid-item">
-                                                    <?= (isset($input['title'])) ? $input['title'] . '. '
-                                                        : '' ?><?= $errors[$form['name']][$input['name']]; ?>
-                                                </li>
+                                                <?php if (isset($errors[$form['name']][$input['name']])) : ?>
+                                                    <li class="form__invalid-item">
+                                                        <?= (isset($input['title'])) ? $input['title'] . '. '
+                                                            : '' ?><?= $errors[$form['name']][$input['name']]; ?>
+                                                    </li>
+                                                <?php endif; ?>
                                             <?php endforeach; ?>
                                         </ul>
                                     </div>

@@ -5,11 +5,11 @@
             <div class="profile__user user container">
                 <div class="profile__user-info user__info">
                     <div class="profile__avatar user__avatar">
-                        <img class="profile__picture user__picture" src="<?= $user['avatar'] ??
-                        '' ?>" alt="Аватар пользователя">
+                        <img class="profile__picture user__picture" src="<?= htmlspecialchars($user['avatar'] ??
+                        '') ?>" alt="Аватар пользователя">
                     </div>
                     <div class="profile__name-wrapper user__name-wrapper">
-                        <span class="profile__name user__name"><?= $user['login'] ?? '' ?></span>
+                        <span class="profile__name user__name"><?= htmlspecialchars($user['login'] ?? '') ?></span>
                         <time class="profile__user-time user__time" datetime="
                         <?= date_format(date_create($user['dt_add']
                             ?? ''), 'Y-m-d'); ?>"><?= print_date_diff($user['dt_add'] ?? '') ?>
@@ -91,14 +91,14 @@
                                                     <a class="user__avatar-link"
                                                        href="profile.php?id=<?= $post['like_user_id'] ?? '' ?>">
                                                         <img class="post-mini__picture user__picture" src="
-                                                        <?= $post['avatar']
-                                                        ?? '' ?>" alt="Аватар пользователя">
+                                                        <?= htmlspecialchars($post['avatar']
+                                                        ?? '') ?>" alt="Аватар пользователя">
                                                     </a>
                                                 </div>
                                                 <div class="post-mini__name-wrapper user__name-wrapper">
                                                     <a class="post-mini__name user__name"
                                                        href="profile.php?id=<?= $post['like_user_id'] ?? '' ?>">
-                                                        <span><?= $post['login'] ?? '' ?></span>
+                                                        <span><?= htmlspecialchars($post['login'] ?? '') ?></span>
                                                     </a>
                                                     <div class="post-mini__action">
                                                         <span class="post-mini__activity user__additional">
@@ -122,8 +122,9 @@
                                                    title="Перейти на публикацию">
                                                     <?php if ($post['class_name'] === 'photo') : ?>
                                                         <div class="post-mini__image-wrapper">
-                                                            <img class="post-mini__image" src="<?= $post['image'] ??
-                                                            '' ?>" width="109" height="109" alt="Превью публикации">
+                                                            <img class="post-mini__image"
+                                                                 src="<?= htmlspecialchars($post['image'] ?? '') ?>"
+                                                                 width="109" height="109" alt="Превью публикации">
                                                         </div>
                                                         <span class="visually-hidden">Фото</span>
                                                     <?php elseif ($post['class_name'] === 'text') : ?>
@@ -172,14 +173,14 @@
                                                     <a class="user__avatar-link"
                                                        href="profile.php?id=<?= $follower['id'] ?? '' ?>">
                                                         <img class="post-mini__picture user__picture"
-                                                             src="<?= $follower['avatar'] ?? '' ?>"
+                                                             src="<?= htmlspecialchars($follower['avatar'] ?? '') ?>"
                                                              alt="Аватар пользователя">
                                                     </a>
                                                 </div>
                                                 <div class="post-mini__name-wrapper user__name-wrapper">
                                                     <a class="post-mini__name user__name"
                                                        href="profile.php?id=<?= $follower['id'] ?? '' ?>">
-                                                        <span><?= $follower['login'] ?? '' ?></span>
+                                                        <span><?= htmlspecialchars($follower['login'] ?? '') ?></span>
                                                     </a>
                                                     <time class="post-mini__time user__additional"
                                                           datetime="
@@ -261,15 +262,15 @@
                                         <header class="post__header">
                                             <h2>
                                                 <a href="post.php?id=<?= $post['id'] ?? '' ?>">
-                                                    <?= $post['title'] ?? '' ?>
+                                                    <?= htmlspecialchars($post['title'] ?? '') ?>
                                                 </a>
                                             </h2>
                                         </header>
                                         <div class="post__main">
                                             <?php if ($post['class_name'] === 'photo') : ?>
                                                 <div class="post-photo__image-wrapper">
-                                                    <img src="<?= $post['image'] ??
-                                                    '' ?>" alt="Фото от пользователя" width="760" height="396">
+                                                    <img src="<?= htmlspecialchars($post['image'] ??
+                                                    '') ?>" alt="Фото от пользователя" width="760" height="396">
                                                 </div>
                                             <?php elseif ($post['class_name'] === 'video') : ?>
                                                 <div class="post-video__block">
@@ -310,17 +311,17 @@
                                                         Читать далее
                                                     </a>
                                                 <?php else : ?>
-                                                    <p><?= htmlspecialchars($post['text_content']) ?? '' ?></p>
+                                                    <p><?= htmlspecialchars($post['text_content'] ?? '') ?></p>
                                                 <?php endif; ?>
                                             <?php elseif ($post['class_name'] === 'quote') : ?>
                                                 <blockquote>
-                                                    <p><?= htmlspecialchars($post['text_content']) ?? '' ?></p>
-                                                    <cite><?= htmlspecialchars($post['quote_author']) ?? '' ?></cite>
+                                                    <p><?= htmlspecialchars($post['text_content'] ?? '') ?></p>
+                                                    <cite><?= htmlspecialchars($post['quote_author'] ?? '') ?></cite>
                                                 </blockquote>
                                             <?php elseif ($post['class_name'] === 'link') : ?>
                                                 <div class="post-link__wrapper">
                                                     <a class="post-link__external"
-                                                       href="<?= htmlspecialchars($post['link']) ?? '' ?>"
+                                                       href="<?= htmlspecialchars($post['link'] ?? '') ?>"
                                                        title="Перейти по ссылке">
                                                         <div class="post-link__icon-wrapper">
                                                             <img src="https://www.google.com/s2/favicons?domain=
@@ -334,7 +335,7 @@
                                                         </div>
                                                         <div class="post-link__info">
                                                             <h3><?= $post['title'] ?? '' ?></h3>
-                                                            <span><?= htmlspecialchars($post['link']) ?? '' ?></span>
+                                                            <span><?= htmlspecialchars($post['link'] ?? '') ?></span>
                                                         </div>
                                                         <svg class="post-link__arrow" width="11" height="16">
                                                             <use xlink:href="#icon-arrow-right-ad"></use>

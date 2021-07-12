@@ -19,13 +19,13 @@ $tabs = [
     'quote' => 'цитата',
     'link'  => 'ссылка',
 ];
+$current_tab = 'text';
 
-foreach ($tabs as $type => $name) {
+foreach (array_keys($tabs) as $type) {
     if (isset($_GET["type"]) && $_GET["type"] === $type) {
         $current_tab = $_GET["type"];
         break;
     }
-    $current_tab = 'text';
 }
 
 $form = include_once 'forms/' . $current_tab . '-form.php';
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($errors[$form['name']])) {
-        $db_post_title = htmlspecialchars($_POST[$current_tab . '-heading']);
+        $db_post_title = $_POST[$current_tab . '-heading'];
         $bd_post_user_id = $_SESSION['user']['id'];
         $db_data = [
             'title'   => $db_post_title,

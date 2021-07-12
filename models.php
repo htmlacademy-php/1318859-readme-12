@@ -192,6 +192,8 @@ function get_followers($con, $following_user_id)
  *                              объект с данными, иначе - false.
  * @param array $follower_user  - массив данных о добавляемом подписчике.
  * @param array $following_user - массив данных о пользователе, чей подписчик добавляется.
+ *
+ * @return bool
  */
 function add_follower($con, $follower_user, $following_user)
 {
@@ -270,6 +272,7 @@ function add_post($con, $data)
 function add_user($con, $data)
 {
     $sql_data = '';
+    $user_id = null;
     foreach ($data as $db_col_name => $value) {
         $sql_data .= " $db_col_name = '$value',";
     }
@@ -779,7 +782,7 @@ function get_interlocutors_of_user($con, $user_id)
  * @param int $sender_id     - идентификатор отправителя.
  * @param int $receiver_id   - идентификатор получателя.
  *
- * @return array
+ * @return int
  */
 function count_unread_messages($con, $sender_id, $receiver_id)
 {
@@ -798,7 +801,7 @@ function count_unread_messages($con, $sender_id, $receiver_id)
  *                           объект с данными, иначе - false.
  * @param int $receiver_id   - идентификатор получателя.
  *
- * @return array
+ * @return int
  */
 function count_user_unread_messages($con, $receiver_id)
 {
@@ -815,7 +818,8 @@ function count_user_unread_messages($con, $receiver_id)
  *
  * @param object(false) $con - результат работы mysqli_connect(). При успешном подключении к базе данных возвращает
  *                           объект с данными, иначе - false.
- * @param int $post_id       - идентификатор поста.
+ * @param int $sender_id     - идентификатор отправителя.
+ * @param int $receiver_id   - идентификатор получателя.
  */
 function read_all_user_messages($con, $sender_id, $receiver_id)
 {

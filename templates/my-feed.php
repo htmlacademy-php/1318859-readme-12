@@ -30,12 +30,12 @@
                                     <?php if ($post['class_name'] === 'photo') : ?>
                                         <h2>
                                             <a href="post.php?id=<?= $post['id'] ?? '' ?>">
-                                                <?= $post['title'] ?? '' ?>
+                                                <?= htmlspecialchars($post['title'] ?? '') ?>
                                             </a>
                                         </h2>
                                         <div class="post-photo__image-wrapper">
-                                            <img src="<?= $post['image'] ??
-                                            '' ?>" alt="Фото от пользователя" width="760" height="396">
+                                            <img src="<?= htmlspecialchars($post['image'] ?? '') ?>"
+                                                 alt="Фото от пользователя" width="760" height="396">
                                         </div>
                                     <?php elseif ($post['class_name'] === 'video') : ?>
                                         <div class="post-video__block">
@@ -67,7 +67,7 @@
                                     <?php elseif ($post['class_name'] === 'text') : ?>
                                         <h2>
                                             <a href="post.php?id=<?= $post['id'] ?? '' ?>">
-                                                <?= $post['title'] ?? '' ?>
+                                                <?= htmlspecialchars($post['title'] ?? '') ?>
                                             </a>
                                         </h2>
                                         <?php if (crop_text($post['text_content'], 1000)) : ?>
@@ -78,18 +78,18 @@
                                                 Читать далее
                                             </a>
                                         <?php else : ?>
-                                            <p><?= htmlspecialchars($post['text_content']) ?? '' ?></p>
+                                            <p><?= htmlspecialchars($post['text_content'] ?? '') ?></p>
                                         <?php endif; ?>
 
                                     <?php elseif ($post['class_name'] === 'quote') : ?>
                                         <blockquote>
-                                            <p><?= htmlspecialchars($post['text_content']) ?? '' ?></p>
-                                            <cite><?= htmlspecialchars($post['quote_author']) ?? '' ?></cite>
+                                            <p><?= htmlspecialchars($post['text_content'] ?? '') ?></p>
+                                            <cite><?= htmlspecialchars($post['quote_author'] ?? '') ?></cite>
                                         </blockquote>
                                     <?php elseif ($post['class_name'] === 'link') : ?>
                                         <div class="post-link__wrapper">
                                             <a class="post-link__external"
-                                               href="<?= htmlspecialchars($post['link']) ?? '' ?>"
+                                               href="<?= htmlspecialchars($post['link'] ?? '') ?>"
                                                title="Перейти по ссылке">
                                                 <div class="post-link__icon-wrapper">
                                                     <img src="https://www.google.com/s2/favicons?domain=
@@ -100,8 +100,8 @@
                                                     )) ?>" alt="Иконка">
                                                 </div>
                                                 <div class="post-link__info">
-                                                    <h3><?= $post['title'] ?? '' ?></h3>
-                                                    <span><?= htmlspecialchars($post['link']) ?? '' ?></span>
+                                                    <h3><?= htmlspecialchars($post['title'] ?? '') ?></h3>
+                                                    <span><?= htmlspecialchars($post['link'] ?? '') ?></span>
                                                 </div>
                                                 <svg class="post-link__arrow" width="11" height="16">
                                                     <use xlink:href="#icon-arrow-right-ad"></use>

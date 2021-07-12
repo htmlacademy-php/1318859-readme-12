@@ -689,34 +689,34 @@ function build_post_data($current_tab, &$db_data)
         if (isset($_FILES['photo-userpic-file']['name'])) {
             $db_post_image = '/uploads/' . time() . '-' . $_FILES['photo-userpic-file']['name'];
         } else {
-            $db_post_image = '/uploads' . strrchr(htmlspecialchars($_POST['photo-url']), '/');
+            $db_post_image = '/uploads' . strrchr($_POST['photo-url'], '/');
         }
         $db_data += [
             'image'   => $db_post_image,
             'type_id' => 1,
         ];
     } elseif ($current_tab === 'video') {
-        $db_post_video = htmlspecialchars($_POST['video-url']);
+        $db_post_video = $_POST['video-url'];
         $db_data += [
             'video'   => $db_post_video,
             'type_id' => 2,
         ];
     } elseif ($current_tab === 'text') {
-        $db_post_text_content = htmlspecialchars($_POST['text-post']);
+        $db_post_text_content = $_POST['text-post'];
         $db_data += [
             'text_content' => $db_post_text_content,
             'type_id'      => 3,
         ];
     } elseif ($current_tab === 'quote') {
-        $db_post_text_content = htmlspecialchars($_POST['quote-text']);
-        $db_post_quote_author = htmlspecialchars($_POST['quote-author']);
+        $db_post_text_content = $_POST['quote-text'];
+        $db_post_quote_author = $_POST['quote-author'];
         $db_data += [
             'text_content' => $db_post_text_content,
             'quote_author' => $db_post_quote_author,
             'type_id'      => 4,
         ];
     } else {
-        $db_post_link = htmlspecialchars($_POST['link-url']);
+        $db_post_link = $_POST['link-url'];
         $db_data += [
             'link'    => $db_post_link,
             'type_id' => 5,

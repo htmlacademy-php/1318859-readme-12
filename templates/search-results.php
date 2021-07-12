@@ -12,7 +12,7 @@
             <div class="container">
                 <div class="search__content">
 
-                    <?php foreach ($posts as $key => $post) : ?>
+                    <?php foreach ($posts as $post) : ?>
                         <article class="search__post post post-<?= $post['class_name'] ?? '' ?>">
                             <header class="post__header post__author">
                                 <a class="post__author-link" href="profile.php?id=<?= $post['user_id'] ??

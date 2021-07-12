@@ -60,25 +60,25 @@
 
         <div class="popular__posts">
             <?php if (!empty($posts)) : ?>
-                <?php foreach ($posts as $key => $post) : ?>
+                <?php foreach ($posts as $post) : ?>
                     <article class="popular__post <?= $post['class_name'] ? "post-" . $post['class_name'] : "" ?>">
                         <header class="post__header">
                             <h2>
-                                <a href="/post.php?id=<?= $post['id'] ?? '' ?>">
-                                    <?= htmlspecialchars($post['title']) ?? '' ?>
+                                <a href="post.php?id=<?= $post['id'] ?? '' ?>">
+                                    <?= htmlspecialchars($post['title'] ?? '') ?>
                                 </a>
                             </h2>
                         </header>
                         <div class="post__main">
                             <?php if ($post['class_name'] === 'quote') : ?>
                                 <blockquote>
-                                    <p><?= htmlspecialchars($post['text_content']) ?? '' ?></p>
-                                    <cite><?= htmlspecialchars($post['quote_author']) ?? '' ?></cite>
+                                    <p><?= htmlspecialchars($post['text_content'] ?? '') ?></p>
+                                    <cite><?= htmlspecialchars($post['quote_author'] ?? '') ?></cite>
                                 </blockquote>
                             <?php elseif ($post['class_name'] === 'link') : ?>
                                 <div class="post-link__wrapper">
-                                    <a class="post-link__external" href="http://<?= htmlspecialchars($post['link']) ??
-                                    '' ?>" title="Перейти по ссылке">
+                                    <a class="post-link__external" href="http://<?= htmlspecialchars($post['link'] ??
+                                    '') ?>" title="Перейти по ссылке">
                                         <div class="post-link__info-wrapper">
                                             <div class="post-link__icon-wrapper">
                                                 <img src="https://www.google.com/s2/favicons?domain=
@@ -89,16 +89,16 @@
                                                 )) ?>" alt="Иконка">
                                             </div>
                                             <div class="post-link__info">
-                                                <h3><?= htmlspecialchars($post['link']) ?? '' ?></h3>
+                                                <h3><?= htmlspecialchars($post['link'] ?? '') ?></h3>
                                             </div>
                                         </div>
-                                        <span><?= htmlspecialchars($post['link']) ?? '' ?></span>
+                                        <span><?= htmlspecialchars($post['link'] ?? '') ?></span>
                                     </a>
                                 </div>
                             <?php elseif ($post['class_name'] === 'photo') : ?>
                                 <div class="post-photo__image-wrapper">
-                                    <img src="img/<?= htmlspecialchars($post['image']) ??
-                                    '' ?>" alt="Фото от пользователя" width="360" height="240">
+                                    <img src="img/<?= htmlspecialchars($post['image'] ??
+                                    '') ?>" alt="Фото от пользователя" width="360" height="240">
                                 </div>
                             <?php elseif ($post['class_name'] === 'video') : ?>
                                 <div class="post-video__block">
@@ -119,7 +119,7 @@
                                         Читать далее
                                     </a>
                                 <?php else : ?>
-                                    <p><?= htmlspecialchars($post['text_content']) ?? '' ?></p>
+                                    <p><?= htmlspecialchars($post['text_content'] ?? '') ?></p>
                                 <?php endif; ?>
                             <?php endif; ?>
                         </div>
@@ -128,11 +128,12 @@
                                 <a class="post__author-link" href="profile.php?id=<?= $post['user_id'] ??
                                 '' ?>" title="Автор">
                                     <div class="post__avatar-wrapper">
-                                        <img class="post__author-avatar" src="<?= $post['avatar'] ?>"
+                                        <img class="post__author-avatar" src="<?= htmlspecialchars($post['avatar']
+                                             ?? '') ?>"
                                              alt="Аватар пользователя">
                                     </div>
                                     <div class="post__info">
-                                        <b class="post__author-name"><?= htmlspecialchars($post['login']) ?></b>
+                                        <b class="post__author-name"><?= htmlspecialchars($post['login'] ?? '') ?></b>
                                         <time class="post__time"
                                               datetime="<?= date_format(date_create($post['dt_add']), 'Y-m-d'); ?>"
                                               title="<?= date_format(date_create($post['dt_add']), 'd.m.Y H:i'); ?>">
@@ -176,6 +177,7 @@
                 <p>По данному фильтру постов не найдено.</p>
             <?php endif; ?>
         </div>
+
         <div class="popular__page-links">
             <?php if ($page_number > 1) : ?>
                 <a class="popular__page-link popular__page-link--prev button button--gray"

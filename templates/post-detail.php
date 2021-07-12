@@ -152,7 +152,7 @@
                                           placeholder="Ваш комментарий"
                                             <?php if ($count_of_shown_post_comments === 0) : ?>
                                               id="last_comment"
-                                            <?php endif; ?>><?= $_POST['comment'] ?? '' ?></textarea>
+                                            <?php endif; ?>><?= htmlspecialchars($_POST['comment'] ?? '') ?></textarea>
                                 <label class="visually-hidden">Ваш комментарий</label>
                                 <?php if (!empty($errors[$form['name']])) : ?>
                                     <button class="form__error-button button" type="button">!</button>
@@ -197,7 +197,7 @@
                                                     </time>
                                                 </div>
                                                 <p class="comments__text">
-                                                    <?= $post_comments[$i]['content'] ?? '' ?>
+                                                    <?= htmlspecialchars($post_comments[$i]['content'] ?? '') ?>
                                                 </p>
                                             </div>
                                         </li>
