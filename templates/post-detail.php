@@ -3,7 +3,8 @@
         <h1 class="page__title page__title--publication"><?= $post['title'] ?? '' ?></h1>
         <section class="post-details">
             <h2 class="visually-hidden">Публикация</h2>
-            <div class="post-details__wrapper <?= $post['class_name'] ? "post-" . $post['class_name'] : '' ?>">
+            <div class="post-details__wrapper <?= (isset($post['class_name'])
+                && $post['class_name']) ? "post-" . $post['class_name'] : '' ?>">
                 <div class="post-details__main-block post post--details">
                     <?php if ($post['class_name'] === 'quote') : ?>
                         <div class="post__main">

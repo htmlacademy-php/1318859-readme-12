@@ -13,6 +13,11 @@ function get_post_types($con)
     $sql = "SELECT * FROM `types`";
     $stmt = mysqli_prepare($con, $sql);
     $types = get_data($con, $stmt, false);
+    if (!isset($types)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $types;
 }
 
@@ -29,6 +34,11 @@ function get_all_posts($con)
     $sql = "SELECT * FROM `posts`;";
     $stmt = mysqli_prepare($con, $sql);
     $posts = get_data($con, $stmt, false);
+    if (!isset($posts)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $posts;
 }
 
@@ -45,6 +55,11 @@ function get_all_users($con)
     $sql = "SELECT * FROM `users`;";
     $stmt = mysqli_prepare($con, $sql);
     $users = get_data($con, $stmt, false);
+    if (!isset($users)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $users;
 }
 
@@ -61,6 +76,11 @@ function get_all_tags($con)
     $sql = "SELECT * FROM `tags`;";
     $stmt = mysqli_prepare($con, $sql);
     $tags = get_data($con, $stmt, false);
+    if (!isset($tags)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $tags;
 }
 
@@ -101,6 +121,11 @@ function get_filtered_posts($con, $filtered_property, $value, $limit, $order = '
             $sql_filter $sql_order $sql_limit;";
     $stmt = mysqli_prepare($con, $sql);
     $filtered_posts = get_data($con, $stmt, false);
+    if (!isset($filtered_posts)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $filtered_posts;
 }
 
@@ -126,6 +151,11 @@ function get_post($con, $filtered_property, $value)
             JOIN `types` t ON p.type_id = t.id $sql_filter;";
     $stmt = mysqli_prepare($con, $sql);
     $post = get_data($con, $stmt, true);
+    if (!isset($post)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $post;
 }
 
@@ -143,6 +173,11 @@ function get_post_for_repost($con, $post_id)
     $sql = "SELECT * FROM `posts` WHERE `id` = $post_id;";
     $stmt = mysqli_prepare($con, $sql);
     $post = get_data($con, $stmt, true);
+    if (!isset($post)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $post;
 }
 
@@ -161,6 +196,11 @@ function get_user($con, $user_id)
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $user_id);
     $user = get_data($con, $stmt, true);
+    if (!isset($user)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $user;
 }
 
@@ -182,6 +222,11 @@ function get_followers($con, $following_user_id)
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $following_user_id);
     $followers = get_data($con, $stmt, false);
+    if (!isset($followers)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $followers;
 }
 
@@ -203,12 +248,13 @@ function add_follower($con, $follower_user, $following_user)
             return false;
         }
     }
-    $sql = "INSERT INTO `follows` SET `follower_id` = '" . $follower_user['id'] . "', `following_user_id` = '"
-        . $following_user['id'] . "';";
+    $sql = "INSERT INTO `follows` SET `follower_id` = '" . intval($follower_user['id']) . "', `following_user_id` = '"
+        . intval($following_user['id']) . "';";
     $result = mysqli_query($con, $sql);
     if (!$result) {
         $error = mysqli_error($con);
         print("Ошибка MySQL: " . $error);
+        return false;
     }
     send_subscribe_notification($follower_user, $following_user);
 }
@@ -224,7 +270,8 @@ function add_follower($con, $follower_user, $following_user)
  */
 function remove_follower($con, $follower_id, $following_user_id)
 {
-    $sql = "DELETE FROM `follows` WHERE `follower_id` = '$follower_id' AND `following_user_id` = '$following_user_id';";
+    $sql = "DELETE FROM `follows` WHERE `follower_id` = '" . intval($follower_id) . "' 
+            AND `following_user_id` = '" . intval($following_user_id) . "';";
     $result = mysqli_query($con, $sql);
     if (!$result) {
         $error = mysqli_error($con);
@@ -245,17 +292,24 @@ function add_post($con, $data)
 {
     $sql_data = '';
     foreach ($data as $db_col_name => $value) {
-        $sql_data .= " $db_col_name = '$value',";
+        $sql_data .= " $db_col_name = '" . mysqli_real_escape_string($con, $value) . "',";
     }
+//    $sql_data = mysqli_real_escape_string($con, $sql_data);
     $sql = "INSERT INTO `posts` SET" . substr($sql_data, 0, -1) . ";";
     $result = mysqli_query($con, $sql);
     if (!$result) {
         $error = mysqli_error($con);
         print("Ошибка MySQL: " . $error);
+        return false;
     } else {
         $sql = "SELECT * FROM `posts` WHERE `id` = LAST_INSERT_ID()";
         $stmt = mysqli_prepare($con, $sql);
         $post = get_data($con, $stmt, true);
+        if (!isset($post)) {
+            $error = mysqli_error($con);
+            print("Ошибка MySQL: " . $error);
+            return false;
+        }
         return $post;
     }
 }
@@ -272,18 +326,17 @@ function add_post($con, $data)
 function add_user($con, $data)
 {
     $sql_data = '';
-    $user_id = null;
     foreach ($data as $db_col_name => $value) {
-        $sql_data .= " $db_col_name = '$value',";
+        $sql_data .= " $db_col_name = '" . mysqli_real_escape_string($con, $value) . "',";
     }
     $sql = "INSERT INTO `users` SET" . substr($sql_data, 0, -1) . ";";
     $result = mysqli_query($con, $sql);
     if (!$result) {
         $error = mysqli_error($con);
         print("Ошибка MySQL: " . $error);
-    } else {
-        $user_id = mysqli_insert_id($con);
+        return false;
     }
+    $user_id = mysqli_insert_id($con);
     return $user_id;
 }
 
@@ -298,7 +351,7 @@ function add_comment($con, $data)
 {
     $sql_data = '';
     foreach ($data as $db_col_name => $value) {
-        $sql_data .= " $db_col_name = '$value',";
+        $sql_data .= " $db_col_name = '" . mysqli_real_escape_string($con, $value) . "',";
     }
     $sql = "INSERT INTO `comments` SET" . substr($sql_data, 0, -1) . ";";
     $result = mysqli_query($con, $sql);
@@ -319,7 +372,7 @@ function add_message($con, $data)
 {
     $sql_data = '';
     foreach ($data as $db_col_name => $value) {
-        $sql_data .= " $db_col_name = '$value',";
+        $sql_data .= " $db_col_name = '" . mysqli_real_escape_string($con, $value) . "',";
     }
     $sql = "INSERT INTO `messages` SET" . substr($sql_data, 0, -1) . ";";
     $result = mysqli_query($con, $sql);
@@ -339,7 +392,7 @@ function add_message($con, $data)
  */
 function add_view($con, $post_id)
 {
-    $sql = "UPDATE `posts` SET `views_count` = `views_count` + 1 WHERE `id` = $post_id;";
+    $sql = "UPDATE `posts` SET `views_count` = `views_count` + 1 WHERE `id` = " . intval($post_id) . ";";
     $result = mysqli_query($con, $sql);
     if (!$result) {
         $error = mysqli_error($con);
@@ -366,6 +419,7 @@ function add_tags($con, $post_tags, $db_tags, $post_id)
         $key += 1;
     }
     foreach ($post_tags as $tag) {
+        $tag = mysqli_real_escape_string($con, $tag);
         if (!in_array($tag, $tag_names)) {
             $sql = "INSERT INTO `tags` SET `name` = '$tag';";
             $result = mysqli_query($con, $sql);
@@ -385,7 +439,7 @@ function add_tags($con, $post_tags, $db_tags, $post_id)
         }
     }
     foreach ($post_tags_ids as $id) {
-        $sql = "INSERT INTO `posts_tags` SET `post_id` = '$post_id', `tag_id` = '$id';";
+        $sql = "INSERT INTO `posts_tags` SET `post_id` = '" . intval($post_id) . "', `tag_id` = '" . intval($id) . "';";
         $result = mysqli_query($con, $sql);
         if (!$result) {
             $error = mysqli_error($con);
@@ -413,6 +467,11 @@ function get_search_posts($con, $search)
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 's', $search);
     $posts = get_data($con, $stmt, false);
+    if (!isset($posts)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $posts;
 }
 
@@ -433,6 +492,11 @@ function get_post_tags($con, $post_id)
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $post_id);
     $post_tags = get_data($con, $stmt, false);
+    if (!isset($post_tags)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $post_tags;
 }
 
@@ -453,8 +517,13 @@ function get_post_comments($con, $post_id)
             ORDER BY `publish_time` DESC;";
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $post_id);
-    $post_tags = get_data($con, $stmt, false);
-    return $post_tags;
+    $post_comments = get_data($con, $stmt, false);
+    if (!isset($post_comments)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
+    return $post_comments;
 }
 
 /**
@@ -477,6 +546,11 @@ function get_posts_with_tag($con, $tag_name)
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 's', $tag_name);
     $post_tags = get_data($con, $stmt, false);
+    if (!isset($post_tags)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $post_tags;
 }
 
@@ -498,6 +572,11 @@ function get_posts_of_user($con, $user_id)
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $user_id);
     $filtered_posts = get_data($con, $stmt, false);
+    if (!isset($filtered_posts)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $filtered_posts;
 }
 
@@ -520,6 +599,11 @@ function get_posts_of_following_users($con, $user_id)
             ORDER BY p.dt_add DESC;";
     $stmt = mysqli_prepare($con, $sql);
     $filtered_posts = get_data($con, $stmt, false);
+    if (!isset($filtered_posts)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $filtered_posts;
 }
 
@@ -543,6 +627,11 @@ function get_liked_posts_of_user($con, $user_id)
             ORDER BY l.dt_add DESC;";
     $stmt = mysqli_prepare($con, $sql);
     $liked_user_posts = get_data($con, $stmt, false);
+    if (!isset($liked_user_posts)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $liked_user_posts;
 }
 
@@ -563,6 +652,11 @@ function get_following_users_of_user($con, $user_id)
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $user_id);
     $following_users_of_user = get_data($con, $stmt, false);
+    if (!isset($following_users_of_user)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $following_users_of_user;
 }
 
@@ -582,14 +676,16 @@ function toggle_like($con, $user_id, $post_id)
     $like = get_data($con, $stmt, true);
 
     if ($like) {
-        $sql = "DELETE FROM `likes` WHERE `user_id` = '$user_id' AND `post_id` = '$post_id';";
+        $sql = "DELETE FROM `likes` WHERE `user_id` = '" . intval($user_id) . "' 
+                AND `post_id` = '" . intval($post_id) . "';";
         $result = mysqli_query($con, $sql);
         if (!$result) {
             $error = mysqli_error($con);
             print("Ошибка MySQL: " . $error);
         }
     } else {
-        $sql = "INSERT INTO `likes` SET `user_id` = '$user_id', `post_id` = '$post_id';";
+        $sql = "INSERT INTO `likes` 
+                SET `user_id` = '" . intval($user_id) . "', `post_id` = '" . intval($post_id) . "';";
         $result = mysqli_query($con, $sql);
         if (!$result) {
             $error = mysqli_error($con);
@@ -612,6 +708,11 @@ function get_all_liked_post_ids_by_user($con, $user_id)
     $sql = "SELECT `post_id` FROM `likes` WHERE `user_id` = '$user_id';";
     $stmt = mysqli_prepare($con, $sql);
     $all_liked_post_ids_by_user_from_db = get_data($con, $stmt, false);
+    if (!isset($all_liked_post_ids_by_user_from_db)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     $all_liked_post_ids_by_user = [];
     $i = 0;
     foreach ($all_liked_post_ids_by_user_from_db as $item) {
@@ -635,6 +736,11 @@ function get_all_reposted_post_ids_by_user($con, $user_id)
     $sql = "SELECT `repost_id` FROM `posts` WHERE `user_id` = '$user_id' AND `repost_id` IS NOT NULL;";
     $stmt = mysqli_prepare($con, $sql);
     $all_reposted_post_ids_by_user_from_db = get_data($con, $stmt, false);
+    if (!isset($all_reposted_post_ids_by_user_from_db)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     $all_reposted_post_ids_by_user = [];
     $i = 0;
     foreach ($all_reposted_post_ids_by_user_from_db as $item) {
@@ -655,8 +761,13 @@ function get_all_reposted_post_ids_by_user($con, $user_id)
  */
 function count_likes_of_post($con, $post_id)
 {
-    $sql = "SELECT `id` FROM `likes` WHERE `post_id` = '$post_id';";
+    $sql = "SELECT `id` FROM `likes` WHERE `post_id` = '" . intval($post_id) . "';";
     $result = mysqli_query($con, $sql);
+    if (!isset($result)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     $records_count = mysqli_num_rows($result);
     return $records_count;
 }
@@ -672,8 +783,13 @@ function count_likes_of_post($con, $post_id)
  */
 function count_comments_of_post($con, $post_id)
 {
-    $sql = "SELECT `id` FROM `comments` WHERE `post_id` = '$post_id';";
+    $sql = "SELECT `id` FROM `comments` WHERE `post_id` = '" . intval($post_id) . "';";
     $result = mysqli_query($con, $sql);
+    if (!isset($result)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     $records_count = mysqli_num_rows($result);
     return $records_count;
 }
@@ -689,8 +805,13 @@ function count_comments_of_post($con, $post_id)
  */
 function count_reposts_of_post($con, $post_id)
 {
-    $sql = "SELECT `id` FROM `posts` WHERE `repost_id` = '$post_id';";
+    $sql = "SELECT `id` FROM `posts` WHERE `repost_id` = '" . intval($post_id) . "';";
     $result = mysqli_query($con, $sql);
+    if (!isset($result)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     $records_count = mysqli_num_rows($result);
     return $records_count;
 }
@@ -745,6 +866,11 @@ function get_messages_of_user($con, $user_id)
               END;";
     $stmt = mysqli_prepare($con, $sql);
     $messages = get_data($con, $stmt, false);
+    if (!isset($messages)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $messages;
 }
 
@@ -770,6 +896,11 @@ function get_interlocutors_of_user($con, $user_id)
             GROUP BY u.id ORDER BY last_message_time DESC;";
     $stmt = mysqli_prepare($con, $sql);
     $interlocutors = get_data($con, $stmt, false);
+    if (!isset($interlocutors)) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     return $interlocutors;
 }
 
@@ -788,8 +919,15 @@ function count_unread_messages($con, $sender_id, $receiver_id)
 {
     $sql
         = "SELECT id FROM `messages` 
-           WHERE `sender_id` = $sender_id AND `receiver_id` = $receiver_id AND `is_read` = 0;";
+           WHERE `sender_id` = " . intval($sender_id) . " 
+           AND `receiver_id` = " . intval($receiver_id) . " 
+           AND `is_read` = 0;";
     $result = mysqli_query($con, $sql);
+    if (!$result) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     $unread_messages_count = mysqli_num_rows($result);
     return $unread_messages_count;
 }
@@ -806,8 +944,13 @@ function count_unread_messages($con, $sender_id, $receiver_id)
 function count_user_unread_messages($con, $receiver_id)
 {
     $sql
-        = "SELECT id FROM `messages` WHERE `receiver_id` = $receiver_id AND `is_read` = 0;";
+        = "SELECT id FROM `messages` WHERE `receiver_id` = " . intval($receiver_id) . " AND `is_read` = 0;";
     $result = mysqli_query($con, $sql);
+    if (!$result) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return false;
+    }
     $unread_messages_count = mysqli_num_rows($result);
     return $unread_messages_count;
 }
@@ -825,7 +968,9 @@ function read_all_user_messages($con, $sender_id, $receiver_id)
 {
     $sql
         = "UPDATE `messages` SET `is_read` = 1 
-           WHERE `is_read` = 0 AND `sender_id` = $sender_id AND `receiver_id`= $receiver_id;";
+           WHERE `is_read` = 0 
+           AND `sender_id` = " . intval($sender_id) . " 
+           AND `receiver_id`= " . intval($receiver_id) . ";";
     $result = mysqli_query($con, $sql);
     if (!$result) {
         $error = mysqli_error($con);

@@ -3,7 +3,7 @@ session_start();
 
 date_default_timezone_set('Europe/Moscow');
 
-$con = mysqli_connect("localhost", "root", "", "readme");
+$con = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 if ($con === false) {
     print("Ошибка подключения: " . mysqli_connect_error());
     exit();

@@ -592,6 +592,27 @@ function validate_form($form, $configs)
 }
 
 /**
+ * Подготавливает объект Swift_SmtpTransport для подключения к почте.
+ *
+ * @param string $host      адрес почтового сервиса
+ * @param int $port порт почтового сервиса
+ * @param string $login      логин пользователя
+ * @param string $password      пароль пользователя
+ *                               *
+ * @return object
+ */
+function prepare_mail_settings($host, $port, $login, $password)
+{
+    include_once 'vendor/autoload.php';
+
+    $transport = new Swift_SmtpTransport($host, $port);
+    $transport->setUsername($login);
+    $transport->setPassword($password);
+
+    return $transport;
+}
+
+/**
  * Отправляет уведомление на почту о новом подписчике.
  *
  * @param array $follower  Данные о подписчике
@@ -599,12 +620,13 @@ function validate_form($form, $configs)
  */
 function send_subscribe_notification($follower, $following)
 {
-    include_once 'vendor/autoload.php';
+/*    include_once 'vendor/autoload.php';
 
     $transport = new Swift_SmtpTransport("smtp.mailtrap.io", 2525);
     $transport->setUsername("3aa53903ba72c2");
-    $transport->setPassword("d23b1bfd88dbec");
+    $transport->setPassword("d23b1bfd88dbec");*/
 
+    $transport = prepare_mail_settings(SMTP_HOST, SMTP_PORT, SMTP_LOGIN, SMTP_PASSWORD);
     $mailer = new Swift_Mailer($transport);
 
     $email = [
@@ -639,11 +661,12 @@ function send_subscribe_notification($follower, $following)
  */
 function send_new_post_notification($post, $followers)
 {
-    include_once 'vendor/autoload.php';
+    /*include_once 'vendor/autoload.php';*/
 
-    $transport = new Swift_SmtpTransport("smtp.mailtrap.io", 2525);
+    $transport = prepare_mail_settings(SMTP_HOST, SMTP_PORT, SMTP_LOGIN, SMTP_PASSWORD);
+/*    $transport = new Swift_SmtpTransport("smtp.mailtrap.io", 2525);
     $transport->setUsername("3aa53903ba72c2");
-    $transport->setPassword("d23b1bfd88dbec");
+    $transport->setPassword("d23b1bfd88dbec");*/
 
     $mailer = new Swift_Mailer($transport);
 
