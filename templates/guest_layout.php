@@ -183,11 +183,11 @@
                     <?php if (!empty($errors[$form['name']]) && isset($errors[$form['name']][$input['name']])) : ?>
                     form__input-section--error
                     <?php endif; ?>">
-                        <input class="authorization__input <?= $input['name'] ? "authorization__input--"
-                            . $input['name'] : "" ?> form__input"
+                        <input class="authorization__input <?= (isset($input['name']) && $input['name'])
+                            ? "authorization__input--" . $input['name'] : "" ?> form__input"
                                type="<?= $input['type'] ?? '' ?>"
                                name="<?= $input['name'] ?? '' ?>"
-                               value="<?= $_POST[$input['name']] ?? '' ?>"
+                               value="<?= htmlspecialchars($_POST[$input['name']] ?? '') ?>"
                                placeholder="<?= $input['placeholder'] ?? '' ?>">
                         <svg class="form__input-icon" width="<?= $input['icon']['width'] ??
                         '' ?>" height="<?= $input['icon']['height'] ?? '' ?>">
