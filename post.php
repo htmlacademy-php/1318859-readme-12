@@ -68,7 +68,7 @@ if (isset($_GET["id"]) && in_array($_GET["id"], $existed_ids)) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors = validate_form($form, $configs);
         if (empty($errors[$form['name']])) {
-            $db_content = htmlspecialchars($_POST['comment']);
+            $db_content = $_POST['comment'];
             $db_user_id = intval($_SESSION['user']['id']);
             $db_post_id = intval($_POST['id']);
             $db_data = [

@@ -8,11 +8,11 @@
             <div class="form__text-inputs-wrapper">
                 <div class="form__text-inputs">
                     <?php foreach ($form['inputs'] as $input) : ?>
-                        <?php if ($input['field_type'] === 'input') : ?>
+                        <?php if (isset($input['field_type']) && $input['field_type'] === 'input') : ?>
                             <div class="registration__input-wrapper form__input-wrapper">
                                 <label class="registration__label form__label" for="<?= 'registration-' . $input['name']
                                 ?? '' ?>"><?= $input['title'] ?? '' ?>
-                                    <?php if ($input['required']) : ?>
+                                    <?php if (isset($input['required']) && $input['required']) : ?>
                                         <span class="form__input-required">*</span>
                                     <?php endif; ?>
                                 </label>
@@ -21,10 +21,12 @@
                                     && isset($errors[$form['name']][$input['name']])) : ?>
                                     form__input-section--error
                                 <?php endif; ?>">
-                                    <input class="registration__input form__input" id="<?= 'registration-'
-                                    . $input['name'] ?? '' ?>" type="<?= $input['type'] ??
-                                    '' ?>" name="<?= $input['name'] ?? '' ?>" value="<?= $_POST[$input['name']] ??
-                                    ''; ?>" placeholder="<?= $input['placeholder'] ?? '' ?>">
+                                    <input class="registration__input form__input"
+                                           id="<?= 'registration-' . $input['name'] ?? '' ?>"
+                                           type="<?= $input['type'] ?? '' ?>"
+                                           name="<?= $input['name'] ?? '' ?>"
+                                           value="<?= htmlspecialchars($_POST[$input['name']] ?? '') ?>"
+                                           placeholder="<?= $input['placeholder'] ?? '' ?>">
                                     <?php if (!empty($errors[$form['name']])
                                         && isset($errors[$form['name']][$input['name']])
                                     ) : ?>
@@ -33,8 +35,7 @@
                                         </button>
                                         <div class="form__error-text">
                                             <h3 class="form__error-title"><?= $input['title'] ?? '' ?></h3>
-                                            <p class="form__error-desc">
-                                                <?= $errors[$form['name']][$input['name']]; ?>
+                                            <p class="form__error-desc"><?= $errors[$form['name']][$input['name']]; ?>
                                             </p>
                                         </div>
                                     <?php endif; ?>
@@ -61,11 +62,15 @@
 
             <div class="registration__input-file-container form__input-container form__input-container--file">
                 <?php foreach ($form['inputs'] as $input) : ?>
-                    <?php if ($input['field_type'] === 'input-file') : ?>
+                    <?php if (isset($input['field_type']) && $input['field_type'] === 'input-file') : ?>
                         <div class="registration__input-file-wrapper form__input-file-wrapper">
                             <div class="registration__file-zone form__file-zone dropzone">
-                                <input class="registration__input-file form__input-file" id="<?= $input['name'] ??
-                                '' ?>" type="<?= $input['type'] ?? '' ?>" name="<?= $input['name'] ?? '' ?>" title=" ">
+                                <input
+                                    class="registration__input-file form__input-file"
+                                    id="<?= $input['name'] ?? '' ?>"
+                                    type="<?= $input['type'] ?? '' ?>"
+                                    name="<?= $input['name'] ?? '' ?>"
+                                    title=" ">
                                 <div class="form__file-zone-text">
                                     <span>Перетащите фото сюда</span>
                                 </div>

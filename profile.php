@@ -11,15 +11,18 @@ if (!isset($_SESSION['user'])) {
 }
 
 $title = 'readme: профиль';
+$tabs = [
+    'posts' => 'посты',
+    'likes' => 'лайки',
+    'follows' => 'подписки',
+];
+$current_tab = 'posts';
 
-$tabs = ['posts' => 'посты', 'likes' => 'лайки', 'follows' => 'подписки',];
-
-foreach ($tabs as $type => $name) {
+foreach (array_keys($tabs) as $type) {
     if (isset($_GET["tab"]) && $_GET["tab"] === $type) {
         $current_tab = $_GET["tab"];
         break;
     }
-    $current_tab = 'posts';
 }
 
 $users = get_all_users($con);

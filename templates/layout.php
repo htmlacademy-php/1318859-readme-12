@@ -156,10 +156,12 @@
             <nav class="header__nav">
                 <ul class="header__my-nav">
                     <?php foreach ($nav_links as $nav_link) : ?>
-                        <li class="header__my-page <?= $nav_link['class_name'] ? "header__my-page--"
-                            . $nav_link['class_name'] : "" ?>">
+                        <li class="header__my-page <?= (isset($nav_link['class_name']) && $nav_link['class_name'])
+                            ? "header__my-page--" . $nav_link['class_name'] : "" ?>">
                             <a class="header__page-link
-                            <?php if (strpos($_SERVER['REQUEST_URI'], $nav_link['href'])) : ?>
+                            <?php if (isset($_SERVER['REQUEST_URI'])
+                                && isset($nav_link['href'])
+                                && strpos($_SERVER['REQUEST_URI'], $nav_link['href'])) : ?>
                             header__page-link--active
                             <?php endif; ?>"
                                href="<?= $nav_link['href'] ?? '' ?>" title="<?= $nav_link['title'] ?? '' ?>">
@@ -171,10 +173,10 @@
                 <ul class="header__user-nav">
                     <?php if (isset($user_name)) : ?>
                         <li class="header__profile">
-                            <a class="header__profile-link" href="profile.php?id=<?= $_SESSION['user']['id'] ?>">
+                            <a class="header__profile-link" href="profile.php?id=<?= $_SESSION['user']['id'] ?? '' ?>">
                                 <div class="header__avatar-wrapper">
-                                    <img class="header__profile-avatar" src="<?= $user_avatar ??
-                                    '' ?>" alt="Аватар профиля">
+                                    <img class="header__profile-avatar" src="<?= $user_avatar ?? '' ?>"
+                                         alt="Аватар профиля">
                                 </div>
                                 <div class="header__profile-name">
                                 <span>
@@ -190,7 +192,7 @@
                                     <ul class="header__profile-nav">
                                         <li class="header__profile-nav-item">
                                             <a class="header__profile-nav-link"
-                                               href="profile.php?id=<?= $_SESSION['user']['id'] ?>">
+                                               href="profile.php?id=<?= $_SESSION['user']['id'] ?? '' ?>">
                                                 <span class="header__profile-nav-text">Мой профиль</span>
                                             </a>
                                         </li>

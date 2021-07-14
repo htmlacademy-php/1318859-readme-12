@@ -11,7 +11,6 @@ if (!isset($_SESSION['user'])) {
 }
 
 $title = 'readme: моя лента';
-
 $tabs = [
     'photo' => 'фото',
     'video' => 'видео',
@@ -19,13 +18,13 @@ $tabs = [
     'quote' => 'цитата',
     'link'  => 'ссылка',
 ];
+$current_tab = '';
 
-foreach ($tabs as $type => $name) {
+foreach (array_keys($tabs) as $type) {
     if (isset($_GET["type"]) && $_GET["type"] === $type) {
         $current_tab = $_GET["type"];
         break;
     }
-    $current_tab = '';
 }
 
 $user_id = intval($_SESSION['user']['id']);

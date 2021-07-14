@@ -3,79 +3,83 @@
         <h1 class="page__title page__title--publication"><?= $post['title'] ?? '' ?></h1>
         <section class="post-details">
             <h2 class="visually-hidden">Публикация</h2>
-            <div class="post-details__wrapper <?= $post['class_name'] ? "post-" . $post['class_name'] : '' ?>">
+            <div class="post-details__wrapper <?= (isset($post['class_name'])
+                && $post['class_name']) ? "post-" . $post['class_name'] : '' ?>">
                 <div class="post-details__main-block post post--details">
-                    <?php if ($post['class_name'] === 'quote') : ?>
-                        <div class="post__main">
-                            <blockquote>
-                                <p><?= htmlspecialchars($post['text_content']) ?></p>
-                                <cite><?= htmlspecialchars($post['quote_author']) ?></cite>
-                            </blockquote>
-                        </div>
-                    <?php elseif ($post['class_name'] === 'link') : ?>
-                        <div class="post__main">
-                            <div class="post-link__wrapper">
-                                <a class="post-link__external" href="<?= htmlspecialchars($post['link']) ??
-                                '' ?>" title="Перейти по ссылке">
-                                    <div class="post-link__icon-wrapper">
-                                        <img src="https://www.google.com/s2/favicons?domain=
-                                        <?= htmlspecialchars(str_replace(
-                                            'www.',
-                                            '',
-                                            $post['link'] ?? ''
-                                        )) ?>" alt="Иконка">
-                                    </div>
-                                    <div class="post-link__info">
-                                        <h3><?= htmlspecialchars($post['title']) ?? '' ?></h3>
-                                        <span><?= htmlspecialchars($post['link']) ?? '' ?></span>
-                                    </div>
-                                    <svg class="post-link__arrow" width="11" height="16">
-                                        <use xlink:href="#icon-arrow-right-ad"></use>
-                                    </svg>
-                                </a>
+                    <?php if (isset($post['class_name'])) : ?>
+                        <?php if ($post['class_name'] === 'quote') : ?>
+                            <div class="post__main">
+                                <blockquote>
+                                    <p><?= htmlspecialchars($post['text_content'] ?? '') ?></p>
+                                    <cite><?= htmlspecialchars($post['quote_author'] ?? '') ?></cite>
+                                </blockquote>
                             </div>
-                        </div>
-                    <?php elseif ($post['class_name'] === 'photo') : ?>
-                        <div class="post__main">
-                            <div class="post-details__image-wrapper post-photo__image-wrapper">
-                                <img src="<?= htmlspecialchars($post['image']) ??
-                                '' ?>" alt="Фото от пользователя" width="760" height="507">
-                            </div>
-                        </div>
-                    <?php elseif ($post['class_name'] === 'video') : ?>
-                        <div class="post__main">
-                            <div class="post-video__block">
-                                <div class="post-video__preview">
-                                    <?= embed_youtube_cover($post['video'] ?? '', 760, 507); ?>
+                        <?php elseif ($post['class_name'] === 'link') : ?>
+                            <div class="post__main">
+                                <div class="post-link__wrapper">
+                                    <a class="post-link__external" href="<?= htmlspecialchars($post['link'] ??
+                                    '') ?>" title="Перейти по ссылке">
+                                        <div class="post-link__icon-wrapper">
+                                            <img src="https://www.google.com/s2/favicons?domain=
+                                        <?= htmlspecialchars(
+                                            str_replace(
+                                                'www.',
+                                                '',
+                                                $post['link'] ?? ''
+                                            )
+                                        ) ?>" alt="Иконка">
+                                        </div>
+                                        <div class="post-link__info">
+                                            <h3><?= htmlspecialchars($post['title'] ?? '') ?></h3>
+                                            <span><?= htmlspecialchars($post['link'] ?? '') ?></span>
+                                        </div>
+                                        <svg class="post-link__arrow" width="11" height="16">
+                                            <use xlink:href="#icon-arrow-right-ad"></use>
+                                        </svg>
+                                    </a>
                                 </div>
-                                <div class="post-video__control">
-                                    <button class="post-video__play post-video__play--paused
+                            </div>
+                        <?php elseif ($post['class_name'] === 'photo') : ?>
+                            <div class="post__main">
+                                <div class="post-details__image-wrapper post-photo__image-wrapper">
+                                    <img src="<?= htmlspecialchars($post['image'] ??
+                                    '') ?>" alt="Фото от пользователя" width="760" height="507">
+                                </div>
+                            </div>
+                        <?php elseif ($post['class_name'] === 'video') : ?>
+                            <div class="post__main">
+                                <div class="post-video__block">
+                                    <div class="post-video__preview">
+                                        <?= embed_youtube_cover($post['video'] ?? '', 760, 507); ?>
+                                    </div>
+                                    <div class="post-video__control">
+                                        <button class="post-video__play post-video__play--paused
                                     button button--video" type="button">
-                                        <span class="visually-hidden">Запустить видео</span></button>
-                                    <div class="post-video__scale-wrapper">
-                                        <div class="post-video__scale">
-                                            <div class="post-video__bar">
-                                                <div class="post-video__toggle"></div>
+                                            <span class="visually-hidden">Запустить видео</span></button>
+                                        <div class="post-video__scale-wrapper">
+                                            <div class="post-video__scale">
+                                                <div class="post-video__bar">
+                                                    <div class="post-video__toggle"></div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <button class="post-video__fullscreen post-video__fullscreen--inactive
+                                        <button class="post-video__fullscreen post-video__fullscreen--inactive
                                     button button--video" type="button">
-                                        <span class="visually-hidden">Полноэкранный режим</span></button>
+                                            <span class="visually-hidden">Полноэкранный режим</span></button>
+                                    </div>
+                                    <button class="post-video__play-big button" type="button">
+                                        <svg class="post-video__play-big-icon" width="27" height="28">
+                                            <use xlink:href="#icon-video-play-big"></use>
+                                        </svg>
+                                        <span class="visually-hidden">Запустить проигрыватель</span>
+                                    </button>
                                 </div>
-                                <button class="post-video__play-big button" type="button">
-                                    <svg class="post-video__play-big-icon" width="27" height="28">
-                                        <use xlink:href="#icon-video-play-big"></use>
-                                    </svg>
-                                    <span class="visually-hidden">Запустить проигрыватель</span>
-                                </button>
                             </div>
-                        </div>
-
-                    <?php elseif ($post['class_name'] === 'text') : ?>
-                        <div class="post__main">
-                            <p><?= htmlspecialchars($post['text_content']) ?? '' ?></p>
-                        </div>
+                        <?php elseif ($post['class_name'] === 'text') : ?>
+                            <div class="post__main">
+                                <p><?= htmlspecialchars($post['text_content'] ?? '') ?></p>
+                            </div>
+                        <?php endif; ?>
                     <?php endif; ?>
                     <div class="post__indicators">
                         <div class="post__buttons">
@@ -119,12 +123,7 @@
                             </a>
                         </div>
                         <span class="post__view"><?= $views_count ?? '0' ?>
-                            <?= get_noun_plural_form(
-                                $views_count,
-                                'просмотр',
-                                'просмотра',
-                                'просмотров'
-                            ) ?></span>
+                            <?= get_noun_plural_form($views_count, 'просмотр', 'просмотра', 'просмотров') ?></span>
                     </div>
                     <?php if ($post_tags) : ?>
                         <ul class="post__tags">
@@ -138,9 +137,9 @@
                     <?php endif; ?>
                     <div class="comments">
                         <form class="comments__form form" action="post.php?id=<?= $id ?? '' ?>" method="post">
-                            <input type="hidden" name="id" value="<?= $id; ?>">
+                            <input type="hidden" name="id" value="<?= $id ?? '' ?>">
                             <div class="comments__my-avatar">
-                                <img class="comments__picture" src="<?= $_SESSION['user']['avatar'] ?>"
+                                <img class="comments__picture" src="<?= $_SESSION['user']['avatar'] ?? '' ?>"
                                      alt="Аватар пользователя">
                             </div>
                             <div class="form__input-section
@@ -151,14 +150,14 @@
                                           name="comment"
                                           placeholder="Ваш комментарий"
                                             <?php if ($count_of_shown_post_comments === 0) : ?>
-                                              id="last_comment"
-                                            <?php endif; ?>><?= $_POST['comment'] ?? '' ?></textarea>
+                                                id="last_comment"
+                                            <?php endif; ?>><?= htmlspecialchars($_POST['comment'] ?? '') ?></textarea>
                                 <label class="visually-hidden">Ваш комментарий</label>
                                 <?php if (!empty($errors[$form['name']])) : ?>
                                     <button class="form__error-button button" type="button">!</button>
                                     <div class="form__error-text">
                                         <h3 class="form__error-title">Ошибка валидации</h3>
-                                        <p class="form__error-desc"><?= $errors[$form['name']]['comment']; ?></p>
+                                        <p class="form__error-desc"><?= $errors[$form['name']]['comment'] ?? '' ?></p>
                                     </div>
                                 <?php endif; ?>
                             </div>
@@ -175,29 +174,29 @@
                                             <div class="comments__avatar">
                                                 <a class="user__avatar-link"
                                                    href="profile.php?id=<?= $post_comments[$i]['id'] ?? '' ?>">
-                                                    <img class="comments__picture" src="<?= $post_comments[$i]['avatar']
-                                                    ?? '' ?>" alt="Аватар пользователя">
+                                                    <img class="comments__picture"
+                                                         src="<?= htmlspecialchars($post_comments[$i]['avatar']
+                                                            ?? '') ?>" alt="Аватар пользователя">
                                                 </a>
                                             </div>
                                             <div class="comments__info">
                                                 <div class="comments__name-wrapper">
                                                     <a class="comments__user-name"
                                                        href="profile.php?id=<?= $post_comments[$i]['id'] ?? '' ?>">
-                                                        <span><?= $post_comments[$i]['login'] ?? '' ?></span>
+                                                        <span><?= htmlspecialchars($post_comments[$i]['login']
+                                                                ?? '') ?></span>
                                                     </a>
                                                     <time class="comments__time"
                                                           datetime="
-                                                          <?= date_format(
-                                                              date_create($post_comments[$i]['publish_time'] ?? ''),
-                                                              'Y-m-d'
-                                                          ); ?>">
+                                                          <?= date_format(date_create($post_comments[$i]['publish_time']
+                                                              ?? ''), 'Y-m-d'); ?>">
                                                         <?= print_date_diff($post_comments[$i]['publish_time'] ??
                                                             ''); ?>
                                                         назад
                                                     </time>
                                                 </div>
                                                 <p class="comments__text">
-                                                    <?= $post_comments[$i]['content'] ?? '' ?>
+                                                    <?= htmlspecialchars($post_comments[$i]['content'] ?? '') ?>
                                                 </p>
                                             </div>
                                         </li>
@@ -218,18 +217,23 @@
                         <div class="post-details__avatar user__avatar">
                             <a class="post-details__avatar-link user__avatar-link"
                                href="profile.php?id=<?= $post['user_id'] ?? '' ?>">
-                                <img class="post-details__picture user__picture" src="../<?= $post['avatar'] ??
-                                '' ?>" alt="Аватар пользователя">
+                                <img class="post-details__picture user__picture"
+                                     src="../<?= htmlspecialchars($post['avatar'] ?? '') ?>"
+                                     alt="Аватар пользователя">
                             </a>
                         </div>
                         <div class="post-details__name-wrapper user__name-wrapper">
                             <a class="post-details__name user__name" href="profile.php?id=<?= $post['user_id'] ??
                             '' ?>">
-                                <span><?= $post['login'] ?? '' ?></span>
+                                <span><?= htmlspecialchars($post['login'] ?? '') ?></span>
                             </a>
                             <time class="post-details__time user__time"
-                                  datetime="<?= date_format(date_create($author['dt_add']
-                                    ?? ''), 'Y-m-d'); ?>"><?= print_date_diff($author['dt_add'] ?? ''); ?>
+                                  datetime="<?= date_format(
+                                      date_create(
+                                          $author['dt_add'] ?? ''
+                                      ),
+                                      'Y-m-d'
+                                  ) ?>"><?= print_date_diff($author['dt_add'] ?? ''); ?>
                                 на сайте
                             </time>
                         </div>

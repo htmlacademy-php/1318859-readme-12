@@ -80,7 +80,7 @@ if (!isset($_GET["id"])) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && $id !== intval($_SESSION['user']['id'])) {
         $errors = validate_form($form, $configs);
         if (empty($errors[$form['name']])) {
-            $db_content = htmlspecialchars($_POST['message']);
+            $db_content = $_POST['message'];
             $db_sender_id = intval($_SESSION['user']['id']);
             $db_receiver_id = intval($_POST['id']);
             $db_data = [
