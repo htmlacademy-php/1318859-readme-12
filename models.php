@@ -257,6 +257,7 @@ function add_follower($con, $follower_user, $following_user)
         return false;
     }
     send_subscribe_notification($follower_user, $following_user);
+    return true;
 }
 
 /**
@@ -286,7 +287,7 @@ function remove_follower($con, $follower_id, $following_user_id)
  *                           объект с данными, иначе - false.
  * @param array $data        - данные о добавляемом посте.
  *
- * @return array
+ * @return bool|array
  */
 function add_post($con, $data)
 {
@@ -294,7 +295,6 @@ function add_post($con, $data)
     foreach ($data as $db_col_name => $value) {
         $sql_data .= " $db_col_name = '" . mysqli_real_escape_string($con, $value) . "',";
     }
-//    $sql_data = mysqli_real_escape_string($con, $sql_data);
     $sql = "INSERT INTO `posts` SET" . substr($sql_data, 0, -1) . ";";
     $result = mysqli_query($con, $sql);
     if (!$result) {
@@ -321,7 +321,7 @@ function add_post($con, $data)
  *                           объект с данными, иначе - false.
  * @param array $data        - данные о добавляемом пользователе.
  *
- * @return int
+ * @return bool|int
  */
 function add_user($con, $data)
 {
@@ -455,7 +455,7 @@ function add_tags($con, $post_tags, $db_tags, $post_id)
  *                           объект с данными, иначе - false.
  * @param string $search     - поисковый запрос.
  *
- * @return array
+ * @return array|bool
  */
 function get_search_posts($con, $search)
 {
@@ -482,7 +482,7 @@ function get_search_posts($con, $search)
  *                           объект с данными, иначе - false.
  * @param int $post_id       - идентификатор поста.
  *
- * @return array
+ * @return array|bool
  */
 function get_post_tags($con, $post_id)
 {
@@ -507,7 +507,7 @@ function get_post_tags($con, $post_id)
  *                           объект с данными, иначе - false.
  * @param int $post_id       - идентификатор поста.
  *
- * @return array
+ * @return array|bool
  */
 function get_post_comments($con, $post_id)
 {
@@ -533,7 +533,7 @@ function get_post_comments($con, $post_id)
  *                           объект с данными, иначе - false.
  * @param string $tag_name   - тег, по наличию которого выбираются посты.
  *
- * @return array
+ * @return array|bool
  */
 function get_posts_with_tag($con, $tag_name)
 {
@@ -561,7 +561,7 @@ function get_posts_with_tag($con, $tag_name)
  *                           объект с данными, иначе - false.
  * @param int $user_id       - идентификатор пользователя.
  *
- * @return array
+ * @return array|bool
  */
 function get_posts_of_user($con, $user_id)
 {
@@ -587,7 +587,7 @@ function get_posts_of_user($con, $user_id)
  *                           объект с данными, иначе - false.
  * @param int $user_id       - идентификатор пользователя.
  *
- * @return array
+ * @return array|bool
  */
 function get_posts_of_following_users($con, $user_id)
 {
@@ -614,7 +614,7 @@ function get_posts_of_following_users($con, $user_id)
  *                           объект с данными, иначе - false.
  * @param int $user_id       - идентификатор пользователя.
  *
- * @return array
+ * @return array|bool
  */
 function get_liked_posts_of_user($con, $user_id)
 {
@@ -642,7 +642,7 @@ function get_liked_posts_of_user($con, $user_id)
  *                           объект с данными, иначе - false.
  * @param int $user_id       - идентификатор пользователя.
  *
- * @return array
+ * @return array|bool
  */
 function get_following_users_of_user($con, $user_id)
 {
@@ -701,7 +701,7 @@ function toggle_like($con, $user_id, $post_id)
  *                           объект с данными, иначе - false.
  * @param int $user_id       - идентификатор пользователя.
  *
- * @return array
+ * @return array|bool
  */
 function get_all_liked_post_ids_by_user($con, $user_id)
 {
@@ -729,7 +729,7 @@ function get_all_liked_post_ids_by_user($con, $user_id)
  *                           объект с данными, иначе - false.
  * @param int $user_id       - идентификатор пользователя.
  *
- * @return array
+ * @return array|bool
  */
 function get_all_reposted_post_ids_by_user($con, $user_id)
 {
@@ -757,7 +757,7 @@ function get_all_reposted_post_ids_by_user($con, $user_id)
  *                           объект с данными, иначе - false.
  * @param int $post_id       - идентификатор поста.
  *
- * @return int
+ * @return int|bool
  */
 function count_likes_of_post($con, $post_id)
 {
@@ -779,7 +779,7 @@ function count_likes_of_post($con, $post_id)
  *                           объект с данными, иначе - false.
  * @param int $post_id       - идентификатор поста.
  *
- * @return int
+ * @return int|bool
  */
 function count_comments_of_post($con, $post_id)
 {
@@ -801,7 +801,7 @@ function count_comments_of_post($con, $post_id)
  *                           объект с данными, иначе - false.
  * @param int $post_id       - идентификатор поста.
  *
- * @return int
+ * @return int|bool
  */
 function count_reposts_of_post($con, $post_id)
 {
@@ -852,7 +852,7 @@ function repost($con, $post_id)
  *                           объект с данными, иначе - false.
  * @param int $user_id       - идентификатор пользователя.
  *
- * @return array
+ * @return array|bool
  */
 function get_messages_of_user($con, $user_id)
 {
@@ -881,7 +881,7 @@ function get_messages_of_user($con, $user_id)
  *                           объект с данными, иначе - false.
  * @param int $user_id       - идентификатор пользователя.
  *
- * @return array
+ * @return array|bool
  */
 function get_interlocutors_of_user($con, $user_id)
 {
@@ -913,7 +913,7 @@ function get_interlocutors_of_user($con, $user_id)
  * @param int $sender_id     - идентификатор отправителя.
  * @param int $receiver_id   - идентификатор получателя.
  *
- * @return int
+ * @return int|bool
  */
 function count_unread_messages($con, $sender_id, $receiver_id)
 {
@@ -939,7 +939,7 @@ function count_unread_messages($con, $sender_id, $receiver_id)
  *                           объект с данными, иначе - false.
  * @param int $receiver_id   - идентификатор получателя.
  *
- * @return int
+ * @return int|bool
  */
 function count_user_unread_messages($con, $receiver_id)
 {

@@ -299,9 +299,7 @@ function get_data($con, $stmt, $is_row)
  */
 function validate_filled($name)
 {
-    if (empty(trim($_POST[$name]))) {
-        return "Это поле должно быть заполнено";
-    }
+    return (empty(trim($_POST[$name]))) ? "Это поле должно быть заполнено" : false;
 }
 
 /**
@@ -311,15 +309,13 @@ function validate_filled($name)
  * @param string $name       Значение атрибута 'name' поля формы
  * @param int    $max_length Максимальная длина строки
  *
- * @return string
+ * @return string|bool
  */
 function validate_max_length($name, $max_length)
 {
     $len = strlen(trim($_POST[$name]));
 
-    if ($len > $max_length) {
-        return "Количество символов не должно превышать $max_length";
-    }
+    return ($len > $max_length) ? "Количество символов не должно превышать $max_length" : false;
 }
 
 /**
@@ -329,15 +325,14 @@ function validate_max_length($name, $max_length)
  * @param string $name       Значение атрибута 'name' поля формы
  * @param int    $max_length Максимальная длина строки
  *
- * @return string
+ * @return string|bool
  */
 function validate_max_image_name_length($name, $max_length)
 {
     $len = strlen(trim($_FILES[$name]['name']));
 
-    if ($len > $max_length) {
-        return "Количество символов в имени файла изображения не должно превышать $max_length";
-    }
+    return ($len > $max_length)
+        ? "Количество символов в имени файла изображения не должно превышать $max_length" : false;
 }
 
 /**
@@ -347,15 +342,13 @@ function validate_max_image_name_length($name, $max_length)
  * @param string $name       Значение атрибута 'name' поля формы
  * @param int    $min_length Минимальная длина строки
  *
- * @return string
+ * @return string|bool
  */
 function is_correct_min_length_comment($name, $min_length)
 {
     $len = strlen(trim($_POST[$name]));
 
-    if ($len < $min_length) {
-        return "Комментарий должен быть не менее $min_length символов";
-    }
+    return ($len < $min_length) ? "Комментарий должен быть не менее $min_length символов" : false;
 }
 
 /**
@@ -363,14 +356,12 @@ function is_correct_min_length_comment($name, $min_length)
  *
  * @param string $name Значение атрибута 'name' поля формы
  *
- * @return string
+ * @return string|bool
  */
 function validate_url($name)
 {
-    if (!filter_var($_POST[$name], FILTER_VALIDATE_URL)) {
-        return "Значение поля должно быть корректным URL-адресом";
-    }
-    return false;
+    return (!filter_var($_POST[$name], FILTER_VALIDATE_URL))
+        ? "Значение поля должно быть корректным URL-адресом" : false;
 }
 
 /**
@@ -378,14 +369,12 @@ function validate_url($name)
  *
  * @param string $name Значение атрибута 'name' поля формы
  *
- * @return string
+ * @return string|bool
  */
 function validate_email($name)
 {
-    if (!filter_var($_POST[$name], FILTER_VALIDATE_EMAIL)) {
-        return "Значение поля должно быть корректным email-адресом";
-    }
-    return false;
+    return (!filter_var($_POST[$name], FILTER_VALIDATE_EMAIL))
+        ? "Значение поля должно быть корректным email-адресом" : false;
 }
 
 /**
@@ -395,7 +384,7 @@ function validate_email($name)
  *                           объект с данными, иначе - false.
  * @param string $name       Значение атрибута 'name' поля формы
  *
- * @return string
+ * @return string|bool
  */
 function validate_unique_email($con, $name)
 {
@@ -403,10 +392,7 @@ function validate_unique_email($con, $name)
     $sql = "SELECT `id` FROM `users` WHERE `email` = '$email'";
     $res = mysqli_query($con, $sql);
 
-    if (mysqli_num_rows($res) > 0) {
-        return "Пользователь с таким email уже зарегистрирован";
-    }
-    return false;
+    return (mysqli_num_rows($res) > 0) ? "Пользователь с таким email уже зарегистрирован" : false;
 }
 
 /**
@@ -415,14 +401,11 @@ function validate_unique_email($con, $name)
  * @param string $password_repeat Значение из поля "Повторите пароль"
  * @param string $password        Значение из поля "Пароль"
  *
- * @return string
+ * @return string|bool
  */
 function validate_password($password_repeat, $password)
 {
-    if ($_POST[$password_repeat] !== $_POST[$password]) {
-        return "Пароли не совпадают.";
-    }
-    return false;
+    return ($_POST[$password_repeat] !== $_POST[$password]) ? "Пароли не совпадают." : false;
 }
 
 /**
@@ -459,7 +442,7 @@ function validate_image_type_from_url($name)
  *
  * @param string $name Значение атрибута 'name' поля формы
  *
- * @return string
+ * @return string|bool
  */
 function validate_image_url_content($name)
 {
@@ -515,7 +498,7 @@ function validate_image_type($name)
  *
  * @param string $name Значение атрибута 'name' поля формы
  *
- * @return false
+ * @return string|bool
  */
 function move_uploaded_image($name)
 {
@@ -553,12 +536,11 @@ function get_tags_from_post($name)
  * @param string $name       Значение атрибута 'name' поля формы
  * @param int    $max_length Максимальная длина строки
  *
- * @return string
+ * @return string|bool
  */
 function validate_max_tag_name_length($name, $max_length)
 {
     $tags = get_tags_from_post($name);
-
     if (count($tags) > 0) {
         foreach ($tags as $tag) {
             $len = strlen($tag);
@@ -567,6 +549,7 @@ function validate_max_tag_name_length($name, $max_length)
             }
         }
     }
+    return false;
 }
 
 /**
@@ -594,11 +577,12 @@ function validate_form($form, $configs)
 /**
  * Подготавливает объект Swift_SmtpTransport для подключения к почте.
  *
- * @param string $host      адрес почтового сервиса
- * @param int $port порт почтового сервиса
- * @param string $login      логин пользователя
- * @param string $password      пароль пользователя
+ * @param string $host           адрес почтового сервиса
+ * @param int    $port           порт почтового сервиса
+ * @param string $login          логин пользователя
+ * @param string $password       пароль пользователя
  *                               *
+ *
  * @return \Swift_Transport
  */
 function prepare_mail_settings($host, $port, $login, $password)
@@ -628,10 +612,9 @@ function send_subscribe_notification($follower, $following)
         'sender_email'     => ['keks@phpdemo.ru' => 'Readme'],
         'addressee_emails' => htmlspecialchars([$following['email']] ?? ''),
         'message_content'  => 'Здравствуйте, ' . htmlspecialchars($following['login'] ?? '')
-            . '. На вас подписался новый пользователь '
-            . htmlspecialchars($follower['login'] ?? '') . '. Вот ссылка на его профиль: '
-            . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http')
-            . '://' . $_SERVER['HTTP_HOST'] . '/profile.php?id=' . $follower['id'] ?? '',
+            . '. На вас подписался новый пользователь ' . htmlspecialchars($follower['login'] ?? '')
+            . '. Вот ссылка на его профиль: ' . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://'
+            . $_SERVER['HTTP_HOST'] . '/profile.php?id=' . $follower['id'] ?? '',
     ];
 
     $message = new Swift_Message();
@@ -662,15 +645,15 @@ function send_new_post_notification($post, $followers)
 
     foreach ($followers as $follower) {
         $email = [
-            'subject'          => 'Новая публикация от пользователя ' . htmlspecialchars($_SESSION['user']['login']
-                    ?? ''),
+            'subject'          => 'Новая публикация от пользователя ' . htmlspecialchars($_SESSION['user']['login'] ??
+                    ''),
             'sender_email'     => ['keks@phpdemo.ru' => 'Readme'],
             'addressee_emails' => [$follower['email'] ?? ''],
-            'message_content'  => 'Здравствуйте, ' . htmlspecialchars($follower['login']
-                    ?? '') . '. Пользователь ' . htmlspecialchars($_SESSION['user']['login'] ?? '')
-                . ' только что опубликовал новую запись "' . htmlspecialchars($post['title'] ?? '')
-                . '". Посмотрите её на странице пользователя: ' . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http')
-                . '://' . $_SERVER['HTTP_HOST'] . '/profile.php?id=' . $_SESSION['user']['id'] ?? '',
+            'message_content'  => 'Здравствуйте, ' . htmlspecialchars($follower['login'] ?? '') . '. Пользователь '
+                . htmlspecialchars($_SESSION['user']['login'] ?? '') . ' только что опубликовал новую запись "'
+                . htmlspecialchars($post['title'] ?? '') . '". Посмотрите её на странице пользователя: '
+                . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/profile.php?id='
+                . $_SESSION['user']['id'] ?? '',
         ];
 
         $message = new Swift_Message();
