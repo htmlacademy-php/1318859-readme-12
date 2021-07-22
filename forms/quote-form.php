@@ -38,6 +38,7 @@ return [
             'required'   => true,
             'type'       => 'text',
             'name'       => 'author',
+            'placeholder' => 'Укажите автора',
             'field_type' => 'input',
             'max_length' => 200,
             'checks'     => [
@@ -56,7 +57,15 @@ return [
             'name'        => 'tags',
             'placeholder' => 'Введите теги',
             'field_type'  => 'input',
-            'checks'      => [],
+            'max_length'  => 50,
+            'checks'      => [
+                0 => function ($input, $configs) {
+                    return validate_max_tag_name_length(
+                        $configs['current_tab'] . '-' . $input['name'],
+                        $input['max_length']
+                    );
+                },
+            ],
         ],
     ],
 ];

@@ -1,6 +1,6 @@
 <main class="page__main page__main--publication">
     <div class="container">
-        <h1 class="page__title page__title--publication"><?= $post['title'] ?? '' ?></h1>
+        <h1 class="page__title page__title--publication"><?= htmlspecialchars($post['title'] ?? '') ?></h1>
         <section class="post-details">
             <h2 class="visually-hidden">Публикация</h2>
             <div class="post-details__wrapper <?= (isset($post['class_name'])
@@ -96,7 +96,7 @@
                                      width="20" height="17">
                                     <use xlink:href="#icon-heart-active"></use>
                                 </svg>
-                                <span><?= count_likes_of_post($con, $id) ?></span>
+                                <span><?= count_likes_of_post($con, $id ?? '') ?></span>
                                 <span class="visually-hidden">количество лайков</span>
                             </a>
                             <a class="post__indicator post__indicator--comments button" href="#last_comment"
@@ -104,7 +104,7 @@
                                 <svg class="post__indicator-icon" width="19" height="17">
                                     <use xlink:href="#icon-comment"></use>
                                 </svg>
-                                <span><?= count_comments_of_post($con, $id) ?></span>
+                                <span><?= count_comments_of_post($con, $id ?? '') ?></span>
                                 <span class="visually-hidden">количество комментариев</span>
                             </a>
                             <a class="post__indicator post__indicator--repost button
@@ -123,14 +123,15 @@
                             </a>
                         </div>
                         <span class="post__view"><?= $views_count ?? '0' ?>
-                            <?= get_noun_plural_form($views_count, 'просмотр', 'просмотра', 'просмотров') ?></span>
+                            <?= get_noun_plural_form($views_count ?? 0, 'просмотр', 'просмотра', 'просмотров') ?></span>
                     </div>
-                    <?php if ($post_tags) : ?>
+                    <?php if (isset($post_tags) && $post_tags) : ?>
                         <ul class="post__tags">
                             <?php foreach ($post_tags as $tag) : ?>
                                 <li>
-                                    <a href="search.php?q=<?= $tag['name'] ?? '' ?>&type=tag">#<?= $tag['name'] ??
-                                        '' ?></a>
+                                    <a href="search.php?q=<?= htmlspecialchars($tag['name'] ??
+                                        '') ?>&type=tag">#<?= htmlspecialchars($tag['name'] ??
+                                        '') ?></a>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
@@ -149,7 +150,8 @@
                                 <textarea class="comments__textarea form__textarea form__input"
                                           name="comment"
                                           placeholder="Ваш комментарий"
-                                            <?php if ($count_of_shown_post_comments === 0) : ?>
+                                            <?php if (isset($count_of_shown_post_comments)
+                                                && $count_of_shown_post_comments === 0) : ?>
                                                 id="last_comment"
                                             <?php endif; ?>><?= htmlspecialchars($_POST['comment'] ?? '') ?></textarea>
                                 <label class="visually-hidden">Ваш комментарий</label>
@@ -163,7 +165,7 @@
                             </div>
                             <button class="comments__submit button button--green" type="submit">Отправить</button>
                         </form>
-                        <?php if ($count_of_shown_post_comments > 0) : ?>
+                        <?php if (isset($count_of_shown_post_comments) && $count_of_shown_post_comments > 0) : ?>
                             <div class="comments__list-wrapper">
                                 <ul class="comments__list">
                                     <?php for ($i = 0; $i < $count_of_shown_post_comments; $i++) : ?>
@@ -202,7 +204,8 @@
                                         </li>
                                     <?php endfor; ?>
                                 </ul>
-                                <?php if ($count_of_post_comments > NUMBER_OF_SHOWN_POST_COMMENTS) : ?>
+                                <?php if (isset($count_of_post_comments)
+                                    && $count_of_post_comments > NUMBER_OF_SHOWN_POST_COMMENTS) : ?>
                                     <a class="comments__more-link" href="#">
                                         <span>Показать все комментарии</span>
                                         <sup class="comments__amount"><?= $count_of_post_comments ?></sup>
@@ -244,7 +247,7 @@
                                 ?? '0' ?></span>
                             <span class="post-details__rating-text user__rating-text">
                                 <?= get_noun_plural_form(
-                                    $amount_of_user_followers,
+                                    $amount_of_user_followers ?? 0,
                                     'подписчик',
                                     'подписчика',
                                     'подписчиков'
@@ -255,16 +258,16 @@
                                 '0' ?></span>
                             <span class="post-details__rating-text user__rating-text">
                                 <?= get_noun_plural_form(
-                                    $amount_of_user_posts,
+                                    $amount_of_user_posts ?? 0,
                                     'публикация',
                                     'публикации',
                                     'публикаций'
                                 ) ?></span>
                         </p>
                     </div>
-                    <?php if (!$self_page) : ?>
+                    <?php if (isset($self_page) && !$self_page) : ?>
                         <div class="post-details__user-buttons user__buttons">
-                            <?php if ($subscribe) : ?>
+                            <?php if (isset($subscribe) && $subscribe) : ?>
                                 <a class="user__button user__button--subscription button button--quartz"
                                    href="profile.php?id=<?= $post['user_id'] ?? '' ?>&unsubscribed">
                                     Отписаться
