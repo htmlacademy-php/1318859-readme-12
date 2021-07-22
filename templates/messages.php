@@ -27,15 +27,16 @@
                     <?php if (isset($interlocutor['unread_messages']) && $interlocutor['unread_messages'] > 0) : ?>
                     messages__contacts-item--new
                     <?php endif; ?>">
-                        <a class="messages__contacts-tab tabs__item <?= (isset($id) && $interlocutor['user_id'] === $id)
-                            ? "messages__contacts-tab--active tabs__item--active"
-                            : "" ?>" href="message.php?id=<?= $interlocutor['user_id'] ?? '' ?>">
+                        <a class="messages__contacts-tab tabs__item
+                        <?= (isset($id) && isset($interlocutor['user_id']) && $interlocutor['user_id'] === $id)
+                            ? " messages__contacts-tab--active tabs__item--active"
+                            : "" ?>" href="message.php?id=<?= $interlocutor['user_id'] ?>">
                             <div class="messages__avatar-wrapper">
                                 <img class="messages__avatar" src="<?= htmlspecialchars($interlocutor['avatar'] ??
                                 '') ?>" alt="Аватар пользователя">
                                 <?php if (isset($interlocutor['unread_messages'])
                                     && $interlocutor['unread_messages'] > 0) : ?>
-                                    <i class="messages__indicator"><?= $interlocutor['unread_messages'] ?? '' ?></i>
+                                    <i class="messages__indicator"><?= $interlocutor['unread_messages'] ?></i>
                                 <?php endif; ?>
                             </div>
                             <div class="messages__info">
@@ -85,7 +86,8 @@
                                                     && isset($_SESSION['user']['id'])
                                                     && isset($_SESSION['user']['avatar'])
                                                     && $message['sender_id'] === intval($_SESSION['user']['id']))
-                                                    ? $_SESSION['user']['avatar'] : $message['avatar'] ?>"
+                                                    ? htmlspecialchars($_SESSION['user']['avatar'])
+                                                    : htmlspecialchars($message['avatar']) ?>"
                                                      alt="Аватар пользователя">
                                             </a>
                                         </div>
@@ -100,7 +102,8 @@
                                                     && isset($_SESSION['user']['id'])
                                                     && isset($_SESSION['user']['login'])
                                                     && $message['sender_id'] === intval($_SESSION['user']['id']))
-                                                    ? $_SESSION['user']['login'] : $message['login'] ?>
+                                                    ? htmlspecialchars($_SESSION['user']['login'])
+                                                    : htmlspecialchars($message['login']) ?>
                                             </a>
                                             <time class="messages__time" datetime="
                                             <?= date_format(date_create($message['dt_add'] ?? ''), 'Y-m-d'); ?>">

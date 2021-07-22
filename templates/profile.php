@@ -24,7 +24,7 @@
                         <span class="user__rating-amount"><?= $amount_of_user_posts ?? '0' ?></span>
                         <span class="profile__rating-text user__rating-text">
                             <?= get_noun_plural_form(
-                                $amount_of_user_posts,
+                                $amount_of_user_posts ?? 0,
                                 'публикация',
                                 'публикации',
                                 'публикаций'
@@ -34,7 +34,7 @@
                         <span class="user__rating-amount"><?= $amount_of_user_followers ?? '0' ?></span>
                         <span class="profile__rating-text user__rating-text">
                             <?= get_noun_plural_form(
-                                $amount_of_user_followers,
+                                $amount_of_user_followers ?? 0,
                                 'подписчик',
                                 'подписчика',
                                 'подписчиков'
@@ -42,9 +42,9 @@
                     </p>
                 </div>
 
-                <?php if (!$self_page) : ?>
+                <?php if (isset($self_page) && !$self_page) : ?>
                     <div class="profile__user-buttons user__buttons">
-                        <?php if ($subscribe) : ?>
+                        <?php if (isset($subscribe) && $subscribe) : ?>
                             <a class="profile__user-button user__button user__button--subscription button
                             button--quartz" href="profile.php?id=<?= $user['id'] ?? '' ?>&unsubscribed">
                                 Отписаться
@@ -246,7 +246,10 @@
                                                             Подписаться
                                                         </a>
                                                             <?php endif; ?>
-                                                <?php else : ?>
+                                                <?php elseif (isset($follower['id'])
+                                                    && isset($_SESSION['user']['id'])
+                                                    && $follower['id'] === intval($_SESSION['user']['id'])
+                                                ) : ?>
                                                     <a class="post-mini__user-button user__button
                                                     user__button--subscription button button--main"
                                                        href="profile.php?id=<?= $follower['id'] ?? '' ?>">
@@ -344,7 +347,7 @@
                                                             )) ?>" alt="Иконка">
                                                             </div>
                                                             <div class="post-link__info">
-                                                                <h3><?= $post['title'] ?? '' ?></h3>
+                                                                <h3><?= htmlspecialchars($post['title'] ?? '') ?></h3>
                                                                 <span><?= htmlspecialchars($post['link'] ??
                                                                         '') ?></span>
                                                             </div>
@@ -415,8 +418,9 @@
                                                 <ul class="post__tags">
                                                     <?php foreach ($post['post_tags'] as $tag) : ?>
                                                         <li>
-                                                            <a href="search.php?q=<?= $tag['name'] ??
-                                                            '' ?>&type=tag">#<?= $tag['name'] ?? '' ?></a>
+                                                            <a href="search.php?q=<?= htmlspecialchars($tag['name'] ??
+                                                            '') ?>&type=tag">#<?= htmlspecialchars($tag['name'] ??
+                                                                    '') ?></a>
                                                         </li>
                                                     <?php endforeach; ?>
                                                 </ul>

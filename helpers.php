@@ -599,7 +599,7 @@ function validate_form($form, $configs)
  * @param string $login      логин пользователя
  * @param string $password      пароль пользователя
  *                               *
- * @return object
+ * @return \Swift_Transport
  */
 function prepare_mail_settings($host, $port, $login, $password)
 {
@@ -620,22 +620,18 @@ function prepare_mail_settings($host, $port, $login, $password)
  */
 function send_subscribe_notification($follower, $following)
 {
-/*    include_once 'vendor/autoload.php';
-
-    $transport = new Swift_SmtpTransport("smtp.mailtrap.io", 2525);
-    $transport->setUsername("3aa53903ba72c2");
-    $transport->setPassword("d23b1bfd88dbec");*/
-
     $transport = prepare_mail_settings(SMTP_HOST, SMTP_PORT, SMTP_LOGIN, SMTP_PASSWORD);
     $mailer = new Swift_Mailer($transport);
 
     $email = [
         'subject'          => 'У вас новый подписчик',
         'sender_email'     => ['keks@phpdemo.ru' => 'Readme'],
-        'addressee_emails' => [$following['email']],
-        'message_content'  => 'Здравствуйте, ' . $following['login'] . '. На вас подписался новый пользователь '
-            . $follower['login'] . '. Вот ссылка на его профиль: ' . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http')
-            . '://' . $_SERVER['HTTP_HOST'] . '/profile.php?id=' . $follower['id'],
+        'addressee_emails' => htmlspecialchars([$following['email']] ?? ''),
+        'message_content'  => 'Здравствуйте, ' . htmlspecialchars($following['login'] ?? '')
+            . '. На вас подписался новый пользователь '
+            . htmlspecialchars($follower['login'] ?? '') . '. Вот ссылка на его профиль: '
+            . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http')
+            . '://' . $_SERVER['HTTP_HOST'] . '/profile.php?id=' . $follower['id'] ?? '',
     ];
 
     $message = new Swift_Message();
@@ -661,24 +657,20 @@ function send_subscribe_notification($follower, $following)
  */
 function send_new_post_notification($post, $followers)
 {
-    /*include_once 'vendor/autoload.php';*/
-
     $transport = prepare_mail_settings(SMTP_HOST, SMTP_PORT, SMTP_LOGIN, SMTP_PASSWORD);
-/*    $transport = new Swift_SmtpTransport("smtp.mailtrap.io", 2525);
-    $transport->setUsername("3aa53903ba72c2");
-    $transport->setPassword("d23b1bfd88dbec");*/
-
     $mailer = new Swift_Mailer($transport);
 
     foreach ($followers as $follower) {
         $email = [
-            'subject'          => 'Новая публикация от пользователя ' . $_SESSION['user']['login'],
+            'subject'          => 'Новая публикация от пользователя ' . htmlspecialchars($_SESSION['user']['login']
+                    ?? ''),
             'sender_email'     => ['keks@phpdemo.ru' => 'Readme'],
-            'addressee_emails' => [$follower['email']],
-            'message_content'  => 'Здравствуйте, ' . $follower['login'] . '. Пользователь ' . $_SESSION['user']['login']
-                . ' только что опубликовал новую запись "' . $post['title']
+            'addressee_emails' => [$follower['email'] ?? ''],
+            'message_content'  => 'Здравствуйте, ' . htmlspecialchars($follower['login']
+                    ?? '') . '. Пользователь ' . htmlspecialchars($_SESSION['user']['login'] ?? '')
+                . ' только что опубликовал новую запись "' . htmlspecialchars($post['title'] ?? '')
                 . '". Посмотрите её на странице пользователя: ' . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http')
-                . '://' . $_SERVER['HTTP_HOST'] . '/profile.php?id=' . $_SESSION['user']['id'],
+                . '://' . $_SERVER['HTTP_HOST'] . '/profile.php?id=' . $_SESSION['user']['id'] ?? '',
         ];
 
         $message = new Swift_Message();

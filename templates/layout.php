@@ -142,8 +142,10 @@
         <form class="header__search-form form" action="search.php" method="get">
             <div class="header__search">
                 <label class="visually-hidden">Поиск</label>
-                <input class="header__search-input form__input" type="search" name="q" value="<?= (isset($search))
-                    ? $search_line_text : '' ?>">
+                <input class="header__search-input form__input"
+                       type="search"
+                       name="q"
+                       value="<?= $search_line_text ?? '' ?>">
                 <button class="header__search-button button" type="submit">
                     <svg class="header__search-icon" width="18" height="18">
                         <use xlink:href="#icon-search"></use>
@@ -154,28 +156,32 @@
         </form>
         <div class="header__nav-wrapper">
             <nav class="header__nav">
-                <ul class="header__my-nav">
-                    <?php foreach ($nav_links as $nav_link) : ?>
-                        <li class="header__my-page <?= (isset($nav_link['class_name']) && $nav_link['class_name'])
-                            ? "header__my-page--" . $nav_link['class_name'] : "" ?>">
-                            <a class="header__page-link
+                <?php if (isset($nav_links)) : ?>
+                    <ul class="header__my-nav">
+                        <?php foreach ($nav_links as $nav_link) : ?>
+                            <li class="header__my-page <?= (isset($nav_link['class_name']) && $nav_link['class_name'])
+                                ? "header__my-page--" . $nav_link['class_name'] : "" ?>">
+                                <a class="header__page-link
                             <?php if (isset($_SERVER['REQUEST_URI'])
-                                && isset($nav_link['href'])
-                                && strpos($_SERVER['REQUEST_URI'], $nav_link['href'])) : ?>
+                                    && isset($nav_link['href'])
+                                    && strpos($_SERVER['REQUEST_URI'], $nav_link['href'])
+                                ) : ?>
                             header__page-link--active
                             <?php endif; ?>"
-                               href="<?= $nav_link['href'] ?? '' ?>" title="<?= $nav_link['title'] ?? '' ?>">
-                                <span class="visually-hidden"><?= $nav_link['title'] ?? '' ?></span>
-                            </a>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
+                                   href="<?= $nav_link['href'] ?? '' ?>" title="<?= $nav_link['title'] ?? '' ?>">
+                                    <span class="visually-hidden"><?= $nav_link['title'] ?? '' ?></span>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
                 <ul class="header__user-nav">
                     <?php if (isset($user_name)) : ?>
                         <li class="header__profile">
                             <a class="header__profile-link" href="profile.php?id=<?= $_SESSION['user']['id'] ?? '' ?>">
                                 <div class="header__avatar-wrapper">
-                                    <img class="header__profile-avatar" src="<?= $user_avatar ?? '' ?>"
+                                    <img class="header__profile-avatar"
+                                         src="<?= htmlspecialchars($user_avatar ?? '') ?>"
                                          alt="Аватар профиля">
                                 </div>
                                 <div class="header__profile-name">
@@ -200,7 +206,8 @@
                                             <a class="header__profile-nav-link" href="message.php">
                                                 <span class="header__profile-nav-text">
                                                     Сообщения
-                                                    <?php if ($count_session_user_unread_messages > 0) : ?>
+                                                    <?php if (isset($count_session_user_unread_messages)
+                                                        && $count_session_user_unread_messages > 0) : ?>
                                                         <i class="header__profile-indicator">
                                                             <?= $count_session_user_unread_messages ?>
                                                         </i>
