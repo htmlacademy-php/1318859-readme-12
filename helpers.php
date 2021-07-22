@@ -280,8 +280,16 @@ function print_last_message_date($last_message_time)
  */
 function get_data($con, $stmt, $is_row)
 {
+    if (gettype($stmt) === 'boolean') {
+        return [];
+    }
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
+    if (!$result) {
+        $error = mysqli_error($con);
+        print("Ошибка MySQL: " . $error);
+        return [];
+    }
     if ($is_row) {
         $data = mysqli_fetch_assoc($result);
     } else {
@@ -610,7 +618,7 @@ function send_subscribe_notification($follower, $following)
     $email = [
         'subject'          => 'У вас новый подписчик',
         'sender_email'     => ['keks@phpdemo.ru' => 'Readme'],
-        'addressee_emails' => htmlspecialchars([$following['email']] ?? ''),
+        'addressee_emails' => [htmlspecialchars($following['email'] ?? '')],
         'message_content'  => 'Здравствуйте, ' . htmlspecialchars($following['login'] ?? '')
             . '. На вас подписался новый пользователь ' . htmlspecialchars($follower['login'] ?? '')
             . '. Вот ссылка на его профиль: ' . ((!empty($_SERVER['HTTPS'])) ? 'https' : 'http') . '://'
@@ -648,7 +656,7 @@ function send_new_post_notification($post, $followers)
             'subject'          => 'Новая публикация от пользователя ' . htmlspecialchars($_SESSION['user']['login'] ??
                     ''),
             'sender_email'     => ['keks@phpdemo.ru' => 'Readme'],
-            'addressee_emails' => [$follower['email'] ?? ''],
+            'addressee_emails' => [htmlspecialchars($follower['email'] ?? '')],
             'message_content'  => 'Здравствуйте, ' . htmlspecialchars($follower['login'] ?? '') . '. Пользователь '
                 . htmlspecialchars($_SESSION['user']['login'] ?? '') . ' только что опубликовал новую запись "'
                 . htmlspecialchars($post['title'] ?? '') . '". Посмотрите её на странице пользователя: '
