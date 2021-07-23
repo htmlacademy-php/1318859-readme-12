@@ -140,7 +140,8 @@
                         <form class="comments__form form" action="post.php?id=<?= $id ?? '' ?>" method="post">
                             <input type="hidden" name="id" value="<?= $id ?? '' ?>">
                             <div class="comments__my-avatar">
-                                <img class="comments__picture" src="<?= $_SESSION['user']['avatar'] ?? '' ?>"
+                                <img class="comments__picture"
+                                     src="<?= htmlspecialchars($_SESSION['user']['avatar'] ?? '') ?>"
                                      alt="Аватар пользователя">
                             </div>
                             <div class="form__input-section
