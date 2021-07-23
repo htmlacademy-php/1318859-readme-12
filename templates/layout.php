@@ -145,7 +145,7 @@
                 <input class="header__search-input form__input"
                        type="search"
                        name="q"
-                       value="<?= $search_line_text ?? '' ?>">
+                       value="<?= htmlspecialchars($search_line_text ?? '') ?>">
                 <button class="header__search-button button" type="submit">
                     <svg class="header__search-icon" width="18" height="18">
                         <use xlink:href="#icon-search"></use>

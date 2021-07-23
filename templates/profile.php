@@ -202,10 +202,10 @@
                                                 <p class="post-mini__rating-item user__rating-item
                                                 user__rating-item--publications">
                                                     <span class="post-mini__rating-amount user__rating-amount">
-                                                        <?= $follower['amount_of_posts'] ?? '' ?></span>
+                                                        <?= $follower['amount_of_posts'] ?? '0' ?></span>
                                                     <span class="post-mini__rating-text user__rating-text">
                                                         <?= get_noun_plural_form(
-                                                            $follower['amount_of_posts'] ?? '',
+                                                            $follower['amount_of_posts'] ?? 0,
                                                             'публикация',
                                                             'публикации',
                                                             'публикаций'
@@ -214,10 +214,10 @@
                                                 <p class="post-mini__rating-item user__rating-item
                                                 user__rating-item--subscribers">
                                                     <span class="post-mini__rating-amount user__rating-amount">
-                                                        <?= $follower['amount_of_followers'] ?? '' ?></span>
+                                                        <?= $follower['amount_of_followers'] ?? '0' ?></span>
                                                     <span class="post-mini__rating-text user__rating-text">
                                                         <?= get_noun_plural_form(
-                                                            $follower['amount_of_followers'] ?? '',
+                                                            $follower['amount_of_followers'] ?? 0,
                                                             'подписчик',
                                                             'подписчика',
                                                             'подписчиков'

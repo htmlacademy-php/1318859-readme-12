@@ -5,7 +5,7 @@
         <div class="search__query-wrapper">
             <div class="search__query container">
                 <span>Вы искали:</span>
-                <span class="search__query-text"><?= $result_text ?? '' ?></span>
+                <span class="search__query-text"><?= htmlspecialchars($result_text ?? '') ?></span>
             </div>
         </div>
         <div class="search__results-wrapper">
@@ -22,7 +22,7 @@
                                             '') ?>" alt="Аватар пользователя" width="60" height="60">
                                     </div>
                                     <div class="post__info">
-                                        <b class="post__author-name"><?= $post['login'] ?? '' ?></b>
+                                        <b class="post__author-name"><?= htmlspecialchars($post['login'] ?? '') ?></b>
                                         <span class="post__time"><?= print_date_diff($post['dt_add'] ??
                                                 '') ?> назад</span>
                                     </div>
